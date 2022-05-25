@@ -4,8 +4,7 @@
     <title>My New Post</title>
     <url>/2022/05/25/My-New-Post/</url>
     <content><![CDATA[<h2 id="ttile">Ttile</h2>
-<!-- more --
-
+<span id="more"></span>
 <pre class="mermaid">
 graph TD
 A[Hard] --&gt;|Text| B(Round)
@@ -13,15 +12,13 @@ B --&gt; C{Decision}
 C --&gt;|One| D[Result 1]
 C --&gt;|Two| E[Result 2]
 </pre>
-<blockquote>
 <p><span class="math display">\[\begin{equation} \label{eq2}
 \begin{aligned}
 a &amp;= b + c \\
-&amp;= d + e + f + g \\
-&amp;= h + i
+  &amp;= d + e + f + g \\
+  &amp;= h + i
 \end{aligned}
 \end{equation}\]</span></p>
-</blockquote>
 <p>-<span class="math inline">\(\epsilon_0\)</span> +<span
 class="math inline">\(\epsilon\_0\)</span> -\begin{eqnarray*}
 +\begin{eqnarray*} -\ +\\</p>
