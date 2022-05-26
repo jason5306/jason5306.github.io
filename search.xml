@@ -2,9 +2,15 @@
 <search>
   <entry>
     <title>This is test for image uploading</title>
-    <url>/2022/05/26/This-is-test-for-image-uploading/</url>
-    <content><![CDATA[<p>This is a test for image</p>
-<img src="/.com//05/26/This-is-test-for-image-uploading/Screen%20Shot%202022-05-26%20at%2023.03.01.png" class alt="Screen Shot 2022-05-26 at 23.03.01">
+    <url>/2022/05/27/This-is-test-for-image-uploading/</url>
+    <content><![CDATA[<h2 id="this-is-a-test">This is a test</h2>
+<figure>
+<img
+src="/2022/05/27/This-is-test-for-image-uploading/Screen%20Shot%202022-05-27%20at%2000.40.44.png"
+alt="Screen Shot 2022-05-27 at 00.40.44" />
+<figcaption aria-hidden="true">Screen Shot 2022-05-27 at
+00.40.44</figcaption>
+</figure>
 ]]></content>
   </entry>
 </search>
