@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Change Vote Weight of WSFC Node Servers</title>
+    <url>/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/</url>
+    <content><![CDATA[<h1 id="change-vote-weight-of-wsfc-node-servers">Change Vote Weight of
+WSFC Node Servers</h1>
+<p>Currently, my node servers have the voting values as the
+following.</p>
+<figure>
+<img
+src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171346007.png"
+alt="image-20220606171346007" />
+<figcaption aria-hidden="true">image-20220606171346007</figcaption>
+</figure>
+<p>In <strong>Windows PowerShell</strong>, we can view the node servers
+by <code>get-clusternode</code>.</p>
+<figure>
+<img
+src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171619268.png"
+alt="image-20220606171619268" />
+<figcaption aria-hidden="true">image-20220606171619268</figcaption>
+</figure>
+<p>Then, to change the vote weight,</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># (get-clusternode NODE_NAME).nodeweight = VALUE</span><br>(<span class="hljs-built_in">get-clusternode</span> tjxiem406VM).nodeweight = <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606172036812.png"
+alt="image-20220606172036812" />
+<figcaption aria-hidden="true">image-20220606172036812</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Build a Failover Cluster on VMAS</title>
     <url>/2022/06/07/Build%20a%20failover%20cluster%20on%20VMAS/</url>
     <content><![CDATA[<h1 id="build-a-failover-cluster-on-vmas">Build a failover cluster on
@@ -461,40 +495,6 @@ alt="image-20220606102320690" />
 src="/2022/06/07/Build%20a%20failover%20cluster%20on%20VMAS/image-20220607174939143.png"
 alt="image-20220607174939143" />
 <figcaption aria-hidden="true">image-20220607174939143</figcaption>
-</figure>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Change Vote Weight of WSFC Node Servers</title>
-    <url>/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/</url>
-    <content><![CDATA[<h1 id="change-vote-weight-of-wsfc-node-servers">Change Vote Weight of
-WSFC Node Servers</h1>
-<p>Currently, my node servers have the voting values as the
-following.</p>
-<figure>
-<img
-src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171346007.png"
-alt="image-20220606171346007" />
-<figcaption aria-hidden="true">image-20220606171346007</figcaption>
-</figure>
-<p>In <strong>Windows PowerShell</strong>, we can view the node servers
-by <code>get-clusternode</code>.</p>
-<figure>
-<img
-src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171619268.png"
-alt="image-20220606171619268" />
-<figcaption aria-hidden="true">image-20220606171619268</figcaption>
-</figure>
-<p>Then, to change the vote weight,</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># (get-clusternode NODE_NAME).nodeweight = VALUE</span><br>(<span class="hljs-built_in">get-clusternode</span> tjxiem406VM).nodeweight = <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606172036812.png"
-alt="image-20220606172036812" />
-<figcaption aria-hidden="true">image-20220606172036812</figcaption>
 </figure>
 ]]></content>
       <tags>
