@@ -502,6 +502,66 @@ alt="image-20220606172036812" />
       </tags>
   </entry>
   <entry>
+    <title>Freeze SQL service manually using WinDbg</title>
+    <url>/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/</url>
+    <content><![CDATA[<h1 id="freeze-sql-service-manually-using-windbg">Freeze SQL service
+manually using WinDbg</h1>
+<p>Currently, the SQL failover cluster works normally.</p>
+<figure>
+<img
+src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606132830651.png"
+alt="image-20220606132830651" />
+<figcaption aria-hidden="true">image-20220606132830651</figcaption>
+</figure>
+<p>In the SSMS (Microsoft SQL Server Management Studio), the following
+query returns the process id and other information related to the SQL
+server service.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- Thread ID</span><br><span class="hljs-keyword">SELECT</span> kpid,<span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.sysprocesses <span class="hljs-keyword">where</span> program_name  <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;Microsoft® Windows® Operating System%&#x27;</span><br><span class="hljs-comment">-- Prrocess ID</span><br><span class="hljs-keyword">SELECT</span> process_id,<span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.dm_server_services <span class="hljs-keyword">WHERE</span> servicename <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;SQL Server (MSSQLSERVER)&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>Note that the thread ID here is the id for the system, we need to
+convert the id before using it.</p>
+<figure>
+<img
+src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606164943627.png"
+alt="image-20220606164943627" />
+<figcaption aria-hidden="true">image-20220606164943627</figcaption>
+</figure>
+<p>In <strong>WinDbg</strong>, attach to the <code>sqlserver.exe</code>
+process. As you can see, the process id is the same as the query result.
+Note that make sure the WinDbg is running on the node server that is the
+current host of the cluster, or you may not find the
+<code>sqlserver.exe</code> in the list.</p>
+<figure>
+<img
+src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606165000885.png"
+alt="image-20220606165000885" />
+<figcaption aria-hidden="true">image-20220606165000885</figcaption>
+</figure>
+<p>Convert the thread ID into hexadecimal, then enter
+<code>~~[HEX Thread ID]</code> to get the thread ID (debug ID) in the
+debugger. Then we can freeze the SQL service by
+<code>~Debug ID f</code>.</p>
+<figure>
+<img
+src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606165508820.png"
+alt="image-20220606165508820" />
+<figcaption aria-hidden="true">image-20220606165508820</figcaption>
+</figure>
+<p>Now, we observe that the SQL service is frozen.</p>
+<figure>
+<img
+src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606170306322.png"
+alt="image-20220606170306322" />
+<figcaption aria-hidden="true">image-20220606170306322</figcaption>
+</figure>
+<p>To resume the service, detach the process from the debugger. Then the
+SQL server will be brought online.</p>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+        <tag>WinDbg</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SQL Server Backup</title>
     <url>/2022/06/06/SQL%20Server%20Backup/</url>
     <content><![CDATA[<h1 id="sql-server-backup">SQL Server Backup</h1>
@@ -560,66 +620,6 @@ alt="image-20220606101859208" />
       <tags>
         <tag>SQL Server</tag>
         <tag>T-SQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Freeze SQL service manually using WinDbg</title>
-    <url>/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/</url>
-    <content><![CDATA[<h1 id="freeze-sql-service-manually-using-windbg">Freeze SQL service
-manually using WinDbg</h1>
-<p>Currently, the SQL failover cluster works normally.</p>
-<figure>
-<img
-src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606132830651.png"
-alt="image-20220606132830651" />
-<figcaption aria-hidden="true">image-20220606132830651</figcaption>
-</figure>
-<p>In the SSMS (Microsoft SQL Server Management Studio), the following
-query returns the process id and other information related to the SQL
-server service.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- Thread ID</span><br><span class="hljs-keyword">SELECT</span> kpid,<span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.sysprocesses <span class="hljs-keyword">where</span> program_name  <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;Microsoft® Windows® Operating System%&#x27;</span><br><span class="hljs-comment">-- Prrocess ID</span><br><span class="hljs-keyword">SELECT</span> process_id,<span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.dm_server_services <span class="hljs-keyword">WHERE</span> servicename <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;SQL Server (MSSQLSERVER)&#x27;</span><br></code></pre></td></tr></table></figure>
-<p>Note that the thread ID here is the id for the system, we need to
-convert the id before using it.</p>
-<figure>
-<img
-src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606164943627.png"
-alt="image-20220606164943627" />
-<figcaption aria-hidden="true">image-20220606164943627</figcaption>
-</figure>
-<p>In <strong>WinDbg</strong>, attach to the <code>sqlserver.exe</code>
-process. As you can see, the process id is the same as the query result.
-Note that make sure the WinDbg is running on the node server that is the
-current host of the cluster, or you may not find the
-<code>sqlserver.exe</code> in the list.</p>
-<figure>
-<img
-src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606165000885.png"
-alt="image-20220606165000885" />
-<figcaption aria-hidden="true">image-20220606165000885</figcaption>
-</figure>
-<p>Convert the thread ID into hexadecimal, then enter
-<code>~~[HEX Thread ID]</code> to get the thread ID (debug ID) in the
-debugger. Then we can freeze the SQL service by
-<code>~Debug ID f</code>.</p>
-<figure>
-<img
-src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606165508820.png"
-alt="image-20220606165508820" />
-<figcaption aria-hidden="true">image-20220606165508820</figcaption>
-</figure>
-<p>Now, we observe that the SQL service is frozen.</p>
-<figure>
-<img
-src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606170306322.png"
-alt="image-20220606170306322" />
-<figcaption aria-hidden="true">image-20220606170306322</figcaption>
-</figure>
-<p>To resume the service, detach the process from the debugger. Then the
-SQL server will be brought online.</p>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-        <tag>WinDbg</tag>
       </tags>
   </entry>
 </search>
