@@ -23,12 +23,16 @@
 <meta property="og:site_name" content="Jiacheng&#39;s Blog">
 <meta property="og:description" content="This note records how to change the voting value of WSFC (Windows Server Failover Clustering) node servers.">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/SQL%20Server.png">
 <meta property="article:published_time" content="2022-06-06T14:40:22.000Z">
-<meta property="article:modified_time" content="2022-06-07T14:19:08.216Z">
+<meta property="article:modified_time" content="2022-06-07T15:01:57.855Z">
 <meta property="article:author" content="Jiacheng">
 <meta property="article:tag" content="SQL Server">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/SQL%20Server.png">
   
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
   
   
   <title>Change Vote Weight of WSFC Node Servers - Jiacheng&#39;s Blog</title>
@@ -69,7 +73,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"|","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -93,7 +97,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>YCheng&#39;s Blog</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -154,18 +158,6 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                About
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
             <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
@@ -217,7 +209,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          425 words
+          334 words
         
       </span>
     
@@ -228,7 +220,7 @@
         
         
         
-          4 mins
+          3 mins
         
       </span>
     
@@ -270,10 +262,7 @@
             
             <div class="markdown-body">
               
-              <p>This note records how to change the voting value of WSFC (Windows
-Server Failover Clustering) node servers.</p>
-<span id="more"></span>
-<h1 id="change-vote-weight-of-wsfc-node-servers">Change Vote Weight of
+              <h1 id="change-vote-weight-of-wsfc-node-servers">Change Vote Weight of
 WSFC Node Servers</h1>
 <p>Currently, my node servers have the voting values as the
 following.</p>
@@ -473,6 +462,30 @@ alt="image-20220606172036812" />
     </div>
   
   
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Totoal views 
+        <span id="busuanzi_value_site_pv"></span>
+        
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visitors 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
   
   
 </div>
@@ -658,6 +671,8 @@ alt="image-20220606172036812" />
   <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
 
 
 

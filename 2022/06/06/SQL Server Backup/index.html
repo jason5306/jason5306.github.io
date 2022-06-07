@@ -23,19 +23,17 @@
 <meta property="og:site_name" content="Jiacheng&#39;s Blog">
 <meta property="og:description" content="This note records my note for basic SQL server backup operations.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2022/06/06/SQL%20Server%20Backup/image-20220606100125253.png">
-<meta property="og:image" content="http://example.com/2022/06/06/SQL%20Server%20Backup/image-20220606100346465.png">
-<meta property="og:image" content="http://example.com/2022/06/06/SQL%20Server%20Backup/image-20220606100858530.png">
-<meta property="og:image" content="http://example.com/2022/06/06/SQL%20Server%20Backup/image-20220606101710464.png">
-<meta property="og:image" content="http://example.com/2022/06/06/SQL%20Server%20Backup/image-20220606101859208.png">
+<meta property="og:image" content="http://example.com/img/TSQL.png">
 <meta property="article:published_time" content="2022-06-06T15:50:22.000Z">
-<meta property="article:modified_time" content="2022-06-07T14:19:11.002Z">
+<meta property="article:modified_time" content="2022-06-07T15:05:05.074Z">
 <meta property="article:author" content="Jiacheng">
 <meta property="article:tag" content="SQL Server">
 <meta property="article:tag" content="T-SQL">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/2022/06/06/SQL%20Server%20Backup/image-20220606100125253.png">
+<meta name="twitter:image" content="http://example.com/img/TSQL.png">
   
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
   
   
   <title>SQL Server Backup - Jiacheng&#39;s Blog</title>
@@ -76,7 +74,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"|","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -100,7 +98,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>YCheng&#39;s Blog</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -161,18 +159,6 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                About
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
             <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
@@ -224,7 +210,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.5k words
+          1.4k words
         
       </span>
     
@@ -235,7 +221,7 @@
         
         
         
-          13 mins
+          12 mins
         
       </span>
     
@@ -277,9 +263,7 @@
             
             <div class="markdown-body">
               
-              <p>This note records my note for basic SQL server backup operations.</p>
-<span id="more"></span>
-<h1 id="sql-server-backup">SQL Server Backup</h1>
+              <h1 id="sql-server-backup">SQL Server Backup</h1>
 <p><strong>Full Backup</strong></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Windows\AdventureWorks2019_20220602.bak&#x27;</span>;<br></code></pre></td></tr></table></figure>
 <p>If get an error like this:</p>
@@ -513,6 +497,30 @@ alt="image-20220606101859208" />
     </div>
   
   
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Totoal views 
+        <span id="busuanzi_value_site_pv"></span>
+        
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visitors 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
   
   
 </div>
@@ -698,6 +706,8 @@ alt="image-20220606101859208" />
   <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
 
 
 
