@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Change Vote Weight of WSFC Node Servers</title>
+    <url>/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/</url>
+    <content><![CDATA[<h1 id="change-vote-weight-of-wsfc-node-servers">Change Vote Weight of
+WSFC Node Servers</h1>
+<p>Currently, my node servers have the voting values as the
+following.</p>
+<figure>
+<img
+src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171346007.png"
+alt="image-20220606171346007" />
+<figcaption aria-hidden="true">image-20220606171346007</figcaption>
+</figure>
+<p>In <strong>Windows PowerShell</strong>, we can view the node servers
+by <code>get-clusternode</code>.</p>
+<figure>
+<img
+src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171619268.png"
+alt="image-20220606171619268" />
+<figcaption aria-hidden="true">image-20220606171619268</figcaption>
+</figure>
+<p>Then, to change the vote weight,</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># (get-clusternode NODE_NAME).nodeweight = VALUE</span><br>(<span class="hljs-built_in">get-clusternode</span> tjxiem406VM).nodeweight = <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606172036812.png"
+alt="image-20220606172036812" />
+<figcaption aria-hidden="true">image-20220606172036812</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Freeze SQL service manually using WinDbg</title>
     <url>/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/</url>
     <content><![CDATA[<h1 id="freeze-sql-service-manually-using-windbg">Freeze SQL service
@@ -58,6 +92,67 @@ SQL server will be brought online.</p>
       <tags>
         <tag>SQL Server</tag>
         <tag>WinDbg</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL Server Backup</title>
+    <url>/2022/06/06/SQL%20Server%20Backup/</url>
+    <content><![CDATA[<h1 id="sql-server-backup">SQL Server Backup</h1>
+<p><strong>Full Backup</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Windows\AdventureWorks2019_20220602.bak&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>If get an error like this:</p>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100125253.png"
+alt="image-20220606100125253" />
+<figcaption aria-hidden="true">image-20220606100125253</figcaption>
+</figure>
+<p>It means that the SQL server has no permission to the location. To
+fix this, in the <strong>SQL Server Configuration Manager</strong>, we
+can find that the SQL service is logged on as
+<code>NT Service\MSSQLSERVER</code>.</p>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100346465.png"
+alt="image-20220606100346465" />
+<figcaption aria-hidden="true">image-20220606100346465</figcaption>
+</figure>
+<p>Then right-click on the folder you want to access, <strong>properties
+--&gt; security</strong>, and add permission to the
+<code>NT Service\MSSQLSERVER</code>.</p>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100858530.png"
+alt="image-20220606100858530" />
+<figcaption aria-hidden="true">image-20220606100858530</figcaption>
+</figure>
+<p><strong>Backup with differential</strong></p>
+<p>This will back up the changed pages from the previous full
+backup.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup changes start from last full backup, save changed page only</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> differential;<br></code></pre></td></tr></table></figure>
+<p><strong>Backup with copy_only</strong></p>
+<p>This will leave the DCM (diff change map) unchanged, meaning that if
+we are back up with differential, it will also backup changes from the
+last full backup.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup, leave (DCM) diff change map unchanged, compressed</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> copy_only, compression;<br></code></pre></td></tr></table></figure>
+<p>The DCM records the changes made to the page of the database, we can
+view the DCM of the specific database by</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc page(<span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>, <span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101710464.png"
+alt="image-20220606101710464" />
+<figcaption aria-hidden="true">image-20220606101710464</figcaption>
+</figure>
+<p><strong>Backup log files</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup log AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602.trn&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>We can view the information of log files of databases by</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc sqlperf(logspace)<br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101859208.png"
+alt="image-20220606101859208" />
+<figcaption aria-hidden="true">image-20220606101859208</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+        <tag>T-SQL</tag>
       </tags>
   </entry>
   <entry>
@@ -525,101 +620,6 @@ alt="image-20220607174939143" />
 ]]></content>
       <tags>
         <tag>SQL Server</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Change Vote Weight of WSFC Node Servers</title>
-    <url>/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/</url>
-    <content><![CDATA[<h1 id="change-vote-weight-of-wsfc-node-servers">Change Vote Weight of
-WSFC Node Servers</h1>
-<p>Currently, my node servers have the voting values as the
-following.</p>
-<figure>
-<img
-src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171346007.png"
-alt="image-20220606171346007" />
-<figcaption aria-hidden="true">image-20220606171346007</figcaption>
-</figure>
-<p>In <strong>Windows PowerShell</strong>, we can view the node servers
-by <code>get-clusternode</code>.</p>
-<figure>
-<img
-src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171619268.png"
-alt="image-20220606171619268" />
-<figcaption aria-hidden="true">image-20220606171619268</figcaption>
-</figure>
-<p>Then, to change the vote weight,</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># (get-clusternode NODE_NAME).nodeweight = VALUE</span><br>(<span class="hljs-built_in">get-clusternode</span> tjxiem406VM).nodeweight = <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606172036812.png"
-alt="image-20220606172036812" />
-<figcaption aria-hidden="true">image-20220606172036812</figcaption>
-</figure>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SQL Server Backup</title>
-    <url>/2022/06/06/SQL%20Server%20Backup/</url>
-    <content><![CDATA[<h1 id="sql-server-backup">SQL Server Backup</h1>
-<p><strong>Full Backup</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Windows\AdventureWorks2019_20220602.bak&#x27;</span>;<br></code></pre></td></tr></table></figure>
-<p>If get an error like this:</p>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100125253.png"
-alt="image-20220606100125253" />
-<figcaption aria-hidden="true">image-20220606100125253</figcaption>
-</figure>
-<p>It means that the SQL server has no permission to the location. To
-fix this, in the <strong>SQL Server Configuration Manager</strong>, we
-can find that the SQL service is logged on as
-<code>NT Service\MSSQLSERVER</code>.</p>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100346465.png"
-alt="image-20220606100346465" />
-<figcaption aria-hidden="true">image-20220606100346465</figcaption>
-</figure>
-<p>Then right-click on the folder you want to access, <strong>properties
---&gt; security</strong>, and add permission to the
-<code>NT Service\MSSQLSERVER</code>.</p>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100858530.png"
-alt="image-20220606100858530" />
-<figcaption aria-hidden="true">image-20220606100858530</figcaption>
-</figure>
-<p><strong>Backup with differential</strong></p>
-<p>This will back up the changed pages from the previous full
-backup.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup changes start from last full backup, save changed page only</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> differential;<br></code></pre></td></tr></table></figure>
-<p><strong>Backup with copy_only</strong></p>
-<p>This will leave the DCM (diff change map) unchanged, meaning that if
-we are back up with differential, it will also backup changes from the
-last full backup.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup, leave (DCM) diff change map unchanged, compressed</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> copy_only, compression;<br></code></pre></td></tr></table></figure>
-<p>The DCM records the changes made to the page of the database, we can
-view the DCM of the specific database by</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc page(<span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>, <span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101710464.png"
-alt="image-20220606101710464" />
-<figcaption aria-hidden="true">image-20220606101710464</figcaption>
-</figure>
-<p><strong>Backup log files</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup log AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602.trn&#x27;</span>;<br></code></pre></td></tr></table></figure>
-<p>We can view the information of log files of databases by</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc sqlperf(logspace)<br></code></pre></td></tr></table></figure>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101859208.png"
-alt="image-20220606101859208" />
-<figcaption aria-hidden="true">image-20220606101859208</figcaption>
-</figure>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-        <tag>T-SQL</tag>
       </tags>
   </entry>
 </search>
