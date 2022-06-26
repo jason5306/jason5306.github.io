@@ -549,296 +549,6 @@ alt="image-20220606172036812" />
       </tags>
   </entry>
   <entry>
-    <title>Install Always On 2019 For Failover Clusters</title>
-    <url>/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/</url>
-    <content><![CDATA[<h1 id="install-always-on-2019-for-failover-clusters">Install Always On
-2019 For Failover Clusters</h1>
-<h2 id="configure-sql-server">Configure SQL Server</h2>
-<p>On each of the node servers (replica), turn on <strong>SQL Server
-Configuration Manager</strong>, <strong>SQL Server Services --&gt; SQL
-Server (MSSQLSERVER) --&gt; Properties --&gt; Always on Availability
-Groups --&gt; Enable Always on Availability Groups</strong>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607094155497.png"
-alt="image-20220607094155497" />
-<figcaption aria-hidden="true">image-20220607094155497</figcaption>
-</figure>
-<p>Then we install a stand-alone SQL service for the two node servers
-(replica).</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607113534697.png"
-alt="image-20220607113534697" />
-<figcaption aria-hidden="true">image-20220607113534697</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607113818112.png"
-alt="image-20220607113818112" />
-<figcaption aria-hidden="true">image-20220607113818112</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114135531.png"
-alt="image-20220607114135531" />
-<figcaption aria-hidden="true">image-20220607114135531</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114435948.png"
-alt="image-20220607114435948" />
-<figcaption aria-hidden="true">image-20220607114435948</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114540380.png"
-alt="image-20220607114540380" />
-<figcaption aria-hidden="true">image-20220607114540380</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114626758.png"
-alt="image-20220607114626758" />
-<figcaption aria-hidden="true">image-20220607114626758</figcaption>
-</figure>
-<p>Also, we need to enable <strong>Always on Availability
-Groups</strong> service as we did before for the two stand-alone SQL
-services.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607132532145.png"
-alt="image-20220607132532145" />
-<figcaption aria-hidden="true">image-20220607132532145</figcaption>
-</figure>
-<p>Moreover, for the secondary replica, we need to make sure its local
-SQL service can be connected to the primary replica. In the <strong>SQL
-Server Configuration Manager</strong> of the secondary replica,
-<strong>SQL Server Network Configuration --&gt; Protocols for SQL2
-</strong>, enable <code>Named Pipes</code> and <code>TCP/IP</code>.</p>
-<p>You need to restart the servers to make all the changes.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607151315019.png"
-alt="image-20220607151315019" />
-<figcaption aria-hidden="true">image-20220607151315019</figcaption>
-</figure>
-<h2 id="restore-and-backup-databases">Restore and Backup Databases</h2>
-<p>If you have databases that need to be added to the AG, make sure that
-they are in <strong>Full Recovery Mode</strong> and remove these
-databases from any <strong>tlog backup maintenance</strong>. Here I need
-to restore and back up <code>AdventureWorks2019</code> database.</p>
-<p>Restore the database on the primary replica, SQL 1.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607151437088.png"
-alt="image-20220607151437088" />
-<figcaption aria-hidden="true">image-20220607151437088</figcaption>
-</figure>
-<p>Change the <code>Recovery Model</code> to <code>Full</code>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607103723163.png"
-alt="image-20220607103723163" />
-<figcaption aria-hidden="true">image-20220607103723163</figcaption>
-</figure>
-<p>Take Full and tlog backups of all databases before adding them to
-AG.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">--Full Backups</span><br>BACKUP DATABASE [AdventureWorks2019] <span class="hljs-keyword">TO</span>  DISK <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.SQL1\MSSQL\Backup\AdventureWorks2019_FullBackup_20220607.bak&#x27;</span> <br><span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,  <br>NAME <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;AdventureWorks2019-Full Database Backup&#x27;</span>, <br><span class="hljs-keyword">SKIP</span>, NOREWIND, NOUNLOAD, COMPRESSION,  STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span>, CHECKSUM<br>GO<br><br><span class="hljs-comment">--Tlog Backups</span><br>BACKUP LOG [AdventureWorks2019] <span class="hljs-keyword">TO</span>  DISK <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.SQL1\MSSQL\Backup\Adventureworks2019_TlogBackup_20220607.trn&#x27;</span> <br><span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,  <br>NAME <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;AdventureWorks2019-Full Database Backup&#x27;</span>, <br><span class="hljs-keyword">SKIP</span>, NOREWIND, NOUNLOAD, COMPRESSION,  STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span>, CHECKSUM<br>GO<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607140009216.png"
-alt="image-20220607140009216" />
-<figcaption aria-hidden="true">image-20220607140009216</figcaption>
-</figure>
-<h2 id="install-always-on">Install Always On</h2>
-<p>Connect to your primary replica, and start the <strong>New
-Availability Group Wizard</strong>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142521671.png"
-alt="image-20220607142521671" />
-<figcaption aria-hidden="true">image-20220607142521671</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607101944506.png"
-alt="image-20220607101944506" />
-<figcaption aria-hidden="true">image-20220607101944506</figcaption>
-</figure>
-<p>If the <code>status</code> of the database is not
-<code>Meets prerequisites</code>, check detailed information.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607104426006.png"
-alt="image-20220607104426006" />
-<figcaption aria-hidden="true">image-20220607104426006</figcaption>
-</figure>
-<p>Add secondary replica.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607140235168.png"
-alt="image-20220607140235168" />
-<figcaption aria-hidden="true">image-20220607140235168</figcaption>
-</figure>
-<p>In the <code>Endpoints</code> tab, to avoid the following warning, we
-need to set the <code>SQL Server Service Account</code> to the domain
-account instead of the local server service account. Note that the
-<code>Port Number</code> should be <strong>5022</strong></p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141252469.png"
-alt="image-20220607141252469" />
-<figcaption aria-hidden="true">image-20220607141252469</figcaption>
-</figure>
-<p>In the <strong>SQL Service Configuration Manager</strong> of both
-node servers, change the account name into the <strong>domain
-account</strong> as the following.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141542135.png"
-alt="image-20220607141542135" />
-<figcaption aria-hidden="true">image-20220607141542135</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141623518-16545825841621-16545825852083.png"
-alt="image-20220607141623518" />
-<figcaption aria-hidden="true">image-20220607141623518</figcaption>
-</figure>
-<p>Now, back to the wizard, refresh the page, and the account is
-successfully changed.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141929009.png"
-alt="image-20220607141929009" />
-<figcaption aria-hidden="true">image-20220607141929009</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142141848.png"
-alt="image-20220607142141848" />
-<figcaption aria-hidden="true">image-20220607142141848</figcaption>
-</figure>
-<p>Note that the <code>Port</code> should be <strong>1433</strong> and
-the <code>IP Address</code> should be an unused IP Address on the
-network.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142110076.png"
-alt="image-20220607142110076" />
-<figcaption aria-hidden="true">image-20220607142110076</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142223919.png"
-alt="image-20220607142223919" />
-<figcaption aria-hidden="true">image-20220607142223919</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142235554-16545829607005.png"
-alt="image-20220607142235554" />
-<figcaption aria-hidden="true">image-20220607142235554</figcaption>
-</figure>
-<p>If successfully installed, we can find an AG listener in the
-<strong>Failover Cluster Manager</strong>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607143200288.png"
-alt="image-20220607143200288" />
-<figcaption aria-hidden="true">image-20220607143200288</figcaption>
-</figure>
-<h2 id="configure-read-only-route">Configure Read-Only Route</h2>
-<h3 id="configuration">Configuration</h3>
-<p>In the <strong>Object Explorer</strong>, open the
-<strong>Properties</strong> of the AG. Change
-<code>Readable Secondary</code> in <strong>Availability
-Replicas</strong> to <code>Read-intent Only</code>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607154139066.png"
-alt="image-20220607154139066" />
-<figcaption aria-hidden="true">image-20220607154139066</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607161723678.png"
-alt="image-20220607161723678" />
-<figcaption aria-hidden="true">image-20220607161723678</figcaption>
-</figure>
-<p>For the two stand-alone SQL servers, in the <strong>SQL Server
-Configuration Manager</strong>, <strong>Protocols for SQL 1 --&gt;
-TCP/IP --&gt; Properties --&gt; IP Addresses --&gt; TPC Dynamic
-Ports</strong>, change the port to an unused one for both services. This
-step ensures we can find the servers using a Read-only routing URL with
-the same port.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093558782.png"
-alt="image-20220608093558782" />
-<figcaption aria-hidden="true">image-20220608093558782</figcaption>
-</figure>
-<p>Fill in the <code>Read-Only Routing URL</code> with
-<code>TCP://ComputerName.domain:port</code>. The <code>port</code> here
-should be the number set in the previous step. Then, click on the first
-instance, there will be two available replicas shown, add SQL2 and then
-add SQL1. Then, click on the second instance, there will also be two
-available replicas shown, add SQL1 and then add SQL2.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608101300076.png"
-alt="image-20220608101300076" />
-<figcaption aria-hidden="true">image-20220608101300076</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608101311244.png"
-alt="image-20220608101311244" />
-<figcaption aria-hidden="true">image-20220608101311244</figcaption>
-</figure>
-<p>Or, simply run the script.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">USE [master]<br> GO<br> <span class="hljs-keyword">ALTER</span> AVAILABILITY <span class="hljs-keyword">GROUP</span> [jiachengAG]<br> MODIFY REPLICA <span class="hljs-keyword">ON</span> N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span> <span class="hljs-keyword">WITH</span> (PRIMARY_ROLE(READ_ONLY_ROUTING_LIST <span class="hljs-operator">=</span> (N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span>,N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span>)))<br> GO<br> USE [master]<br> GO<br> <span class="hljs-keyword">ALTER</span> AVAILABILITY <span class="hljs-keyword">GROUP</span> [jiachengAG]<br> MODIFY REPLICA <span class="hljs-keyword">ON</span> N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span> <span class="hljs-keyword">WITH</span> (PRIMARY_ROLE(READ_ONLY_ROUTING_LIST <span class="hljs-operator">=</span> (N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span>,N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span>)))<br> GO<br></code></pre></td></tr></table></figure>
-<h3 id="test">Test</h3>
-<p>Connect the AG listener. Click <strong>Options</strong> to configure
-the connection.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093733764.png"
-alt="image-20220608093733764" />
-<figcaption aria-hidden="true">image-20220608093733764</figcaption>
-</figure>
-<p>Note that the connected database needs to be specified in
-<code>Connection Properties</code></p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093829901.png"
-alt="image-20220608093829901" />
-<figcaption aria-hidden="true">image-20220608093829901</figcaption>
-</figure>
-<p>Also, add <code>ApplicationIntent=ReadOnly</code> as connection
-strings to enable Read-only routing.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093924655.png"
-alt="image-20220608093924655" />
-<figcaption aria-hidden="true">image-20220608093924655</figcaption>
-</figure>
-<p>New a query, run the script, the Read-only routing works as I am
-working in the primary replica while it routes read-only connections to
-the secondary replica.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608094019762.png"
-alt="image-20220608094019762" />
-<figcaption aria-hidden="true">image-20220608094019762</figcaption>
-</figure>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Freeze SQL service manually using WinDbg</title>
     <url>/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/</url>
     <content><![CDATA[<h1 id="freeze-sql-service-manually-using-windbg">Freeze SQL service
@@ -1747,6 +1457,296 @@ alt="Compatibility levels" />
       </tags>
   </entry>
   <entry>
+    <title>Install Always On 2019 For Failover Clusters</title>
+    <url>/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/</url>
+    <content><![CDATA[<h1 id="install-always-on-2019-for-failover-clusters">Install Always On
+2019 For Failover Clusters</h1>
+<h2 id="configure-sql-server">Configure SQL Server</h2>
+<p>On each of the node servers (replica), turn on <strong>SQL Server
+Configuration Manager</strong>, <strong>SQL Server Services --&gt; SQL
+Server (MSSQLSERVER) --&gt; Properties --&gt; Always on Availability
+Groups --&gt; Enable Always on Availability Groups</strong>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607094155497.png"
+alt="image-20220607094155497" />
+<figcaption aria-hidden="true">image-20220607094155497</figcaption>
+</figure>
+<p>Then we install a stand-alone SQL service for the two node servers
+(replica).</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607113534697.png"
+alt="image-20220607113534697" />
+<figcaption aria-hidden="true">image-20220607113534697</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607113818112.png"
+alt="image-20220607113818112" />
+<figcaption aria-hidden="true">image-20220607113818112</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114135531.png"
+alt="image-20220607114135531" />
+<figcaption aria-hidden="true">image-20220607114135531</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114435948.png"
+alt="image-20220607114435948" />
+<figcaption aria-hidden="true">image-20220607114435948</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114540380.png"
+alt="image-20220607114540380" />
+<figcaption aria-hidden="true">image-20220607114540380</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114626758.png"
+alt="image-20220607114626758" />
+<figcaption aria-hidden="true">image-20220607114626758</figcaption>
+</figure>
+<p>Also, we need to enable <strong>Always on Availability
+Groups</strong> service as we did before for the two stand-alone SQL
+services.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607132532145.png"
+alt="image-20220607132532145" />
+<figcaption aria-hidden="true">image-20220607132532145</figcaption>
+</figure>
+<p>Moreover, for the secondary replica, we need to make sure its local
+SQL service can be connected to the primary replica. In the <strong>SQL
+Server Configuration Manager</strong> of the secondary replica,
+<strong>SQL Server Network Configuration --&gt; Protocols for SQL2
+</strong>, enable <code>Named Pipes</code> and <code>TCP/IP</code>.</p>
+<p>You need to restart the servers to make all the changes.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607151315019.png"
+alt="image-20220607151315019" />
+<figcaption aria-hidden="true">image-20220607151315019</figcaption>
+</figure>
+<h2 id="restore-and-backup-databases">Restore and Backup Databases</h2>
+<p>If you have databases that need to be added to the AG, make sure that
+they are in <strong>Full Recovery Mode</strong> and remove these
+databases from any <strong>tlog backup maintenance</strong>. Here I need
+to restore and back up <code>AdventureWorks2019</code> database.</p>
+<p>Restore the database on the primary replica, SQL 1.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607151437088.png"
+alt="image-20220607151437088" />
+<figcaption aria-hidden="true">image-20220607151437088</figcaption>
+</figure>
+<p>Change the <code>Recovery Model</code> to <code>Full</code>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607103723163.png"
+alt="image-20220607103723163" />
+<figcaption aria-hidden="true">image-20220607103723163</figcaption>
+</figure>
+<p>Take Full and tlog backups of all databases before adding them to
+AG.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">--Full Backups</span><br>BACKUP DATABASE [AdventureWorks2019] <span class="hljs-keyword">TO</span>  DISK <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.SQL1\MSSQL\Backup\AdventureWorks2019_FullBackup_20220607.bak&#x27;</span> <br><span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,  <br>NAME <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;AdventureWorks2019-Full Database Backup&#x27;</span>, <br><span class="hljs-keyword">SKIP</span>, NOREWIND, NOUNLOAD, COMPRESSION,  STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span>, CHECKSUM<br>GO<br><br><span class="hljs-comment">--Tlog Backups</span><br>BACKUP LOG [AdventureWorks2019] <span class="hljs-keyword">TO</span>  DISK <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.SQL1\MSSQL\Backup\Adventureworks2019_TlogBackup_20220607.trn&#x27;</span> <br><span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,  <br>NAME <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;AdventureWorks2019-Full Database Backup&#x27;</span>, <br><span class="hljs-keyword">SKIP</span>, NOREWIND, NOUNLOAD, COMPRESSION,  STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span>, CHECKSUM<br>GO<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607140009216.png"
+alt="image-20220607140009216" />
+<figcaption aria-hidden="true">image-20220607140009216</figcaption>
+</figure>
+<h2 id="install-always-on">Install Always On</h2>
+<p>Connect to your primary replica, and start the <strong>New
+Availability Group Wizard</strong>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142521671.png"
+alt="image-20220607142521671" />
+<figcaption aria-hidden="true">image-20220607142521671</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607101944506.png"
+alt="image-20220607101944506" />
+<figcaption aria-hidden="true">image-20220607101944506</figcaption>
+</figure>
+<p>If the <code>status</code> of the database is not
+<code>Meets prerequisites</code>, check detailed information.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607104426006.png"
+alt="image-20220607104426006" />
+<figcaption aria-hidden="true">image-20220607104426006</figcaption>
+</figure>
+<p>Add secondary replica.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607140235168.png"
+alt="image-20220607140235168" />
+<figcaption aria-hidden="true">image-20220607140235168</figcaption>
+</figure>
+<p>In the <code>Endpoints</code> tab, to avoid the following warning, we
+need to set the <code>SQL Server Service Account</code> to the domain
+account instead of the local server service account. Note that the
+<code>Port Number</code> should be <strong>5022</strong></p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141252469.png"
+alt="image-20220607141252469" />
+<figcaption aria-hidden="true">image-20220607141252469</figcaption>
+</figure>
+<p>In the <strong>SQL Service Configuration Manager</strong> of both
+node servers, change the account name into the <strong>domain
+account</strong> as the following.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141542135.png"
+alt="image-20220607141542135" />
+<figcaption aria-hidden="true">image-20220607141542135</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141623518-16545825841621-16545825852083.png"
+alt="image-20220607141623518" />
+<figcaption aria-hidden="true">image-20220607141623518</figcaption>
+</figure>
+<p>Now, back to the wizard, refresh the page, and the account is
+successfully changed.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141929009.png"
+alt="image-20220607141929009" />
+<figcaption aria-hidden="true">image-20220607141929009</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142141848.png"
+alt="image-20220607142141848" />
+<figcaption aria-hidden="true">image-20220607142141848</figcaption>
+</figure>
+<p>Note that the <code>Port</code> should be <strong>1433</strong> and
+the <code>IP Address</code> should be an unused IP Address on the
+network.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142110076.png"
+alt="image-20220607142110076" />
+<figcaption aria-hidden="true">image-20220607142110076</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142223919.png"
+alt="image-20220607142223919" />
+<figcaption aria-hidden="true">image-20220607142223919</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142235554-16545829607005.png"
+alt="image-20220607142235554" />
+<figcaption aria-hidden="true">image-20220607142235554</figcaption>
+</figure>
+<p>If successfully installed, we can find an AG listener in the
+<strong>Failover Cluster Manager</strong>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607143200288.png"
+alt="image-20220607143200288" />
+<figcaption aria-hidden="true">image-20220607143200288</figcaption>
+</figure>
+<h2 id="configure-read-only-route">Configure Read-Only Route</h2>
+<h3 id="configuration">Configuration</h3>
+<p>In the <strong>Object Explorer</strong>, open the
+<strong>Properties</strong> of the AG. Change
+<code>Readable Secondary</code> in <strong>Availability
+Replicas</strong> to <code>Read-intent Only</code>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607154139066.png"
+alt="image-20220607154139066" />
+<figcaption aria-hidden="true">image-20220607154139066</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607161723678.png"
+alt="image-20220607161723678" />
+<figcaption aria-hidden="true">image-20220607161723678</figcaption>
+</figure>
+<p>For the two stand-alone SQL servers, in the <strong>SQL Server
+Configuration Manager</strong>, <strong>Protocols for SQL 1 --&gt;
+TCP/IP --&gt; Properties --&gt; IP Addresses --&gt; TPC Dynamic
+Ports</strong>, change the port to an unused one for both services. This
+step ensures we can find the servers using a Read-only routing URL with
+the same port.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093558782.png"
+alt="image-20220608093558782" />
+<figcaption aria-hidden="true">image-20220608093558782</figcaption>
+</figure>
+<p>Fill in the <code>Read-Only Routing URL</code> with
+<code>TCP://ComputerName.domain:port</code>. The <code>port</code> here
+should be the number set in the previous step. Then, click on the first
+instance, there will be two available replicas shown, add SQL2 and then
+add SQL1. Then, click on the second instance, there will also be two
+available replicas shown, add SQL1 and then add SQL2.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608101300076.png"
+alt="image-20220608101300076" />
+<figcaption aria-hidden="true">image-20220608101300076</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608101311244.png"
+alt="image-20220608101311244" />
+<figcaption aria-hidden="true">image-20220608101311244</figcaption>
+</figure>
+<p>Or, simply run the script.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">USE [master]<br> GO<br> <span class="hljs-keyword">ALTER</span> AVAILABILITY <span class="hljs-keyword">GROUP</span> [jiachengAG]<br> MODIFY REPLICA <span class="hljs-keyword">ON</span> N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span> <span class="hljs-keyword">WITH</span> (PRIMARY_ROLE(READ_ONLY_ROUTING_LIST <span class="hljs-operator">=</span> (N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span>,N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span>)))<br> GO<br> USE [master]<br> GO<br> <span class="hljs-keyword">ALTER</span> AVAILABILITY <span class="hljs-keyword">GROUP</span> [jiachengAG]<br> MODIFY REPLICA <span class="hljs-keyword">ON</span> N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span> <span class="hljs-keyword">WITH</span> (PRIMARY_ROLE(READ_ONLY_ROUTING_LIST <span class="hljs-operator">=</span> (N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span>,N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span>)))<br> GO<br></code></pre></td></tr></table></figure>
+<h3 id="test">Test</h3>
+<p>Connect the AG listener. Click <strong>Options</strong> to configure
+the connection.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093733764.png"
+alt="image-20220608093733764" />
+<figcaption aria-hidden="true">image-20220608093733764</figcaption>
+</figure>
+<p>Note that the connected database needs to be specified in
+<code>Connection Properties</code></p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093829901.png"
+alt="image-20220608093829901" />
+<figcaption aria-hidden="true">image-20220608093829901</figcaption>
+</figure>
+<p>Also, add <code>ApplicationIntent=ReadOnly</code> as connection
+strings to enable Read-only routing.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093924655.png"
+alt="image-20220608093924655" />
+<figcaption aria-hidden="true">image-20220608093924655</figcaption>
+</figure>
+<p>New a query, run the script, the Read-only routing works as I am
+working in the primary replica while it routes read-only connections to
+the secondary replica.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608094019762.png"
+alt="image-20220608094019762" />
+<figcaption aria-hidden="true">image-20220608094019762</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SQL Server Backup</title>
     <url>/2022/06/06/SQL%20Server%20Backup/</url>
     <content><![CDATA[<h1 id="sql-server-backup">SQL Server Backup</h1>
@@ -1805,6 +1805,154 @@ alt="image-20220606101859208" />
       <tags>
         <tag>SQL Server</tag>
         <tag>T-SQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL Server IAM Page</title>
+    <url>/2022/06/26/SQL%20Server%20IAM%20Page/</url>
+    <content><![CDATA[<h1 id="sql-server-iam-page">SQL Server IAM Page</h1>
+<p>Index Allocation Map (IAM) pages keep track of the extents in a 4 GB
+section of a database file used by an allocation unit.</p>
+<p><u>Allocation unit</u></p>
+<p>An allocation unit is a set of pages belonging to a single partition
+in a table or index and comprises pages of one of three storage
+types:</p>
+<ol type="1">
+<li>pages holding regular in-row data</li>
+<li>pages holding Large Object (LOB) data</li>
+<li>pages holding row-overflow data</li>
+</ol>
+<p><u>Multiple IAM pages</u></p>
+<p>A single IAM page covers only a 4 GB section of a single file.</p>
+<ol type="1">
+<li>if the partition spans files</li>
+<li>if the file is more than 4 GB in size</li>
+<li>if the partition uses pages in more than one 4 GB section</li>
+</ol>
+<p><u>IAM page structure</u></p>
+<ol type="1">
+<li>96-byte page header</li>
+<li>An IAM page header
+<ol type="1">
+<li>Contains eight page-pointer slots</li>
+</ol></li>
+<li>Contains bitmap
+<ol type="1">
+<li>A set of bits that map a range of extents onto a file</li>
+<li>Each bit of the bitmap represents an extent in the range</li>
+<li>1, is allocated; 0, unallocated</li>
+</ol></li>
+</ol>
+<p>Running the defined procedure <code>sp_AllocationMetadata</code> in
+the <code>AdventureWorks2019</code>, we can see the page number of the
+first IAM pages.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">EXEC</span> [sp_AllocationMetadata] N<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>;<br>GO<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623131334311.png"
+alt="sp_AllocationMetadata result" />
+<figcaption aria-hidden="true">sp_AllocationMetadata result</figcaption>
+</figure>
+<p>As we can see, the object <code>Employee</code> has 6 partitions. For
+the partition that has partition ID of <code>72057594056933376</code>,
+its first IAM page is <code>2105</code>.</p>
+<p>Then let's take a closer look at the page <code>2105</code>.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">3</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623133029678.png"
+alt="Mode 3 result" />
+<figcaption aria-hidden="true">Mode 3 result</figcaption>
+</figure>
+<p>The 8 slots listed under the <code>Single Page Allocations</code>
+mean they are in the mixed extent.</p>
+<p>Following the <code>Extent Alloc Status Slot</code> are pages in
+uniform extent. The result suggests that page <code>12640</code> and
+page <code>12672</code> are allocated</p>
+<p>We can check the allocation status by running the query:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> allocated_page_file_id <span class="hljs-keyword">AS</span> [FileID],<br>allocated_page_page_id <span class="hljs-keyword">AS</span> [PageID],<br>page_type_desc,extent_page_id<span class="hljs-operator">/</span><span class="hljs-number">8</span> <span class="hljs-keyword">AS</span> ExtentID,<br>is_mixed_page_allocation,<br>extent_page_id <span class="hljs-keyword">AS</span> [<span class="hljs-keyword">First</span> Page <span class="hljs-keyword">in</span> Extent],<br>extent_page_id<span class="hljs-operator">+</span><span class="hljs-number">7</span> <span class="hljs-keyword">AS</span> [LastPage <span class="hljs-keyword">in</span> Extent],<br>is_allocated <br><span class="hljs-keyword">FROM</span> sys.dm_db_database_page_allocations(db_id(),object_id(<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>),<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-string">&#x27;detailed&#x27;</span>)  <br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> allocated_page_page_id<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623134406196.png"
+alt="Allocation status result" />
+<figcaption aria-hidden="true">Allocation status result</figcaption>
+</figure>
+<p>As shown in the result, page <code>12640</code> and
+<code>12672</code> are allocated, and clearly there are
+<code>(12672-12640)/8=4</code> extents between them, which is proved by
+the corresponding extent ID, <code>1580</code> and
+<code>1584</code>.</p>
+<p>Let's validate our observation by dive into the page in mode 1.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">1</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623140010858.png"
+alt="Mode 1 result" />
+<figcaption aria-hidden="true">Mode 1 result</figcaption>
+</figure>
+<ol type="1">
+<li><p><code>0000381f</code> is fixed.</p></li>
+<li><p>Slot 0 is for mixed extent; Slot 1 is for the uniform
+extent</p></li>
+<li><p>For string <code>00000000 0010</code> and
+<code>0100 00000000</code> in Slot 1</p>
+<p>Each bit in the table stands for one extent.</p>
+<p>Note we need to convert little-endian into normal binary.</p>
+<table>
+<thead>
+<tr class="header">
+<th>HEX</th>
+<th>00 00 00 00 00</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Binary (Little endian)</td>
+<td>many 0</td>
+<td>0001 0000</td>
+</tr>
+<tr class="even">
+<td>Binary (normal)</td>
+<td>many 0</td>
+<td>0000 1000</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>HEX</th>
+<th>01</th>
+<th>00 00 00 00 00</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Binary (Little endian)</td>
+<td>0000 0001</td>
+<td>many 0</td>
+</tr>
+<tr class="even">
+<td>Binary (normal)</td>
+<td>1000 0000</td>
+<td>many 0</td>
+</tr>
+</tbody>
+</table>
+<p>That is, for <code>10 01</code> we have
+<code>0000 1000 1000 0000</code> in binary, the difference is 4 extent,
+from <code>1580</code> to <code>1584</code>.</p>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220624094601306.png"
+alt="Endian example" />
+<figcaption aria-hidden="true">Endian example</figcaption>
+</figure></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
       </tags>
   </entry>
   <entry>
@@ -2802,154 +2950,6 @@ Server会让那个操作等待。直到文件自动增长结束了，原先的�
       <tags>
         <tag>SQL Server</tag>
         <tag>Note</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SQL Server IAM Page</title>
-    <url>/2022/06/26/SQL%20Server%20IAM%20Page/</url>
-    <content><![CDATA[<h1 id="sql-server-iam-page">SQL Server IAM Page</h1>
-<p>Index Allocation Map (IAM) pages keep track of the extents in a 4 GB
-section of a database file used by an allocation unit.</p>
-<p><u>Allocation unit</u></p>
-<p>An allocation unit is a set of pages belonging to a single partition
-in a table or index and comprises pages of one of three storage
-types:</p>
-<ol type="1">
-<li>pages holding regular in-row data</li>
-<li>pages holding Large Object (LOB) data</li>
-<li>pages holding row-overflow data</li>
-</ol>
-<p><u>Multiple IAM pages</u></p>
-<p>A single IAM page covers only a 4 GB section of a single file.</p>
-<ol type="1">
-<li>if the partition spans files</li>
-<li>if the file is more than 4 GB in size</li>
-<li>if the partition uses pages in more than one 4 GB section</li>
-</ol>
-<p><u>IAM page structure</u></p>
-<ol type="1">
-<li>96-byte page header</li>
-<li>An IAM page header
-<ol type="1">
-<li>Contains eight page-pointer slots</li>
-</ol></li>
-<li>Contains bitmap
-<ol type="1">
-<li>A set of bits that map a range of extents onto a file</li>
-<li>Each bit of the bitmap represents an extent in the range</li>
-<li>1, is allocated; 0, unallocated</li>
-</ol></li>
-</ol>
-<p>Running the defined procedure <code>sp_AllocationMetadata</code> in
-the <code>AdventureWorks2019</code>, we can see the page number of the
-first IAM pages.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">EXEC</span> [sp_AllocationMetadata] N<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>;<br>GO<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623131334311.png"
-alt="sp_AllocationMetadata result" />
-<figcaption aria-hidden="true">sp_AllocationMetadata result</figcaption>
-</figure>
-<p>As we can see, the object <code>Employee</code> has 6 partitions. For
-the partition that has partition ID of <code>72057594056933376</code>,
-its first IAM page is <code>2105</code>.</p>
-<p>Then let's take a closer look at the page <code>2105</code>.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">3</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623133029678.png"
-alt="Mode 3 result" />
-<figcaption aria-hidden="true">Mode 3 result</figcaption>
-</figure>
-<p>The 8 slots listed under the <code>Single Page Allocations</code>
-mean they are in the mixed extent.</p>
-<p>Following the <code>Extent Alloc Status Slot</code> are pages in
-uniform extent. The result suggests that page <code>12640</code> and
-page <code>12672</code> are allocated</p>
-<p>We can check the allocation status by running the query:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> allocated_page_file_id <span class="hljs-keyword">AS</span> [FileID],<br>allocated_page_page_id <span class="hljs-keyword">AS</span> [PageID],<br>page_type_desc,extent_page_id<span class="hljs-operator">/</span><span class="hljs-number">8</span> <span class="hljs-keyword">AS</span> ExtentID,<br>is_mixed_page_allocation,<br>extent_page_id <span class="hljs-keyword">AS</span> [<span class="hljs-keyword">First</span> Page <span class="hljs-keyword">in</span> Extent],<br>extent_page_id<span class="hljs-operator">+</span><span class="hljs-number">7</span> <span class="hljs-keyword">AS</span> [LastPage <span class="hljs-keyword">in</span> Extent],<br>is_allocated <br><span class="hljs-keyword">FROM</span> sys.dm_db_database_page_allocations(db_id(),object_id(<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>),<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-string">&#x27;detailed&#x27;</span>)  <br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> allocated_page_page_id<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623134406196.png"
-alt="Allocation status result" />
-<figcaption aria-hidden="true">Allocation status result</figcaption>
-</figure>
-<p>As shown in the result, page <code>12640</code> and
-<code>12672</code> are allocated, and clearly there are
-<code>(12672-12640)/8=4</code> extents between them, which is proved by
-the corresponding extent ID, <code>1580</code> and
-<code>1584</code>.</p>
-<p>Let's validate our observation by dive into the page in mode 1.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">1</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623140010858.png"
-alt="Mode 1 result" />
-<figcaption aria-hidden="true">Mode 1 result</figcaption>
-</figure>
-<ol type="1">
-<li><p><code>0000381f</code> is fixed.</p></li>
-<li><p>Slot 0 is for mixed extent; Slot 1 is for the uniform
-extent</p></li>
-<li><p>For string <code>00000000 0010</code> and
-<code>0100 00000000</code> in Slot 1</p>
-<p>Each bit in the table stands for one extent.</p>
-<p>Note we need to convert little-endian into normal binary.</p>
-<table>
-<thead>
-<tr class="header">
-<th>HEX</th>
-<th>00 00 00 00 00</th>
-<th>10</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Binary (Little endian)</td>
-<td>many 0</td>
-<td>0001 0000</td>
-</tr>
-<tr class="even">
-<td>Binary (normal)</td>
-<td>many 0</td>
-<td>0000 1000</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th>HEX</th>
-<th>01</th>
-<th>00 00 00 00 00</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Binary (Little endian)</td>
-<td>0000 0001</td>
-<td>many 0</td>
-</tr>
-<tr class="even">
-<td>Binary (normal)</td>
-<td>1000 0000</td>
-<td>many 0</td>
-</tr>
-</tbody>
-</table>
-<p>That is, for <code>10 01</code> we have
-<code>0000 1000 1000 0000</code> in binary, the difference is 4 extent,
-from <code>1580</code> to <code>1584</code>.</p>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220624094601306.png"
-alt="Endian example" />
-<figcaption aria-hidden="true">Endian example</figcaption>
-</figure></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
       </tags>
   </entry>
 </search>
