@@ -1,0 +1,1520 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jiacheng Xie">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="This is a note for the chapter Databases and database file of the book SQL Server 2012 Internal.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL Server 2012 Internal Note_Databases and database file">
+<meta property="og:url" content="http://example.com/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/index.html">
+<meta property="og:site_name" content="Ycheng&#39;s Blog">
+<meta property="og:description" content="This is a note for the chapter Databases and database file of the book SQL Server 2012 Internal.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/SQL%20Server.png">
+<meta property="article:published_time" content="2022-06-25T14:50:22.000Z">
+<meta property="article:modified_time" content="2022-06-25T16:49:06.614Z">
+<meta property="article:author" content="Jiacheng Xie">
+<meta property="article:tag" content="SQL Server">
+<meta property="article:tag" content="Note">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/SQL%20Server.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>SQL Server 2012 Internal Note_Databases and database file - Ycheng&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"|","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>YCheng&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SQL Server 2012 Internal Note_Databases and database file"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-25 22:50" pubdate>
+          June 25, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          20k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          167 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">SQL Server 2012 Internal Note_Databases and database file</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="sql-server-2012-internal-note_databases-and-database-file">SQL
+Server 2012 Internal Note_Databases and database file</h1>
+<p>A Microsoft SQL Server database is a collection of objects that hold
+and manipulate data.</p>
+<ul>
+<li>It’s a collection of many objects (tables, views, stored procedures,
+functions, and constraints)</li>
+<li>It’s owned by a single SQL Server login account</li>
+<li>It maintains a set of user accounts, roles, schemas, and
+security</li>
+<li>It has a set of system tables</li>
+<li>It’s the primary unit of recovery and maintains logical consistency
+among objects within it</li>
+<li>It has and manages its transaction logs</li>
+<li>It can span multiple disk drives and operating system files</li>
+<li>It can range in size from 2 MB to a technical limit of 1524,272
+TB.</li>
+<li>It can grow and shrink automatically or manually</li>
+<li>It can have specific properties enabled or disabled</li>
+</ul>
+<h2 id="understanding-database-files">Understanding database files</h2>
+<p>A database file is an operating system file</p>
+<p>A database spans at least two (one for data one for the transaction
+log) or more database files, and the files are specified when a database
+is created or altered.</p>
+<p><strong>Three types of database files:</strong></p>
+<ol type="1">
+<li>Primary data files
+<ol type="1">
+<li><p>One for each database</p></li>
+<li><p>Keeps track of all the rest of the files and stores data</p></li>
+<li><p><code>.mdf</code></p></li>
+<li><p>Has pointers into a table in the master database that contains
+information about all the files belonging to the database</p>
+<ol type="1">
+<li><p>Use <code>SELECT * FROM sys.database_files</code> to see the
+table</p>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220621124602041.png" srcset="/img/loading.gif" lazyload
+alt="Files belong to Archive database" />
+<figcaption aria-hidden="true">Files belong to Archive
+database</figcaption>
+</figure></li>
+</ol></li>
+</ol></li>
+<li>Secondary data files
+<ol type="1">
+<li>Zero or more for each data files</li>
+<li><code>.ndf</code></li>
+</ol></li>
+<li>Log files
+<ol type="1">
+<li>At least one for each database</li>
+<li>Contains the information necessary to recover all transactions in a
+database</li>
+<li><code>.ldf</code></li>
+</ol></li>
+</ol>
+<p><strong>Five properties of each database file:</strong></p>
+<ol type="1">
+<li>a logical filename</li>
+<li>a physical filename</li>
+<li>an initial size</li>
+<li>a maximum size</li>
+<li>a growth increment</li>
+</ol>
+<p>Information on database files can be seen in
+<code>sys.database_files</code> view.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.database_files<br></code></pre></td></tr></table></figure>
+<h3 id="creating-a-database">Creating a database</h3>
+<p>Use <strong>Object Explorer</strong> in Management Studio or
+<code>CREATE DATABASE</code>.</p>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220621093314483.png" srcset="/img/loading.gif" lazyload
+alt="Create Database" />
+<figcaption aria-hidden="true">Create Database</figcaption>
+</figure>
+<p><u><code>CREATE DATABASE newdb</code></u></p>
+<ol type="1">
+<li>Create a <code>newdb</code> database with default values, with
+default size, on two files with logical names <code>newdb</code> and
+<code>newdb_log</code> and corresponding physical files,
+<code>newdb.mdf</code> and <code>newdb_log.ldf</code> are created in the
+default data directory</li>
+<li>Permission (who can create a database):
+<ol type="1">
+<li>Anyone in the sysadmin role</li>
+<li>Anyone has CONTROL or ALTER permission on the server</li>
+<li>Anyone has CREATE DATABASE permission</li>
+</ol></li>
+<li>This command is case-insensitive</li>
+<li>Default size
+<ol type="1">
+<li>Data file: 3 MB (size of the primary data file of the model
+database)</li>
+<li>Log file: 0.75 MB</li>
+</ol></li>
+<li>Database owner
+<ol type="1">
+<li>The login account that created the database</li>
+<li>A database can have only one actual owner</li>
+<li>When the owner uses the database, the user name would be
+<code>dbo</code></li>
+</ol></li>
+</ol>
+<p><u>The model database</u></p>
+<ol type="1">
+<li>SQL Server copies the model database when creating a new
+database</li>
+<li>Objects and database options are copied in all subsequently created
+databases</li>
+<li>Use <code>SELECT * FROM sys.objects</code> to see objects in the
+model database</li>
+</ol>
+<h3 id="using-create-database-an-example">Using CREATE DATABASE: an
+example</h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> DATABASE Archive<br><span class="hljs-keyword">ON</span><br><span class="hljs-keyword">PRIMARY</span><br>( NAME <span class="hljs-operator">=</span> Arch1,<br>FILENAME <span class="hljs-operator">=</span><br>    <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\archdat1.mdf&#x27;</span>,<br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">100</span>MB,<br>MAXSIZE <span class="hljs-operator">=</span> <span class="hljs-number">200</span>MB,<br>FILEGROWTH <span class="hljs-operator">=</span> <span class="hljs-number">20</span>MB),<br>( NAME <span class="hljs-operator">=</span> Arch2,<br>FILENAME <span class="hljs-operator">=</span><br>    <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\archdat2.ndf&#x27;</span>,<br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">10</span>GB,<br>MAXSIZE <span class="hljs-operator">=</span> <span class="hljs-number">50</span>GB,<br>FILEGROWTH <span class="hljs-operator">=</span> <span class="hljs-number">250</span>MB) # file expansion size<br>LOG <span class="hljs-keyword">ON</span><br>( NAME <span class="hljs-operator">=</span> Archlog1,<br>FILENAME <span class="hljs-operator">=</span><br>    <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\archlog1.ldf&#x27;</span>,<br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">2</span>GB,<br>MAXSIZE <span class="hljs-operator">=</span> <span class="hljs-number">10</span>GB,<br>FILEGROWTH <span class="hljs-operator">=</span> <span class="hljs-number">100</span>MB);<br></code></pre></td></tr></table></figure>
+<p>If you find that by executing the query there is error message:</p>
+<p><code>Could not obtain exclusive lock on database 'model'. Retry the operation later.</code></p>
+<p>Use this to see which session is occupying the model database:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> request_session_id<br><span class="hljs-keyword">from</span> sys.dm_tran_locks<br><span class="hljs-keyword">where</span> resource_type <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;database&#x27;</span> <span class="hljs-keyword">and</span><br>      resource_database_id <span class="hljs-operator">=</span> <span class="hljs-number">3</span> <span class="hljs-keyword">and</span><br>      request_type <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;LOCK&#x27;</span> <span class="hljs-keyword">and</span><br>      request_status <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;GRANT&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>Then just <code>KILL</code> the session.</p>
+<h2 id="expanding-or-shrinking-a-database">Expanding or shrinking a
+database</h2>
+<h3 id="automatic-file-expansion">Automatic file expansion</h3>
+<p><code>FILEGROWTH</code> property determines how the file expands with
+suffix TB, GB, MB, KB, or %.</p>
+<p><code>MAXSIZE</code> property sets an upper limit on the file
+size</p>
+<p>Enabling autogrow might prevent some failures due to unexpected
+increases in data volume.</p>
+<p>Shortcomings:</p>
+<ol type="1">
+<li>Time-consuming if fast file initialization is not activated</li>
+<li>Result in physical fragmentation</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"># <span class="hljs-keyword">Returns</span> a list <span class="hljs-keyword">of</span> the amount <span class="hljs-keyword">of</span> <span class="hljs-keyword">free</span> disk space <span class="hljs-keyword">on</span> <span class="hljs-keyword">each</span> <span class="hljs-keyword">of</span> your <span class="hljs-keyword">local</span> volumes<br><span class="hljs-keyword">exec</span> xp_fixeddrives<br></code></pre></td></tr></table></figure>
+<h3 id="manual-file-expansion">Manual file expansion</h3>
+<p>Use <code>ALTER DATABASE</code> command with <code>MODIFY FILE</code>
+option to change the <code>SIZE</code> property of the files.</p>
+<p>Note that the new file size must be larger than the current size.</p>
+<h3 id="fast-file-initialization">Fast file initialization</h3>
+<p>Instant file initialization adds space to the data file (not log
+files) without filling the newly added space with zeros (If want files
+are zeroed out, use <code>tracefalge 1806</code> or deny
+<code>SE_MANAGE_VOLUME_NAME</code> rights of your account), the disk is
+overwritten when the new data is written to the files.</p>
+<h3 id="automatic-shrinkage">Automatic shrinkage</h3>
+<p>Never recommended (resource-intensive)</p>
+<p>Database property <code>autoshrink</code> controls the option, and
+has the same effect as running
+<code>DBCC SHRINKDATABASE (dbname, 25)</code>.</p>
+<h3 id="manual-shrinkage">Manual shrinkage</h3>
+<h4 id="dbcc-shrinkfile">DBCC SHRINKFILE</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"># Attemps <span class="hljs-keyword">to</span> shrink the file <span class="hljs-keyword">to</span> target size <span class="hljs-keyword">in</span> the <span class="hljs-keyword">current</span> database<br>DBCC SHRINKFILE ( &#123;file_name <span class="hljs-operator">|</span> file_id &#125;<br>[, target_size][, &#123;EMPTYFILE <span class="hljs-operator">|</span> NOTRUNCATE <span class="hljs-operator">|</span> TRUNCATEONLY&#125; ] )<br></code></pre></td></tr></table></figure>
+<h4 id="dbcc-shrinkdatabase">DBCC SHRINKDATABASE</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"># Shrinks <span class="hljs-keyword">all</span> files <span class="hljs-keyword">in</span> a database (larger than its minimum size)<br># target_percent <span class="hljs-keyword">is</span> a percentage <span class="hljs-keyword">of</span> <span class="hljs-keyword">free</span> space <span class="hljs-keyword">to</span> leave <span class="hljs-keyword">in</span> <span class="hljs-keyword">each</span> file <span class="hljs-keyword">of</span> the database<br>DBCC SHRINKDATABASE (database_name [, target_percent]<br>[, &#123;NOTRUNCATE <span class="hljs-operator">|</span> TRUNCATEONLY&#125; ] )<br></code></pre></td></tr></table></figure>
+<h2 id="using-database-filegroups">Using database filegroups</h2>
+<p>Filegroups are data files in a database grouped for allocation and
+administration purposes.</p>
+<p><u>Primary filegroup</u></p>
+<ol type="1">
+<li>The filegroup containing the primary data file</li>
+<li>Only one primary filegroup exists</li>
+<li>By default, the primary filegroup is the default filegroup</li>
+</ol>
+<p><u>Create filegroups</u></p>
+<p>Use <code>FILEGROUP</code> keyword in the
+<code>CREATE DATABASE</code> or <code>ALTER DATABASE</code>
+statement.</p>
+<h3 id="the-default-filegroup">The default filegroup</h3>
+<p>One filegroup always has the <strong>property</strong> of
+DEFAULT.</p>
+<p>One default filegroup for each database.</p>
+<p>Change the default filegroup by using <code>ALTER DATABASE</code></p>
+<p>When an object (table or index) is created, it’s created in the
+default filegroup if no specific filegroup is specified.</p>
+<p><u>Proportional fill</u></p>
+<ol type="1">
+<li>Data is stored in a proportional fill manner in the file group</li>
+<li>Creating all your files to be the same size is recommended to avoid
+the issues of proportional fill</li>
+</ol>
+<p><u>Why use multiple files</u></p>
+<ol type="1">
+<li>Partial restore</li>
+<li>The flexibility of easily moving the database onto separate
+drives</li>
+</ol>
+<p><u>Partial restore using filegroups</u></p>
+<ol type="1">
+<li>Partial restore and backup (objects created on the restored
+filegroups are available)</li>
+<li>The database goes online as soon as the primary filegroup is
+restored</li>
+<li>For large databases and a failure of a subset of the disks</li>
+</ol>
+<h3 id="a-filegroup-creation-example">A FILEGROUP CREATION example</h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> DATABASE Sales <br><span class="hljs-keyword">ON</span> <span class="hljs-keyword">PRIMARY</span> <br>( NAME <span class="hljs-operator">=</span> salesPrimary1, <br>FILENAME <span class="hljs-operator">=</span> <br> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\salesPrimary1.</span><br><span class="hljs-string">mdf&#x27;</span>, <br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">1000</span>, MAXSIZE <span class="hljs-operator">=</span> <span class="hljs-number">5000</span>, <br>FILEGROWTH <span class="hljs-operator">=</span> <span class="hljs-number">1000</span> ), <br>( NAME <span class="hljs-operator">=</span> salesPrimary2, <br>FILENAME <span class="hljs-operator">=</span> <br> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\salesPrimary2.</span><br><span class="hljs-string">ndf&#x27;</span>, <br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">1000</span>, MAXSIZE <span class="hljs-operator">=</span> <span class="hljs-number">5000</span>, <br>FILEGROWTH <span class="hljs-operator">=</span> <span class="hljs-number">1000</span> ), <br>FILEGROUP SalesGroup1 <br>( NAME <span class="hljs-operator">=</span> salesGrp1Fi1e1, <br>FILENAME <span class="hljs-operator">=</span> <br> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\salesGrp1Fi1e1.</span><br><span class="hljs-string">ndf&#x27;</span>, <br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">500</span>, MAXSIZE <span class="hljs-operator">=</span> <span class="hljs-number">3000</span>, <br>FILEGROWTH <span class="hljs-operator">=</span> <span class="hljs-number">500</span> ), <br>( NAME <span class="hljs-operator">=</span> salesGrp1Fi1e2, <br>FILENAME <span class="hljs-operator">=</span> <br> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\salesGrp1Fi1e2.</span><br><span class="hljs-string">ndf&#x27;</span>, <br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">500</span>, MAXSIZE <span class="hljs-operator">=</span> <span class="hljs-number">3000</span>, <br>FILEGROWTH <span class="hljs-operator">=</span> <span class="hljs-number">500</span> ), <br>FILEGROUP SalesGroup2 <br>( NAME <span class="hljs-operator">=</span> salesGrp2Fi1e1, <br>FILENAME <span class="hljs-operator">=</span> <br> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\salesGrp2Fi1e1.</span><br><span class="hljs-string">ndf&#x27;</span>, <br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">1000</span>, MAXSIZE <span class="hljs-operator">=</span> <span class="hljs-number">50000</span>, <br>FILEGROWTH <span class="hljs-operator">=</span> <span class="hljs-number">5000</span> ), <br>( NAME <span class="hljs-operator">=</span> salesGrp2Fi1e2, <br>FILENAME <span class="hljs-operator">=</span> <br> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\salesGrp2Fi1e2.</span><br><span class="hljs-string">ndf&#x27;</span>, <br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">1000</span>, MAXSIZE <span class="hljs-operator">=</span> <span class="hljs-number">50000</span>, <br>FILEGROWTH <span class="hljs-operator">=</span> <span class="hljs-number">500</span> ) <br>LOG <span class="hljs-keyword">ON</span> <br>( NAME <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Sales_log&#x27;</span>, <br>FILENAME <span class="hljs-operator">=</span> <br> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\saleslog.ldf&#x27;</span>, <br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">500</span>MB, MAXSIZE <span class="hljs-operator">=</span> <span class="hljs-number">2500</span>MB, <br>FILEGROWTH <span class="hljs-operator">=</span> <span class="hljs-number">500</span>MB );<br></code></pre></td></tr></table></figure>
+<h3 id="filestream-filegroups">Filestream filegroups</h3>
+<p><u>Filestream filegroups</u></p>
+<ol type="1">
+<li>Contain one file reference, and the file is specified as an
+operating system folder</li>
+<li>The path up to the last folder must exist, and the last folder must
+not exist</li>
+<li>No space is preallocated to the filegroup
+<ol type="1">
+<li>The file and filegroup grow as data is added to tables that are
+created with filestream columns</li>
+</ol></li>
+<li>Note that you can’t move a file from one filegroup to another.</li>
+</ol>
+<p><u>Create filestream filegroups</u></p>
+<p>Before creating it, we need to enable the feature.</p>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220621134152163.png" srcset="/img/loading.gif" lazyload
+alt="Enable filestream" />
+<figcaption aria-hidden="true">Enable filestream</figcaption>
+</figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> DATABASE MyMovieReviews # <span class="hljs-keyword">or</span> <span class="hljs-keyword">ALTER</span> DATABASE <span class="hljs-keyword">for</span> existing databases<br><span class="hljs-keyword">ON</span><br><span class="hljs-keyword">PRIMARY</span> <br> ( NAME <span class="hljs-operator">=</span> Reviews_data,<br> FILENAME <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;c:\data\Reviews_data.mdf&#x27;</span>),<br>FILEGROUP MovieReviewsFSGroup1 <span class="hljs-keyword">CONTAINS</span> FILESTREAM<br> ( NAME <span class="hljs-operator">=</span> Reviews_FS,<br> FILENAME <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;c:\data\Reviews_FS&#x27;</span>) # the path C:\Data must exist, but <br>								  # the Reviews_FS subfolder can’t exist<br>LOG <span class="hljs-keyword">ON</span> ( NAME <span class="hljs-operator">=</span> Reviews_log,<br> FILENAME <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;c:\data\Reviews_log.ldf&#x27;</span>);<br>GO<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220621134333252.png" srcset="/img/loading.gif" lazyload
+alt="File structure" />
+<figcaption aria-hidden="true">File structure</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220621134512226.png" srcset="/img/loading.gif" lazyload
+alt="File structure" />
+<figcaption aria-hidden="true">File structure</figcaption>
+</figure>
+<p><code>filestream.hdr</code> file is a FILESTREAM container header
+file, which shouldn’t be modified or removed.</p>
+<p>When filestream with a filestream filegroup is enabled, we can manage
+file data using Windows applications.</p>
+<h2 id="altering-a-database">Altering a database</h2>
+<p>The <code>ALTER DATABASE</code> statement can only make changes each
+time it is executed.</p>
+<h3 id="alter-database-examples">ALTER DATABASE examples</h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"># Increases the size <span class="hljs-keyword">of</span> a database file<br>USE master <br>GO <br><span class="hljs-keyword">ALTER</span> DATABASE Test1<br>MODIFY FILE <br>( NAME <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;test1dat3&#x27;</span>, <br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">2000</span>MB);<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs sql"># <span class="hljs-keyword">create</span> a <span class="hljs-keyword">new</span> filegroup <span class="hljs-keyword">in</span> a database<br># <span class="hljs-keyword">add</span> two <span class="hljs-number">500</span> MB files <span class="hljs-keyword">to</span> the filegroup<br># make the <span class="hljs-keyword">new</span> filegroup the <span class="hljs-keyword">default</span><br><span class="hljs-keyword">ALTER</span> DATABASE Test1 <br><span class="hljs-keyword">ADD</span> FILEGROUP Test1FG1; <br>GO <br><span class="hljs-keyword">ALTER</span> DATABASE Test1 <br><span class="hljs-keyword">ADD</span> FILE <br>( NAME <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;test1dat4&#x27;</span>, <br>FILENAME <span class="hljs-operator">=</span> <br> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\t1dat4.ndf&#x27;</span>, <br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">500</span>MB, <br>MAXSIZE <span class="hljs-operator">=</span> <span class="hljs-number">1000</span>MB, <br>FILEGROWTH <span class="hljs-operator">=</span> <span class="hljs-number">50</span>MB), <br>( NAME <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;test1dat5&#x27;</span>, <br>FILENAME <span class="hljs-operator">=</span> <br> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\t1dat5.ndf&#x27;</span>, <br>SIZE <span class="hljs-operator">=</span> <span class="hljs-number">500</span>MB, <br>MAXSIZE <span class="hljs-operator">=</span> <span class="hljs-number">1000</span>MB, <br>FILEGROWTH <span class="hljs-operator">=</span> <span class="hljs-number">50</span>MB) <br><span class="hljs-keyword">TO</span> FILEGROUP Test1FG1; <br>GO <br><span class="hljs-keyword">ALTER</span> DATABASE Test1 <br>MODIFY FILEGROUP Test1FG1 <span class="hljs-keyword">DEFAULT</span>; <br>GO<br></code></pre></td></tr></table></figure>
+<h3 id="databases-under-the-hood">Databases under the hood</h3>
+<p>A database consists of user-defined space (allocated in one or more
+operating system files) for the permanent storage of user objects such
+as tables and indexes.</p>
+<p>Databases are divided into logical pages (of 8 KB each), numbered
+contiguously from 0 to N.</p>
+<p><u>Enlarge/Shrink a file</u></p>
+<ol type="1">
+<li>new space is added to the end of the file</li>
+<li>pages are removed starting at the end of the pages</li>
+</ol>
+<p><u>New a database</u></p>
+<ol type="1">
+<li><p>A unique database ID created</p></li>
+<li><p>View <code>sys.databases</code> shows basic information about
+each database</p>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220621141438184.png" srcset="/img/loading.gif" lazyload
+alt="sys.databases results" />
+<figcaption aria-hidden="true">sys.databases results</figcaption>
+</figure></li>
+</ol>
+<h3 id="space-allocation">Space allocation</h3>
+<p><u>Extents</u></p>
+<ol type="1">
+<li>eight logically contiguous pages (or 64 KB of space)</li>
+<li>Types
+<ol type="1">
+<li>Uniform extents
+<ol type="1">
+<li>All eight pages owned by a single object</li>
+</ol></li>
+<li>Mixed extents
+<ol type="1">
+<li>shared by up to eight objects</li>
+</ol></li>
+</ol></li>
+<li>Allocation
+<ol type="1">
+<li>For a new table or index, allocates mixed extents</li>
+<li>When the table or index grows to eight pages, all future allocations
+use uniform extents</li>
+</ol></li>
+</ol>
+<p><u>GAM pages</u></p>
+<ol type="1">
+<li>record which extents have been allocated for any type of use.</li>
+<li>On page 2, another GAM appears every 511,230 pages after the first
+GAM on page 2</li>
+<li>Each GAM covers about 64,000 extents, or almost 4 GB of data</li>
+</ol>
+<p><u>SGAM pages</u></p>
+<ol type="1">
+<li>record which extents are now used as mixed extents and have at least
+one unused page</li>
+<li>On page 3, another SGAM appears every 511,230 pages after the first
+SGAM on page 3</li>
+<li>each SGAM covers about 64,000 extents, or almost 4 GB of data</li>
+</ol>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220621170801666.png" srcset="/img/loading.gif" lazyload
+alt="Bit settings in GAM and SGAM pages" />
+<figcaption aria-hidden="true">Bit settings in GAM and SGAM
+pages</figcaption>
+</figure>
+<h2 id="setting-database-options">Setting database options</h2>
+<p>By default, all the options that require ON or OFF have an initial
+value of OFF unless the option was set to ON in the model database.</p>
+<p>All databases created after an option is changed in the model have
+the same values as the model.</p>
+<p><code>sys.databases</code> lists the current values of all the
+options.</p>
+<h3 id="state-options">State options</h3>
+<p>State options control who can use the database and for what
+operations:</p>
+<ol type="1">
+<li><strong>User access state</strong> determines which users can use
+the database.</li>
+<li><strong>Status state</strong> determines whether the database is
+available to anybody for use</li>
+<li><strong>Updateability state</strong> determines what operations can
+be performed on the database</li>
+</ol>
+<h4 id="single_user-restricted_user-multi_user">SINGLE_USER |
+RESTRICTED_USER | MULTI_USER</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> DATABASE AdventureWorks <span class="hljs-keyword">SET</span> SINGLE_USER;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>Describe the user access property of a database</p></li>
+<li><p>Mutually exclusive</p></li>
+<li><p>SINGLE_USER</p>
+<ol type="1">
+<li>Allow only one connection at a time</li>
+</ol></li>
+<li><p>RESTRICTED_USER</p>
+<ol type="1">
+<li>Allow qualified connections</li>
+<li>Qualified: dbcreator, sysadmin server role, db_owner role</li>
+</ol></li>
+<li><p>MULTI_USER (default)</p>
+<ol type="1">
+<li>Allow connections with a valid user name</li>
+</ol></li>
+<li><p>Check current option</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> USER_ACCESS_DESC <span class="hljs-keyword">FROM</span> sys.databases<br><span class="hljs-keyword">WHERE</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;&lt;name of database&gt;&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220621172739994.png" srcset="/img/loading.gif" lazyload
+alt="Current access option" />
+<figcaption aria-hidden="true">Current access option</figcaption>
+</figure></li>
+</ol>
+<h4 id="offline-online-emergency">OFFLINE | ONLINE | EMERGENCY</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> DATABASE AdventureWorks <span class="hljs-keyword">SET</span> OFFLINE;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>Describe the status of a database</p></li>
+<li><p>Mutually exclusive</p></li>
+<li><p>ONLINE (default)</p></li>
+<li><p>OFFLINE</p>
+<ol type="1">
+<li>it’s closed and shut down cleanly and marked as offline</li>
+<li>cannot be modified</li>
+</ol></li>
+<li><p>EMERGENCY</p>
+<ol type="1">
+<li>allows you to access the data while you copy it to a new
+location.</li>
+</ol></li>
+<li><p>Check current status</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> state_desc <span class="hljs-keyword">from</span> sys.databases <br><span class="hljs-keyword">WHERE</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;AdventureWorks&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>Can have another status:</p>
+<ol type="1">
+<li>RESTORING</li>
+<li>RECOVERING</li>
+<li>RECOVERY_PENDING</li>
+</ol></li>
+</ol>
+<h4 id="read_only-read_write">READ_ONLY | READ_WRITE</h4>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> DATABASE AdventureWorks <span class="hljs-keyword">SET</span> READ_ONLY;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>describe a database’s ability to be updated</p></li>
+<li><p>mutually exclusive</p></li>
+<li><p>READ_WRITE (default)</p>
+<ol type="1">
+<li>any user with the appropriate permissions can carry out data
+modification operations</li>
+</ol></li>
+<li><p>READ_ONLY</p>
+<ol type="1">
+<li>no INSERT, UPDATE, or DELETE operations can be executed</li>
+<li>automatic recovery will not run when the SQL server is
+restarted</li>
+<li>no locks are needed for SELECT</li>
+<li>Cannot shrink databases</li>
+<li>Cannot set to READ_ONLY if any connections are made to the
+database</li>
+</ol></li>
+<li><p>Check</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> name, is_read_only <span class="hljs-keyword">FROM</span> sys.databases<br><span class="hljs-keyword">WHERE</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;AdventureWorks&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220622094135221.png" srcset="/img/loading.gif" lazyload
+alt="Updatability status" />
+<figcaption aria-hidden="true">Updatability status</figcaption>
+</figure>
+<p>1 for READ_ONLY, 0 for READ_WRITE</p></li>
+</ol>
+<h3 id="termination-options">Termination options</h3>
+<p>Termination options determine the behavior of the SQL Server when
+several state options cannot be set.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> DATABASE AdventureWorks <span class="hljs-keyword">SET</span> SINGLE_USER <span class="hljs-keyword">WITH</span> NO_WAIT; <br></code></pre></td></tr></table></figure>
+<p>Wait is the default option</p>
+<h4 id="rollback-after-integer-seconds">ROLLBACK AFTER integer
+[SECONDS]</h4>
+<ol type="1">
+<li>wait for the specified number of seconds and then break unqualified
+connections.</li>
+<li>Incomplete transactions are rolled back.</li>
+</ol>
+<h4 id="rollback-immediate">ROLLBACK IMMEDIATE</h4>
+<ol type="1">
+<li>breaks unqualified connections immediately</li>
+<li>All incomplete transactions are rolled back</li>
+</ol>
+<h4 id="no_wait">NO_WAIT</h4>
+<ol type="1">
+<li>check for connections before attempting to change the database state
+and causes the ALTER DATABASE statement to fail if certain connections
+exist (generates an error)</li>
+</ol>
+<h3 id="cursor-options">Cursor options</h3>
+<p>The cursor options control the behavior of server-side cursors
+defined using one of the following T-SQL commands for defining and
+manipulating cursors: DECLARE, OPEN, FETCH, CLOSE, and DEALLOCAT</p>
+<h4 id="cursor_close_on_commit-on-off">CURSOR_CLOSE_ON_COMMIT {ON |
+OFF}</h4>
+<ol type="1">
+<li>ON
+<ol type="1">
+<li>any open cursors are closed when a transaction is committed or
+rolled back</li>
+</ol></li>
+<li>OFF (default)
+<ol type="1">
+<li>cursors remain open after a transaction is committed</li>
+</ol></li>
+</ol>
+<h4 id="cursor_default-local-global">CURSOR_DEFAULT {LOCAL |
+GLOBAL}</h4>
+<ol type="1">
+<li>LOCAL and cursors aren’t specified as GLOBAL when they are
+created</li>
+<li>The cursor name is valid only within this batch</li>
+<li>GLOBAL and cursors aren’t specified as LOCAL when they are created
+<ol type="1">
+<li>The cursor name can be referenced in any stored procedure or batch
+executed by the connection.</li>
+</ol></li>
+</ol>
+<h3 id="auto-options">Auto options</h3>
+<p>Affect actions that SQL Server might take automatically</p>
+<h4 id="auto_close">AUTO_CLOSE</h4>
+<ol type="1">
+<li>On
+<ol type="1">
+<li>the database is closed and shut down cleanly when the last user of
+the database exits</li>
+</ol></li>
+</ol>
+<h4 id="auto_shrink">AUTO_SHRINK</h4>
+<ol type="1">
+<li>On
+<ol type="1">
+<li>all of a database’s files are candidates for periodic shrinking</li>
+<li>never recommended</li>
+</ol></li>
+</ol>
+<h4 id="auto_create_statistics">AUTO_CREATE_STATISTICS</h4>
+<ol type="1">
+<li>On (default)
+<ol type="1">
+<li>the SQL Server Query Optimizer creates statistics on columns
+referenced in a query’s WHERE, ON, GROUP BY, or DISTINCT clauses.</li>
+</ol></li>
+</ol>
+<h4 id="auto_update_statistics">AUTO_UPDATE_STATISTICS</h4>
+<ol type="1">
+<li>On (default)
+<ol type="1">
+<li>existing statistics are updated if the data in the tables has
+changed</li>
+</ol></li>
+</ol>
+<h3 id="sql-options">SQL options</h3>
+<p>The SQL options control how various SQL statements are
+interpreted.</p>
+<p>Default is OFF for all.</p>
+<h4 id="ansi_null_default">ANSI_NULL_DEFAULT</h4>
+<ol type="1">
+<li>ON
+<ol type="1">
+<li>if you don’t specifically indicate whether a column in a table
+allows NULL values, NULLs are allowed</li>
+</ol></li>
+<li>OFF
+<ol type="1">
+<li>newly created columns don’t allow NULLs if no nullability constraint
+is specified</li>
+</ol></li>
+</ol>
+<h4 id="ansi_nulls">ANSI_NULLS</h4>
+<ol type="1">
+<li>ON
+<ol type="1">
+<li>any comparisons with a NULL value result in UNKNOWN</li>
+</ol></li>
+<li>OFF
+<ol type="1">
+<li>comparisons of non-Unicode values to NULL result in a value of TRUE
+if both values being compared are NULL</li>
+</ol></li>
+</ol>
+<h4 id="ansi_padding">ANSI_PADDING</h4>
+<ol type="1">
+<li>ON
+<ol type="1">
+<li>strings being compared with each other are set to the same length
+before the comparison takes place</li>
+</ol></li>
+<li>OFF
+<ol type="1">
+<li>No padding</li>
+</ol></li>
+</ol>
+<h4 id="ansi_warnings">ANSI_WARNINGS</h4>
+<ol type="1">
+<li>ON
+<ol type="1">
+<li>errors or warnings are issued when conditions such as
+division-by-zero or arithmetic overflow occur</li>
+</ol></li>
+</ol>
+<h4 id="arithabort">ARITHABORT</h4>
+<ol type="1">
+<li>ON
+<ol type="1">
+<li>a query is terminated when an arithmetic overflow or
+division-by-zero error is encountered during the execution of a
+query</li>
+</ol></li>
+<li>OFF
+<ol type="1">
+<li>the query returns NULL as the result of the operation</li>
+</ol></li>
+</ol>
+<h4 id="concat_null_yields_null">CONCAT_NULL_YIELDS_NULL</h4>
+<ol type="1">
+<li>ON
+<ol type="1">
+<li>concatenating two strings results in a NULL string if either string
+is NULL</li>
+</ol></li>
+<li>OFF
+<ol type="1">
+<li>a NULL string is treated as an empty (zero-length) string for
+concatenation</li>
+</ol></li>
+</ol>
+<h4 id="numeric_roundabort">NUMERIC_ROUNDABORT</h4>
+<ol type="1">
+<li>ON
+<ol type="1">
+<li>an error is generated if an expression results in a loss of
+precision</li>
+</ol></li>
+<li>OFF
+<ol type="1">
+<li>the result is simply rounded</li>
+</ol></li>
+</ol>
+<h4 id="quoted_identifier">QUOTED_IDENTIFIER</h4>
+<ol type="1">
+<li>ON
+<ol type="1">
+<li>identifiers such as table and column names can be delimited by
+double quotation marks, and literals must then be delimited by single
+quotation marks</li>
+</ol></li>
+<li>OFF
+<ol type="1">
+<li>identifiers can’t be in quotation marks and must follow all T-SQL
+rules for identifiers</li>
+</ol></li>
+</ol>
+<h4 id="recursive_triggers">RECURSIVE_TRIGGERS</h4>
+<ol type="1">
+<li>ON
+<ol type="1">
+<li>triggers can fire recursively, either directly or indirectly</li>
+</ol></li>
+<li>OFF
+<ol type="1">
+<li>triggers can’t be fired recursively.</li>
+</ol></li>
+</ol>
+<h3 id="database-recovery-options">Database recovery options</h3>
+<h4 id="recovery-full-bulk_logged-or-simple">RECOVERY (FULL,
+BULK_LOGGED, or SIMPLE)</h4>
+<ol type="1">
+<li>determines how much recovery can be done on a SQL Server
+database</li>
+<li>controls how much information is logged and how much of the log is
+available for backups</li>
+</ol>
+<h4 id="page_verify">PAGE_VERIFY</h4>
+<p>Discover damaged database pages caused by disk I/O path errors, which
+can cause database corruption problems.</p>
+<ol type="1">
+<li>CHECKSUM
+<ol type="1">
+<li>SQL Server calculates a checksum over the contents of each page and
+stores the value in the page header when a page is written to the
+disk</li>
+<li>When reading the page, a checksum is calculated and compared with
+the stored one, if not match, error message 824</li>
+<li>run <code>DBCC CHECKDB</code> to determine the type of database page
+or pages affected</li>
+</ol></li>
+<li>TORN_PAGE_DETECTION
+<ol type="1">
+<li>allows SQL Server to detect incomplete I/O operations caused by
+power failures or other system outages</li>
+</ol></li>
+<li>NONE</li>
+</ol>
+<h2 id="understanding-database-security">Understanding database
+security</h2>
+<p><u>Authentication</u></p>
+<p>SQL Server validates and establishes the identity of an individual
+who wants to access a resource</p>
+<p><u>Authorization</u></p>
+<p>SQL Server decides whether a given identity is allowed to access a
+resource</p>
+<p><u>Securable</u></p>
+<ol type="1">
+<li>This is an entity on which permissions can be granted.</li>
+<li>Securable include databases, schemas, and objects.</li>
+</ol>
+<p><u>Principal</u></p>
+<ol type="1">
+<li>This entity can access securable</li>
+<li>A primary principal represents a single user</li>
+<li>A secondary principal represents multiple users</li>
+</ol>
+<h3 id="database-access">Database access</h3>
+<p><u>Authentication logins</u></p>
+<ol type="1">
+<li><p>Windows authentication</p>
+<ol type="1">
+<li>SQL Server login security is integrated directly with Windows
+security to authenticate SQL Server users</li>
+<li>The SID is the same as the OS</li>
+</ol></li>
+<li><p>SQL Server authentication</p>
+<ol type="1">
+<li>An administrator creates SQL Server login accounts within SQL
+Server</li>
+</ol></li>
+<li><p>Login names</p>
+<ol type="1">
+<li><p>Check login names in <code>sys.server_principals</code> view</p>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220622134755663.png" srcset="/img/loading.gif" lazyload
+alt="sys.server_principals view" />
+<figcaption aria-hidden="true">sys.server_principals view</figcaption>
+</figure></li>
+</ol></li>
+</ol>
+<p><u>Security modes</u></p>
+<ol type="1">
+<li><p>Windows authentication mode</p>
+<ol type="1">
+<li>Use only Windows authentication</li>
+<li>The default SQL Server sa login is disabled</li>
+</ol></li>
+<li><p>Mixed mode</p>
+<ol type="1">
+<li>Use both Windows authentication and SQL Server authentication</li>
+<li>The sa login can be enabled using the <code>ALTER LOGIN</code>
+command</li>
+</ol></li>
+<li><p>Change mode</p>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220622134603728.png" srcset="/img/loading.gif" lazyload
+alt="Choosing an authentication mode for your SQL Server instance in the Server Properties sheet" />
+<figcaption aria-hidden="true">Choosing an authentication mode for your
+SQL Server instance in the Server Properties sheet</figcaption>
+</figure></li>
+</ol>
+<h3 id="database-security">Database security</h3>
+<p>Databases are owned by login names.</p>
+<p>Most objects within a database are owned by database principals.</p>
+<p>The SID used by a principal determines which databases that principal
+has access to.</p>
+<p><code>sys.database_principals</code> is a mapping table that maps
+login names to users in that particular database</p>
+<p><u>Database user types</u></p>
+<ol type="1">
+<li>a user that maps to a SQL Server login</li>
+<li>a user that maps to a Windows login</li>
+<li>a user who doesn’t map to any login
+<ol type="1">
+<li>have a user to be the owner of objects, who never actually uses the
+database</li>
+</ol></li>
+<li>a user without a login
+<ol type="1">
+<li>have access to only that database.</li>
+</ol></li>
+<li>Within a database, users own objects and are granted
+permissions</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"># Shows the mapping <span class="hljs-keyword">of</span> users <span class="hljs-keyword">in</span> the database <span class="hljs-keyword">to</span> login names<br><span class="hljs-keyword">SELECT</span> s.name <span class="hljs-keyword">as</span> [Login Name], d.name <span class="hljs-keyword">as</span> [<span class="hljs-keyword">User</span> Name],<br>     default_schema_name <span class="hljs-keyword">as</span> [<span class="hljs-keyword">Default</span> Schema] <br>   <span class="hljs-keyword">FROM</span> sys.database_principals d  <br>      <span class="hljs-keyword">LEFT</span> <span class="hljs-keyword">JOIN</span> sys.server_principals s <br>   <span class="hljs-keyword">ON</span> s.sid <span class="hljs-operator">=</span> d.sid<br> <span class="hljs-keyword">WHERE</span> d.type_desc <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;SQL_USER&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220622142154463.png" srcset="/img/loading.gif" lazyload
+alt="Mapping of users" />
+<figcaption aria-hidden="true">Mapping of users</figcaption>
+</figure>
+<h3 id="databases-vs.-schemas">Databases vs. schemas</h3>
+<p><u>Schemas</u></p>
+<p>A schema is defined as a collection of database objects that are
+owned by a single user and form a single namespace (a container of
+objects)</p>
+<p>No two tables in the same schema can have the same name.</p>
+<p><u>Namespace</u></p>
+<p>A namespace is a set of objects that can’t have duplicate names</p>
+<h3 id="principals-and-schemas">Principals and schemas</h3>
+<p>Users and schemas are two separate things</p>
+<p>Permissions are granted to users, but objects are placed in
+schemas.</p>
+<p>Schemas contain objects, not users</p>
+<blockquote>
+<p>The statement <code>GRANT CREATE TABLE</code> TO sue refers to the
+user sue.</p>
+<p>Then sue creates a table</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> mytable (col1 <span class="hljs-type">varchar</span>(<span class="hljs-number">20</span>));<br></code></pre></td></tr></table></figure>
+<p>Then the table is placed in sue's default schema, maybe the schema
+sue.</p>
+<p>If another user wants to select from this table, then</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> col1 <span class="hljs-keyword">FROM</span> sue.mytable;<br></code></pre></td></tr></table></figure>
+<p>Here, sue refers to the schema that contains the table</p>
+</blockquote>
+<p>An object is referenced by the schema n which it is contained</p>
+<p>In most cases, the owner of the schema is the same as the owner of
+all objects within the schema</p>
+<p>The column <code>pricipal_id</code> in the view
+<code>sys.objects</code> contains the user_id of an object’s owner if it
+isn’t the same as the owner of the object’s schema.</p>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220622144848733.png" srcset="/img/loading.gif" lazyload
+alt="sys.objects view" />
+<figcaption aria-hidden="true">sys.objects view</figcaption>
+</figure>
+<p>The default for the default schema is the dbo schema.</p>
+<h3 id="default-schemas">Default schemas</h3>
+<p>Every database also has a schema called sys, which provides a way to
+access all the system tables and views.</p>
+<p>A user can have at most one default schema at any time</p>
+<p>A user’s default schema is used for name resolution during object
+creation or object reference</p>
+<p>You should always specify the schema name for all object access as
+well as object management</p>
+<p><u>To create an object in a schema</u></p>
+<ol type="1">
+<li>The schema must exist</li>
+<li>The user creating the object must have permission to create the
+object</li>
+<li>The user creating the object must have permission to alter the
+schema</li>
+</ol>
+<h2 id="moving-or-copying-a-database">Moving or copying a database</h2>
+<h3 id="detaching-and-reattaching-a-database">Detaching and reattaching
+a database</h3>
+<p><u>Detach</u></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">EXEC</span> sp_detach_db <span class="hljs-operator">&lt;</span>name <span class="hljs-keyword">of</span> database<span class="hljs-operator">&gt;</span>;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>Requires that no one is using the database.
+<ol type="1">
+<li>User <code>ALTER DATABASE</code> to <code>SINGLE_USER</code> mode to
+break connections</li>
+</ol></li>
+<li>Ensure no incomplete transactions and no dirty pages exist</li>
+<li>The database is removed from the <code>sys.databases</code> view and
+underlying system tables</li>
+</ol>
+<p><u>DROP DATABASE</u></p>
+<ol type="1">
+<li>Doesn’t check for dirty pages or open transactions</li>
+<li>Will remove the physical files</li>
+</ol>
+<p><u>Reattach</u></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> DATABASE database_name  <br>    <span class="hljs-keyword">ON</span> <span class="hljs-operator">&lt;</span>filespec<span class="hljs-operator">&gt;</span> [ ,...n ]  <br>    <span class="hljs-keyword">FOR</span> &#123; ATTACH  <br>        <span class="hljs-operator">|</span> ATTACH_REBUILD_LOG &#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>The primary file is required to have a entry</li>
+<li>The <code>FOR ATTACH_REBUILD_LOG</code> option is limited to
+read/write databases</li>
+<li>When attaching a read-only database, you must specify the log file
+or files in the FOR ATTACH clause</li>
+</ol>
+<h3 id="backing-up-and-restoring-a-database">Backing up and restoring a
+database</h3>
+<p>The database doesn’t need to come offline at all because the backup
+is a completely online operation</p>
+<h2 id="understanding-compatibility-levels">Understanding compatibility
+levels</h2>
+<p><u>Compatibility levels</u></p>
+<p>110 (for SQL Server 2012), 100 (for SQL Server 2008), or 90 (for SQL
+Server 2005)</p>
+<p><u>Check compatibility level</u></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> compatibility_level <span class="hljs-keyword">FROM</span> sys.databases<br><span class="hljs-keyword">WHERE</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;&lt;database name&gt;&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/image-20220622155851528.png" srcset="/img/loading.gif" lazyload
+alt="Compatibility levels" />
+<figcaption aria-hidden="true">Compatibility levels</figcaption>
+</figure>
+<p><u>Change compatibility level</u></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> DATABASE <span class="hljs-operator">&lt;</span>database name<span class="hljs-operator">&gt;</span><br><span class="hljs-keyword">SET</span> COMPATIBILITY_LEVEL <span class="hljs-operator">=</span> <span class="hljs-operator">&lt;</span>compatibility<span class="hljs-operator">-</span>level<span class="hljs-operator">&gt;</span>;<br></code></pre></td></tr></table></figure>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/SQL-Server/">#SQL Server</a>
+      
+        <a href="/tags/Note/">#Note</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SQL Server 2012 Internal Note_Databases and database file</div>
+      <div>http://example.com/2022/06/25/SQL Server 2012 Internal Note_Databases and database file/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Jiacheng Xie</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 25, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">
+              <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                <i class="iconfont icon-sa"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/26/SQL%20Server%20IAM%20Page/" title="SQL Server IAM Page">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SQL Server IAM Page</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/06/15/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86/" title="SQL Server 2012 实施与管理实战指南Note：数据库空间管理">
+                        <span class="hidden-mobile">SQL Server 2012 实施与管理实战指南Note：数据库空间管理</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <i class="iconfont icon-love"></i> Ycheng 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Totoal views 
+        <span id="busuanzi_value_site_pv"></span>
+        
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visitors 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
