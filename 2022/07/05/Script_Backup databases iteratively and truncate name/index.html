@@ -16,26 +16,26 @@
   <meta name="author" content="Jiacheng Xie">
   <meta name="keywords" content="">
   
-    <meta name="description" content="A note for IAM page in SQL Server with demo">
+    <meta name="description" content="A script to backup databases using the cursor and truncate databases names if too long.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SQL Server IAM Page">
-<meta property="og:url" content="http://example.com/2022/06/26/SQL%20Server%20IAM%20Page/index.html">
+<meta property="og:title" content="Script_Backup databases iteratively and truncate name">
+<meta property="og:url" content="http://example.com/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/index.html">
 <meta property="og:site_name" content="Ycheng&#39;s Blog">
-<meta property="og:description" content="A note for IAM page in SQL Server with demo">
+<meta property="og:description" content="A script to backup databases using the cursor and truncate databases names if too long.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/img/SQL%20Server.png">
-<meta property="article:published_time" content="2022-06-26T14:40:22.000Z">
-<meta property="article:modified_time" content="2022-06-25T16:44:08.546Z">
+<meta property="og:image" content="http://example.com/img/TSQL.png">
+<meta property="article:published_time" content="2022-07-05T15:50:22.000Z">
+<meta property="article:modified_time" content="2022-07-05T12:22:39.976Z">
 <meta property="article:author" content="Jiacheng Xie">
-<meta property="article:tag" content="SQL Server">
+<meta property="article:tag" content="T-SQL">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/img/SQL%20Server.png">
+<meta name="twitter:image" content="http://example.com/img/TSQL.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>SQL Server IAM Page - Ycheng&#39;s Blog</title>
+  <title>Script_Backup databases iteratively and truncate name - Ycheng&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -186,7 +186,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="SQL Server IAM Page"></span>
+            <span id="subtitle" data-typed-text="Script_Backup databases iteratively and truncate name"></span>
           
         </div>
 
@@ -197,8 +197,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-26 22:40" pubdate>
-          June 26, 2022 pm
+        <time datetime="2022-07-05 23:50" pubdate>
+          July 5, 2022 pm
         </time>
       </span>
     
@@ -209,7 +209,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.5k words
+          3.1k words
         
       </span>
     
@@ -220,7 +220,7 @@
         
         
         
-          22 mins
+          26 mins
         
       </span>
     
@@ -258,150 +258,31 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">SQL Server IAM Page</h1>
+            <h1 style="display: none">Script_Backup databases iteratively and truncate name</h1>
             
             <div class="markdown-body">
               
-              <h1 id="sql-server-iam-page">SQL Server IAM Page</h1>
-<p>Index Allocation Map (IAM) pages keep track of the extents in a 4 GB
-section of a database file used by an allocation unit.</p>
-<p><u>Allocation unit</u></p>
-<p>An allocation unit is a set of pages belonging to a single partition
-in a table or index and comprises pages of one of three storage
-types:</p>
-<ol type="1">
-<li>pages holding regular in-row data</li>
-<li>pages holding Large Object (LOB) data</li>
-<li>pages holding row-overflow data</li>
-</ol>
-<p><u>Multiple IAM pages</u></p>
-<p>A single IAM page covers only a 4 GB section of a single file.</p>
-<ol type="1">
-<li>if the partition spans files</li>
-<li>if the file is more than 4 GB in size</li>
-<li>if the partition uses pages in more than one 4 GB section</li>
-</ol>
-<p><u>IAM page structure</u></p>
-<ol type="1">
-<li>96-byte page header</li>
-<li>An IAM page header
-<ol type="1">
-<li>Contains eight page-pointer slots</li>
-</ol></li>
-<li>Contains bitmap
-<ol type="1">
-<li>A set of bits that map a range of extents onto a file</li>
-<li>Each bit of the bitmap represents an extent in the range</li>
-<li>1, is allocated; 0, unallocated</li>
-</ol></li>
-</ol>
-<p>Running the defined procedure <code>sp_AllocationMetadata</code> in
-the <code>AdventureWorks2019</code>, we can see the page number of the
-first IAM pages.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">EXEC</span> [sp_AllocationMetadata] N<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>;<br>GO<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623131334311.png" srcset="/img/loading.gif" lazyload
-alt="sp_AllocationMetadata result" />
-<figcaption aria-hidden="true">sp_AllocationMetadata result</figcaption>
-</figure>
-<p>As we can see, the object <code>Employee</code> has 6 partitions. For
-the partition that has partition ID of <code>72057594056933376</code>,
-its first IAM page is <code>2105</code>.</p>
-<p>Then let's take a closer look at the page <code>2105</code>.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">3</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623133029678.png" srcset="/img/loading.gif" lazyload
-alt="Mode 3 result" />
-<figcaption aria-hidden="true">Mode 3 result</figcaption>
-</figure>
-<p>The 8 slots listed under the <code>Single Page Allocations</code>
-mean they are in the mixed extent.</p>
-<p>Following the <code>Extent Alloc Status Slot</code> are pages in
-uniform extent. The result suggests that page <code>12640</code> and
-page <code>12672</code> are allocated</p>
-<p>We can check the allocation status by running the query:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> allocated_page_file_id <span class="hljs-keyword">AS</span> [FileID],<br>allocated_page_page_id <span class="hljs-keyword">AS</span> [PageID],<br>page_type_desc,extent_page_id<span class="hljs-operator">/</span><span class="hljs-number">8</span> <span class="hljs-keyword">AS</span> ExtentID,<br>is_mixed_page_allocation,<br>extent_page_id <span class="hljs-keyword">AS</span> [<span class="hljs-keyword">First</span> Page <span class="hljs-keyword">in</span> Extent],<br>extent_page_id<span class="hljs-operator">+</span><span class="hljs-number">7</span> <span class="hljs-keyword">AS</span> [LastPage <span class="hljs-keyword">in</span> Extent],<br>is_allocated <br><span class="hljs-keyword">FROM</span> sys.dm_db_database_page_allocations(db_id(),object_id(<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>),<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-string">&#x27;detailed&#x27;</span>)  <br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> allocated_page_page_id<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623134406196.png" srcset="/img/loading.gif" lazyload
-alt="Allocation status result" />
-<figcaption aria-hidden="true">Allocation status result</figcaption>
-</figure>
-<p>As shown in the result, page <code>12640</code> and
-<code>12672</code> are allocated, and clearly there are
-<code>(12672-12640)/8=4</code> extents between them, which is proved by
-the corresponding extent ID, <code>1580</code> and
-<code>1584</code>.</p>
-<p>Let's validate our observation by dive into the page in mode 1.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">1</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623140010858.png" srcset="/img/loading.gif" lazyload
-alt="Mode 1 result" />
-<figcaption aria-hidden="true">Mode 1 result</figcaption>
-</figure>
-<ol type="1">
-<li><p><code>0000381f</code> is fixed.</p></li>
-<li><p>Slot 0 is for mixed extent; Slot 1 is for the uniform
-extent</p></li>
-<li><p>For string <code>00000000 0010</code> and
-<code>0100 00000000</code> in Slot 1</p>
-<p>Each bit in the table stands for one extent.</p>
-<p>Note we need to convert little-endian into normal binary.</p>
-<table>
-<thead>
-<tr class="header">
-<th>HEX</th>
-<th>00 00 00 00 00</th>
-<th>10</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Binary (Little endian)</td>
-<td>many 0</td>
-<td>0001 0000</td>
-</tr>
-<tr class="even">
-<td>Binary (normal)</td>
-<td>many 0</td>
-<td>0000 1000</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th>HEX</th>
-<th>01</th>
-<th>00 00 00 00 00</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Binary (Little endian)</td>
-<td>0000 0001</td>
-<td>many 0</td>
-</tr>
-<tr class="even">
-<td>Binary (normal)</td>
-<td>1000 0000</td>
-<td>many 0</td>
-</tr>
-</tbody>
-</table>
-<p>That is, for <code>10 01</code> we have
-<code>0000 1000 1000 0000</code> in binary, the difference is 4 extent,
-from <code>1580</code> to <code>1584</code>.</p>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220624094601306.png" srcset="/img/loading.gif" lazyload
-alt="Endian example" />
-<figcaption aria-hidden="true">Endian example</figcaption>
-</figure></li>
-</ol>
+              <h1
+id="script_backup-databases-iteratively-and-truncate-name">Script_Backup
+databases iteratively and truncate name</h1>
+<p><u>Problem</u></p>
+<p>For the database backup script, if the name <code>@dbname</code> is
+too long, longer than <code>128</code>, there will be an error since the
+length of <code>name</code> column in <code>msdb.dbo.backupset</code> is
+<code>nvarchar(128)</code>.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br></code></pre></td></tr></table></figure>
+<p><u>Script logic</u></p>
+<ul>
+<li>Backup all databases except for some required databases</li>
+<li>Truncate necessary characters when the length is larger than
+<code>128</code></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@name</span>_small NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@path</span>_small NVARCHAR(<span class="hljs-number">512</span>)  <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileName</span>_small NVARCHAR(<span class="hljs-number">512</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileDate</span>_small NVARCHAR(<span class="hljs-number">40</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@errorMessage</span> NVARCHAR(<span class="hljs-number">256</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@dbName</span> NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@counter</span> <span class="hljs-type">int</span><br><br><span class="hljs-comment">-- specify database backup directory</span><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\&#x27;</span>   <br><br><span class="hljs-comment">-- specify filename format</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@fileDate</span>_small <span class="hljs-operator">=</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">101</span>),<span class="hljs-string">&#x27;/&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <span class="hljs-operator">+</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">108</span>),<span class="hljs-string">&#x27;:&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <br><br><span class="hljs-comment">-- Cursor for small databases </span><br><span class="hljs-keyword">DECLARE</span> db_cursor_small <span class="hljs-keyword">CURSOR</span> READ_ONLY <span class="hljs-keyword">FOR</span>  <br><span class="hljs-keyword">SELECT</span> name <br><span class="hljs-keyword">FROM</span> master.sys.databases <br><span class="hljs-keyword">WHERE</span> name <br><span class="hljs-keyword">NOT</span> <span class="hljs-keyword">IN</span> (<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span>,<span class="hljs-string">&#x27;tempdb&#x27;</span>)  <span class="hljs-comment">-- Fill in databases you want to exclude here</span><br><span class="hljs-keyword">AND</span> state <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is online</span><br><span class="hljs-keyword">AND</span> is_in_standby <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is not read only for log shipping</span><br><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as required:&#x27;</span>)<br>PRINT N<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span><br>PRINT N<span class="hljs-string">&#x27;tempdb&#x27;</span><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as they are not ONLINE:&#x27;</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@xmltmp</span> xml <span class="hljs-operator">=</span> (<span class="hljs-keyword">SELECT</span> name, state_desc <span class="hljs-keyword">FROM</span> sys.databases <span class="hljs-keyword">where</span> state_desc <span class="hljs-operator">&lt;&gt;</span> <span class="hljs-string">&#x27;ONLINE&#x27;</span> <span class="hljs-keyword">FOR</span> XML AUTO)<br>PRINT <span class="hljs-keyword">CONVERT</span>(NVARCHAR(MAX), <span class="hljs-variable">@xmltmp</span>)<br><br><span class="hljs-keyword">OPEN</span> db_cursor_small   <br><span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><br> <br>WHILE @<span class="hljs-variable">@FETCH</span>_STATUS <span class="hljs-operator">=</span> <span class="hljs-number">0</span>   <br><span class="hljs-keyword">BEGIN</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">+</span> <span class="hljs-number">1</span><br>   <span class="hljs-comment">-- Truncate database name if too long</span><br>   IF len(<span class="hljs-variable">@name</span>_small<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small) <span class="hljs-operator">&gt;</span> <span class="hljs-number">128</span><br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">LEFT</span>(<span class="hljs-variable">@name</span>_small,len(<span class="hljs-variable">@name</span>_small)<span class="hljs-operator">-</span>len(<span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small))<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small<br>   <span class="hljs-keyword">ELSE</span> <br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;_&#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@fileDate</span>_small<br>   PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>   PRINT(<span class="hljs-string">&#x27;Start backup database: &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; AS &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span>)<br>			<br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-operator">=</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;.BAK&#x27;</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@errorMessage</span> <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Verify failed. Backup information for database &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; not found.&#x27;</span><br>   BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>   NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br>   <span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">AS</span> <span class="hljs-type">int</span><br>   <span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-operator">=</span> position <span class="hljs-keyword">FROM</span> msdb..backupset <br>   <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <br>   <span class="hljs-keyword">AND</span> backup_set_id<span class="hljs-operator">=</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">max</span>(backup_set_id) <span class="hljs-keyword">FROM</span> msdb..backupset <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small)<br>   IF <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">BEGIN</span> RAISERROR(<span class="hljs-variable">@errorMessage</span>, <span class="hljs-number">16</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">END</span><br>   RESTORE VERIFYONLY <span class="hljs-keyword">FROM</span>  DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span>  FILE <span class="hljs-operator">=</span> <span class="hljs-variable">@backupSetId</span>,  NOUNLOAD,  NOREWIND<br>  <br>   <span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><span class="hljs-keyword">END</span>   <br>PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>PRINT(<span class="hljs-string">&#x27;Total backups:&#x27;</span>)<br>PRINT(<span class="hljs-variable">@counter</span>)<br><br><span class="hljs-keyword">CLOSE</span> db_cursor_small   <br><span class="hljs-keyword">DEALLOCATE</span> db_cursor_small<br><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>This was the very first T-SQL script I write when I interned as a
+Support Engineer at Microsoft.</p>
+</blockquote>
 
               
             </div>
@@ -413,7 +294,7 @@ alt="Endian example" />
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/SQL-Server/">#SQL Server</a>
+        <a href="/tags/T-SQL/">#T-SQL</a>
       
     </div>
   
@@ -425,8 +306,8 @@ alt="Endian example" />
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>SQL Server IAM Page</div>
-      <div>http://example.com/2022/06/26/SQL Server IAM Page/</div>
+      <div>Script_Backup databases iteratively and truncate name</div>
+      <div>http://example.com/2022/07/05/Script_Backup databases iteratively and truncate name/</div>
     </div>
     <div class="license-meta">
       
@@ -438,7 +319,7 @@ alt="Endian example" />
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>June 26, 2022</div>
+          <div>July 5, 2022</div>
         </div>
       
       
@@ -474,18 +355,12 @@ alt="Endian example" />
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/" title="Script_Backup databases iteratively and truncate name">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Script_Backup databases iteratively and truncate name</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/06/25/SQL%20Server%202012%20Internal%20Note_Databases%20and%20database%20file/" title="SQL Server 2012 Internal Note_Databases and database file">
-                        <span class="hidden-mobile">SQL Server 2012 Internal Note_Databases and database file</span>
+                      <a href="/2022/06/26/SQL%20Server%20IAM%20Page/" title="SQL Server IAM Page">
+                        <span class="hidden-mobile">SQL Server IAM Page</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
