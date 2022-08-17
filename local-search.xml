@@ -16,7 +16,26 @@
       
       <tag>SQL Server</tag>
       
+      <tag>Python</tag>
+      
       <tag>My Work</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Pyinstaller Reduce Packed Program Size</title>
+    <link href="/2022/08/16/Pyinstaller%20Reduce%20Packed%20Program%20Size/"/>
+    <url>/2022/08/16/Pyinstaller%20Reduce%20Packed%20Program%20Size/</url>
+    
+    <content type="html"><![CDATA[<h1 id="pyinstaller-reduce-packed-program-size">Pyinstaller ReducePacked Program Size</h1><p>When I was packing <code>Xevent Reader</code> with<code>pyinstaller</code>, I created a new conda virtual environment andinstalled the necessary python packages. However, the size of the packedprogram is very large, 200MB+, and runs very slow. This problem issolved by using <code>pipenv</code> virtual environment.</p><h2 id="install-pipenv">Install pipenv</h2><p>Working environment: Anaconda Prompt</p><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> pipenv<br></code></pre></td></tr></table></figure><p>Create a new folder for the virtual environment.</p><h2 id="setup-virtual-environment">Setup virtual environment</h2><p>Get into the folder created.</p><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dos"><span class="hljs-built_in">cd</span> &lt;<span class="hljs-built_in">Path</span> of your folder&gt;<br></code></pre></td></tr></table></figure><p>Setup the virtual environment.</p><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pipenv <span class="hljs-keyword">install</span><br></code></pre></td></tr></table></figure><p>Activate the virtual environment.</p><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">pipenv <span class="hljs-keyword">shell</span><br></code></pre></td></tr></table></figure><h2 id="packing">Packing</h2><p>Install necessary packages for your program, including<code>pyinstaller</code></p><figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gams"><span class="hljs-function"><span class="hljs-title">pip</span></span> install pyinstaller, ...<br></code></pre></td></tr></table></figure><p>You can try to run your python script first to test if it runscorrectly under this environment.</p><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">python</span> &lt;YourScript.<span class="hljs-keyword">py</span>&gt;<br></code></pre></td></tr></table></figure><p>Download <a href="https://upx.github.io/">UPX</a> to help furtherreduce file size and avoid triggering security warnings when running theprogram on other machines. Copy <code>upx.exe</code> to the location ofyour script.</p><p>Packing. Make sure <code>INFO: UPX is available</code> is prompted inthe cmd window.</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">pyinstaller -F <span class="hljs-tag">&lt;<span class="hljs-name">YourScript.py</span>&gt;</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    
+    <tags>
       
       <tag>Python</tag>
       
@@ -100,9 +119,9 @@
     
     <tags>
       
-      <tag>My Work</tag>
-      
       <tag>Python</tag>
+      
+      <tag>My Work</tag>
       
       <tag>Web Crawler</tag>
       
