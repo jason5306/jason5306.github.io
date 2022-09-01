@@ -549,106 +549,6 @@ alt="image-20220606172036812" />
       </tags>
   </entry>
   <entry>
-    <title>Freeze SQL service manually using WinDbg</title>
-    <url>/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/</url>
-    <content><![CDATA[<h1 id="freeze-sql-service-manually-using-windbg">Freeze SQL service
-manually using WinDbg</h1>
-<p>Currently, the SQL failover cluster works normally.</p>
-<figure>
-<img
-src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606132830651.png"
-alt="image-20220606132830651" />
-<figcaption aria-hidden="true">image-20220606132830651</figcaption>
-</figure>
-<p>In the SSMS (Microsoft SQL Server Management Studio), the following
-query returns the process id and other information related to the SQL
-server service.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- Thread ID</span><br><span class="hljs-keyword">SELECT</span> kpid,<span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.sysprocesses <span class="hljs-keyword">where</span> program_name  <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;Microsoft® Windows® Operating System%&#x27;</span><br><span class="hljs-comment">-- Prrocess ID</span><br><span class="hljs-keyword">SELECT</span> process_id,<span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.dm_server_services <span class="hljs-keyword">WHERE</span> servicename <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;SQL Server (MSSQLSERVER)&#x27;</span><br></code></pre></td></tr></table></figure>
-<p>Note that the thread ID here is the id for the system, we need to
-convert the id before using it.</p>
-<figure>
-<img
-src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606164943627.png"
-alt="image-20220606164943627" />
-<figcaption aria-hidden="true">image-20220606164943627</figcaption>
-</figure>
-<p>In <strong>WinDbg</strong>, attach to the <code>sqlserver.exe</code>
-process. As you can see, the process id is the same as the query result.
-Note that make sure the WinDbg is running on the node server that is the
-current host of the cluster, or you may not find the
-<code>sqlserver.exe</code> in the list.</p>
-<figure>
-<img
-src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606165000885.png"
-alt="image-20220606165000885" />
-<figcaption aria-hidden="true">image-20220606165000885</figcaption>
-</figure>
-<p>Convert the thread ID into hexadecimal, then enter
-<code>~~[HEX Thread ID]</code> to get the thread ID (debug ID) in the
-debugger. Then we can freeze the SQL service by
-<code>~Debug ID f</code>.</p>
-<figure>
-<img
-src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606165508820.png"
-alt="image-20220606165508820" />
-<figcaption aria-hidden="true">image-20220606165508820</figcaption>
-</figure>
-<p>Now, we observe that the SQL service is frozen.</p>
-<figure>
-<img
-src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606170306322.png"
-alt="image-20220606170306322" />
-<figcaption aria-hidden="true">image-20220606170306322</figcaption>
-</figure>
-<p>To resume the service, detach the process from the debugger. Then the
-SQL server will be brought online.</p>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-        <tag>WinDbg</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Pyinstaller Reduce Packed Program Size</title>
-    <url>/2022/08/16/Pyinstaller%20Reduce%20Packed%20Program%20Size/</url>
-    <content><![CDATA[<h1 id="pyinstaller-reduce-packed-program-size">Pyinstaller Reduce
-Packed Program Size</h1>
-<p>When I was packing <code>Xevent Reader</code> with
-<code>pyinstaller</code>, I created a new conda virtual environment and
-installed the necessary python packages. However, the size of the packed
-program is very large, 200MB+, and runs very slow. This problem is
-solved by using <code>pipenv</code> virtual environment.</p>
-<h2 id="install-pipenv">Install pipenv</h2>
-<p>Working environment: Anaconda Prompt</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> pipenv<br></code></pre></td></tr></table></figure>
-<p>Create a new folder for the virtual environment.</p>
-<h2 id="setup-virtual-environment">Setup virtual environment</h2>
-<p>Get into the folder created.</p>
-<figure class="highlight dos"><table><tr><td class="code"><pre><code class="hljs dos"><span class="hljs-built_in">cd</span> &lt;<span class="hljs-built_in">Path</span> of your folder&gt;<br></code></pre></td></tr></table></figure>
-<p>Setup the virtual environment.</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><code class="hljs cmake">pipenv <span class="hljs-keyword">install</span><br></code></pre></td></tr></table></figure>
-<p>Activate the virtual environment.</p>
-<figure class="highlight dockerfile"><table><tr><td class="code"><pre><code class="hljs dockerfile">pipenv <span class="hljs-keyword">shell</span><br></code></pre></td></tr></table></figure>
-<h2 id="packing">Packing</h2>
-<p>Install necessary packages for your program, including
-<code>pyinstaller</code></p>
-<figure class="highlight gams"><table><tr><td class="code"><pre><code class="hljs gams"><span class="hljs-function"><span class="hljs-title">pip</span></span> install pyinstaller, ...<br></code></pre></td></tr></table></figure>
-<p>You can try to run your python script first to test if it runs
-correctly under this environment.</p>
-<figure class="highlight vim"><table><tr><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">python</span> &lt;YourScript.<span class="hljs-keyword">py</span>&gt;<br></code></pre></td></tr></table></figure>
-<p>Download <a href="https://upx.github.io/">UPX</a> to help further
-reduce file size and avoid triggering security warnings when running the
-program on other machines. Copy <code>upx.exe</code> to the location of
-your script.</p>
-<p>Packing. Make sure <code>INFO: UPX is available</code> is prompted in
-the cmd window.</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml">pyinstaller -F <span class="hljs-tag">&lt;<span class="hljs-name">YourScript.py</span>&gt;</span><br></code></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Install Always On 2019 For Failover Clusters</title>
     <url>/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/</url>
     <content><![CDATA[<h1 id="install-always-on-2019-for-failover-clusters">Install Always On
@@ -936,6 +836,106 @@ alt="image-20220608094019762" />
 ]]></content>
       <tags>
         <tag>SQL Server</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Freeze SQL service manually using WinDbg</title>
+    <url>/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/</url>
+    <content><![CDATA[<h1 id="freeze-sql-service-manually-using-windbg">Freeze SQL service
+manually using WinDbg</h1>
+<p>Currently, the SQL failover cluster works normally.</p>
+<figure>
+<img
+src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606132830651.png"
+alt="image-20220606132830651" />
+<figcaption aria-hidden="true">image-20220606132830651</figcaption>
+</figure>
+<p>In the SSMS (Microsoft SQL Server Management Studio), the following
+query returns the process id and other information related to the SQL
+server service.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- Thread ID</span><br><span class="hljs-keyword">SELECT</span> kpid,<span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.sysprocesses <span class="hljs-keyword">where</span> program_name  <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;Microsoft® Windows® Operating System%&#x27;</span><br><span class="hljs-comment">-- Prrocess ID</span><br><span class="hljs-keyword">SELECT</span> process_id,<span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sys.dm_server_services <span class="hljs-keyword">WHERE</span> servicename <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;SQL Server (MSSQLSERVER)&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>Note that the thread ID here is the id for the system, we need to
+convert the id before using it.</p>
+<figure>
+<img
+src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606164943627.png"
+alt="image-20220606164943627" />
+<figcaption aria-hidden="true">image-20220606164943627</figcaption>
+</figure>
+<p>In <strong>WinDbg</strong>, attach to the <code>sqlserver.exe</code>
+process. As you can see, the process id is the same as the query result.
+Note that make sure the WinDbg is running on the node server that is the
+current host of the cluster, or you may not find the
+<code>sqlserver.exe</code> in the list.</p>
+<figure>
+<img
+src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606165000885.png"
+alt="image-20220606165000885" />
+<figcaption aria-hidden="true">image-20220606165000885</figcaption>
+</figure>
+<p>Convert the thread ID into hexadecimal, then enter
+<code>~~[HEX Thread ID]</code> to get the thread ID (debug ID) in the
+debugger. Then we can freeze the SQL service by
+<code>~Debug ID f</code>.</p>
+<figure>
+<img
+src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606165508820.png"
+alt="image-20220606165508820" />
+<figcaption aria-hidden="true">image-20220606165508820</figcaption>
+</figure>
+<p>Now, we observe that the SQL service is frozen.</p>
+<figure>
+<img
+src="/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/image-20220606170306322.png"
+alt="image-20220606170306322" />
+<figcaption aria-hidden="true">image-20220606170306322</figcaption>
+</figure>
+<p>To resume the service, detach the process from the debugger. Then the
+SQL server will be brought online.</p>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+        <tag>WinDbg</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Pyinstaller Reduce Packed Program Size</title>
+    <url>/2022/08/16/Pyinstaller%20Reduce%20Packed%20Program%20Size/</url>
+    <content><![CDATA[<h1 id="pyinstaller-reduce-packed-program-size">Pyinstaller Reduce
+Packed Program Size</h1>
+<p>When I was packing <code>Xevent Reader</code> with
+<code>pyinstaller</code>, I created a new conda virtual environment and
+installed the necessary python packages. However, the size of the packed
+program is very large, 200MB+, and runs very slow. This problem is
+solved by using <code>pipenv</code> virtual environment.</p>
+<h2 id="install-pipenv">Install pipenv</h2>
+<p>Working environment: Anaconda Prompt</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> pipenv<br></code></pre></td></tr></table></figure>
+<p>Create a new folder for the virtual environment.</p>
+<h2 id="setup-virtual-environment">Setup virtual environment</h2>
+<p>Get into the folder created.</p>
+<figure class="highlight dos"><table><tr><td class="code"><pre><code class="hljs dos"><span class="hljs-built_in">cd</span> &lt;<span class="hljs-built_in">Path</span> of your folder&gt;<br></code></pre></td></tr></table></figure>
+<p>Setup the virtual environment.</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><code class="hljs cmake">pipenv <span class="hljs-keyword">install</span><br></code></pre></td></tr></table></figure>
+<p>Activate the virtual environment.</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><code class="hljs dockerfile">pipenv <span class="hljs-keyword">shell</span><br></code></pre></td></tr></table></figure>
+<h2 id="packing">Packing</h2>
+<p>Install necessary packages for your program, including
+<code>pyinstaller</code></p>
+<figure class="highlight gams"><table><tr><td class="code"><pre><code class="hljs gams"><span class="hljs-function"><span class="hljs-title">pip</span></span> install pyinstaller, ...<br></code></pre></td></tr></table></figure>
+<p>You can try to run your python script first to test if it runs
+correctly under this environment.</p>
+<figure class="highlight vim"><table><tr><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">python</span> &lt;YourScript.<span class="hljs-keyword">py</span>&gt;<br></code></pre></td></tr></table></figure>
+<p>Download <a href="https://upx.github.io/">UPX</a> to help further
+reduce file size and avoid triggering security warnings when running the
+program on other machines. Copy <code>upx.exe</code> to the location of
+your script.</p>
+<p>Packing. Make sure <code>INFO: UPX is available</code> is prompted in
+the cmd window.</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml">pyinstaller -F <span class="hljs-tag">&lt;<span class="hljs-name">YourScript.py</span>&gt;</span><br></code></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
@@ -2441,6 +2441,215 @@ intermediate-level and lower level pages</li>
       </tags>
   </entry>
   <entry>
+    <title>SQL Server Backup</title>
+    <url>/2022/06/06/SQL%20Server%20Backup/</url>
+    <content><![CDATA[<h1 id="sql-server-backup">SQL Server Backup</h1>
+<p><strong>Full Backup</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Windows\AdventureWorks2019_20220602.bak&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>If get an error like this:</p>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100125253.png"
+alt="image-20220606100125253" />
+<figcaption aria-hidden="true">image-20220606100125253</figcaption>
+</figure>
+<p>It means that the SQL server has no permission to the location. To
+fix this, in the <strong>SQL Server Configuration Manager</strong>, we
+can find that the SQL service is logged on as
+<code>NT Service\MSSQLSERVER</code>.</p>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100346465.png"
+alt="image-20220606100346465" />
+<figcaption aria-hidden="true">image-20220606100346465</figcaption>
+</figure>
+<p>Then right-click on the folder you want to access, <strong>properties
+--&gt; security</strong>, and add permission to the
+<code>NT Service\MSSQLSERVER</code>.</p>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100858530.png"
+alt="image-20220606100858530" />
+<figcaption aria-hidden="true">image-20220606100858530</figcaption>
+</figure>
+<p><strong>Backup with differential</strong></p>
+<p>This will back up the changed pages from the previous full
+backup.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup changes start from last full backup, save changed page only</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> differential;<br></code></pre></td></tr></table></figure>
+<p><strong>Backup with copy_only</strong></p>
+<p>This will leave the DCM (diff change map) unchanged, meaning that if
+we are back up with differential, it will also backup changes from the
+last full backup.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup, leave (DCM) diff change map unchanged, compressed</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> copy_only, compression;<br></code></pre></td></tr></table></figure>
+<p>The DCM records the changes made to the page of the database, we can
+view the DCM of the specific database by</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc page(<span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>, <span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101710464.png"
+alt="image-20220606101710464" />
+<figcaption aria-hidden="true">image-20220606101710464</figcaption>
+</figure>
+<p><strong>Backup log files</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup log AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602.trn&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>We can view the information of log files of databases by</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc sqlperf(logspace)<br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101859208.png"
+alt="image-20220606101859208" />
+<figcaption aria-hidden="true">image-20220606101859208</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+        <tag>T-SQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL Server IAM Page</title>
+    <url>/2022/06/26/SQL%20Server%20IAM%20Page/</url>
+    <content><![CDATA[<h1 id="sql-server-iam-page">SQL Server IAM Page</h1>
+<p>Index Allocation Map (IAM) pages keep track of the extents in a 4 GB
+section of a database file used by an allocation unit.</p>
+<p><u>Allocation unit</u></p>
+<p>An allocation unit is a set of pages belonging to a single partition
+in a table or index and comprises pages of one of three storage
+types:</p>
+<ol type="1">
+<li>pages holding regular in-row data</li>
+<li>pages holding Large Object (LOB) data</li>
+<li>pages holding row-overflow data</li>
+</ol>
+<p><u>Multiple IAM pages</u></p>
+<p>A single IAM page covers only a 4 GB section of a single file.</p>
+<ol type="1">
+<li>if the partition spans files</li>
+<li>if the file is more than 4 GB in size</li>
+<li>if the partition uses pages in more than one 4 GB section</li>
+</ol>
+<p><u>IAM page structure</u></p>
+<ol type="1">
+<li>96-byte page header</li>
+<li>An IAM page header
+<ol type="1">
+<li>Contains eight page-pointer slots</li>
+</ol></li>
+<li>Contains bitmap
+<ol type="1">
+<li>A set of bits that map a range of extents onto a file</li>
+<li>Each bit of the bitmap represents an extent in the range</li>
+<li>1, is allocated; 0, unallocated</li>
+</ol></li>
+</ol>
+<p>Running the defined procedure <code>sp_AllocationMetadata</code> in
+the <code>AdventureWorks2019</code>, we can see the page number of the
+first IAM pages.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">EXEC</span> [sp_AllocationMetadata] N<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>;<br>GO<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623131334311.png"
+alt="sp_AllocationMetadata result" />
+<figcaption aria-hidden="true">sp_AllocationMetadata result</figcaption>
+</figure>
+<p>As we can see, the object <code>Employee</code> has 6 partitions. For
+the partition that has partition ID of <code>72057594056933376</code>,
+its first IAM page is <code>2105</code>.</p>
+<p>Then let's take a closer look at the page <code>2105</code>.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">3</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623133029678.png"
+alt="Mode 3 result" />
+<figcaption aria-hidden="true">Mode 3 result</figcaption>
+</figure>
+<p>The 8 slots listed under the <code>Single Page Allocations</code>
+mean they are in the mixed extent.</p>
+<p>Following the <code>Extent Alloc Status Slot</code> are pages in
+uniform extent. The result suggests that page <code>12640</code> and
+page <code>12672</code> are allocated</p>
+<p>We can check the allocation status by running the query:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> allocated_page_file_id <span class="hljs-keyword">AS</span> [FileID],<br>allocated_page_page_id <span class="hljs-keyword">AS</span> [PageID],<br>page_type_desc,extent_page_id<span class="hljs-operator">/</span><span class="hljs-number">8</span> <span class="hljs-keyword">AS</span> ExtentID,<br>is_mixed_page_allocation,<br>extent_page_id <span class="hljs-keyword">AS</span> [<span class="hljs-keyword">First</span> Page <span class="hljs-keyword">in</span> Extent],<br>extent_page_id<span class="hljs-operator">+</span><span class="hljs-number">7</span> <span class="hljs-keyword">AS</span> [LastPage <span class="hljs-keyword">in</span> Extent],<br>is_allocated <br><span class="hljs-keyword">FROM</span> sys.dm_db_database_page_allocations(db_id(),object_id(<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>),<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-string">&#x27;detailed&#x27;</span>)  <br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> allocated_page_page_id<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623134406196.png"
+alt="Allocation status result" />
+<figcaption aria-hidden="true">Allocation status result</figcaption>
+</figure>
+<p>As shown in the result, page <code>12640</code> and
+<code>12672</code> are allocated, and clearly there are
+<code>(12672-12640)/8=4</code> extents between them, which is proved by
+the corresponding extent ID, <code>1580</code> and
+<code>1584</code>.</p>
+<p>Let's validate our observation by dive into the page in mode 1.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">1</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623140010858.png"
+alt="Mode 1 result" />
+<figcaption aria-hidden="true">Mode 1 result</figcaption>
+</figure>
+<ol type="1">
+<li><p><code>0000381f</code> is fixed.</p></li>
+<li><p>Slot 0 is for mixed extent; Slot 1 is for the uniform
+extent</p></li>
+<li><p>For string <code>00000000 0010</code> and
+<code>0100 00000000</code> in Slot 1</p>
+<p>Each bit in the table stands for one extent.</p>
+<p>Note we need to convert little-endian into normal binary.</p>
+<table>
+<thead>
+<tr class="header">
+<th>HEX</th>
+<th>00 00 00 00 00</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Binary (Little endian)</td>
+<td>many 0</td>
+<td>0001 0000</td>
+</tr>
+<tr class="even">
+<td>Binary (normal)</td>
+<td>many 0</td>
+<td>0000 1000</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>HEX</th>
+<th>01</th>
+<th>00 00 00 00 00</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Binary (Little endian)</td>
+<td>0000 0001</td>
+<td>many 0</td>
+</tr>
+<tr class="even">
+<td>Binary (normal)</td>
+<td>1000 0000</td>
+<td>many 0</td>
+</tr>
+</tbody>
+</table>
+<p>That is, for <code>10 01</code> we have
+<code>0000 1000 1000 0000</code> in binary, the difference is 4 extent,
+from <code>1580</code> to <code>1584</code>.</p>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220624094601306.png"
+alt="Endian example" />
+<figcaption aria-hidden="true">Endian example</figcaption>
+</figure></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SQL Server 2012 实施与管理实战指南Note：高可用性和灾难恢复技术</title>
     <url>/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/</url>
     <content><![CDATA[<h1
@@ -2702,758 +2911,49 @@ Services不是Cluster-aware，可以人为配置为群集资源（不推荐）�
       </tags>
   </entry>
   <entry>
-    <title>SQL Server 2012 实施与管理实战指南Note：数据库备份与恢复</title>
-    <url>/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</url>
-    <content><![CDATA[<h1 id="sql-server-2012-实施与管理实战指南note数据库备份与恢复">SQL
-Server 2012 实施与管理实战指南Note：数据库备份与恢复</h1>
-<h2 id="备份类型">备份类型</h2>
-<p>SQL Server提供的11种主要备份方法:</p>
-<table>
-
-<thead>
-<tr class="header">
-<th>分　　级</th>
-<th>数据备份</th>
-<th></th>
-<th></th>
-<th>日志备份</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>数据库级</td>
-<td>完整数据库备份</td>
-<td>仅复制完整数据库备份</td>
-<td>差异数据库备份</td>
-<td>（一般） 日志备份</td>
-<td>仅复制 日志备份</td>
-</tr>
-<tr class="even">
-<td>文件级</td>
-<td>完整文件备份</td>
-<td>仅复制完整文件备份</td>
-<td>差异文件备份</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>部分</td>
-<td>完整部分备份</td>
-<td>仅复制完整部分备份</td>
-<td>差异部分备份</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>最常用的备份方法:</p>
-<table>
-<thead>
-<tr class="header">
-<th>分　　级</th>
-<th>数据备份</th>
-<th></th>
-<th>日志备份</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>数据库级</td>
-<td>完整数据库备份</td>
-<td>差异数据库备份</td>
-<td>（一般）日志备份</td>
-</tr>
-<tr class="even">
-<td>文件级</td>
-<td>完整文件备份</td>
-<td>差异文件备份</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3 id="完整数据库备份">完整数据库备份</h3>
-<ol type="1">
-<li>拷贝下数据库里的所有信息</li>
-<li>数据库在这段时间里还会发生变化，完整数据库备份还要对部分事务日志进行备份</li>
-</ol>
-<h3 id="文件备份">文件备份</h3>
-<ol type="1">
-<li>备份一个或多个文件或文件组中的所有数据</li>
-<li>在完整恢复模式下，一整套完整文件备份+跨所有文件备份的日志备份=完整数据库备份</li>
-<li>能够指定还原损坏的文件，以加快恢复速度</li>
-</ol>
-<h3 id="部分备份">部分备份</h3>
-<ol type="1">
-<li>默认只备份数据库的可读写部分</li>
-</ol>
-<h3 id="差异备份">差异备份</h3>
-<ol type="1">
-<li>要求数据库之前做过一次完整备份（基准）</li>
-<li>捕获自基准以来发生改变的数据</li>
-<li>便于执行频繁备份，从而降低了数据丢失的风险</li>
-</ol>
-<h3 id="事务日志备份">事务日志备份</h3>
-<ol type="1">
-<li>每个日志备份都包括创建备份时处于活动状态的部分事务日志，以及先前日志备份中未备份的所有日志记录</li>
-<li>不间断的日志备份序列包含数据库的完整（即连续不断的）日志链</li>
-</ol>
-<h3 id="仅复制备份">仅复制备份</h3>
-<p>防止将要做的备份会破坏现有的备份，维护日志链</p>
-<h4 id="仅复制完整备份">仅复制完整备份</h4>
-<ol type="1">
-<li>备份整个数据库内容</li>
-<li>但不改变差异备份的基准，不影响差异备份序列</li>
-</ol>
-<h4 id="仅复制日志备份">仅复制日志备份</h4>
-<ol type="1">
-<li>备份当前日志文件里现有的内容</li>
-<li>但不会清空日志文件里备份下的日志，不影响常规日志备份的序列</li>
-</ol>
-<h2 id="选择备份策略和恢复模式">选择备份策略和恢复模式</h2>
-<h3 id="简单恢复模式下的备份">简单恢复模式下的备份</h3>
-<figure>
-<img
-src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/clip_image002.jpg"
-alt="简单模式下的备份和还原策略" />
-<figcaption aria-hidden="true">简单模式下的备份和还原策略</figcaption>
-</figure>
-<ol type="1">
-<li><p>不能做日志备份</p></li>
-<li><p>只能将数据库恢复到最后一次备份的结尾</p></li>
-<li><p>工作损失风险会随时间增长而增加</p></li>
-<li><p>可加入差异备份</p>
-<ol type="1">
-<li><p>建立数据库备份后，后续建立差异备份</p></li>
-<li><p>可以使用在数据量稍大，能够容忍较长时间数据丢失的数据库上</p>
-<figure>
-<img
-src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/clip_image002-16563991129832.jpg"
-alt="使用差异数据库备份补充数据库完整备份" />
-<figcaption
-aria-hidden="true">使用差异数据库备份补充数据库完整备份</figcaption>
-</figure></li>
-<li><p>无法满足较大数据库，或不允许较长时间数据丢失的情况</p></li>
-</ol></li>
-</ol>
-<h3 id="完整恢复模式下的备份">完整恢复模式下的备份</h3>
-<p>使用日志备份</p>
-<ol type="1">
-<li><p>日志备份只拷贝上次日志备份以来的所有日志记录，开销小</p></li>
-<li><p>可以将数据库还原到日志备份内包含的任何时点</p></li>
-<li><p>缺点：</p>
-<ol type="1">
-<li>数量多</li>
-<li>需要严格按照备份产生的顺序进行恢复，管理复杂</li>
-</ol></li>
-<li><p>备份策略</p>
-<ol type="1">
-<li><p>基本</p>
-<figure>
-<img
-src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/clip_image002-16564066494734.jpg"
-alt="完整恢复模式下的最简单备份策略" />
-<figcaption
-aria-hidden="true">完整恢复模式下的最简单备份策略</figcaption>
-</figure>
-<p>在还原这3个备份前，数据库管理员必须备份活动日志（日志尾部，即尚未备份的日志）。然后还原Db_1、Log_1和Log_2，并且不恢复数据库。接着，数据库管理员还原并恢复尾（Tail）日志备份。这一步将可以把数据库恢复到故障点，从而恢复所有数据。如果灾难毁坏的是日志文件，使得尾日志不能成功备份和恢复，那这次灾难造成的数据丢失就是从Log_2以后的所有修改。</p></li>
-<li><p>加上差异备份</p>
-<figure>
-<img
-src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/clip_image002-16564069300966.jpg"
-alt="使用差异数据库备份及日志备份来补充完整数据库备份" />
-<figcaption
-aria-hidden="true">使用差异数据库备份及日志备份来补充完整数据库备份</figcaption>
-</figure>
-<p>在第一个数据库备份完成后，每天会做一个差异数据库备份，而在工作时间进行若干日志备份。例行日志备份将工作丢失的风险降为丢失自最近日志备份之后所做的更改。</p></li>
-</ol></li>
-</ol>
-<h3
-id="案例完整恢复模式下的数据库备份">案例：完整恢复模式下的数据库备份</h3>
-<p>对于数据库<code>Archive</code></p>
-<ol type="1">
-<li><p>全备份</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">BACKUP DATABASE [Archive] <span class="hljs-keyword">TO</span> DISK<span class="hljs-operator">=</span><span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\AdvFull1.bak&#x27;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>查询历史上的备份信息</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> s.first_lsn, s.last_lsn, <br>				s.database_backup_lsn, s.backup_finish_date,<br>				s.type, y.physical_device_name  <br><span class="hljs-keyword">FROM</span> msdb..backupset <span class="hljs-keyword">AS</span> s <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span><br>msdb..backupfile <span class="hljs-keyword">AS</span> f <span class="hljs-keyword">ON</span> f.backup_set_id <span class="hljs-operator">=</span> s.backup_set_id <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span><br>msdb..backupmediaset <span class="hljs-keyword">AS</span> m <span class="hljs-keyword">ON</span> s.media_set_id <span class="hljs-operator">=</span> m.media_set_id <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span><br>msdb..backupmediafamily <span class="hljs-keyword">AS</span> y <span class="hljs-keyword">ON</span> m.media_set_id <span class="hljs-operator">=</span> y.media_set_id<br><span class="hljs-keyword">WHERE</span>  (s.database_name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Archive&#x27;</span>) <br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span>  s.backup_finish_date <span class="hljs-keyword">DESC</span>;<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/image-20220628175642522.png"
-alt="查询数据库的历史备份记录，显示一个全备份" />
-<figcaption
-aria-hidden="true">查询数据库的历史备份记录，显示一个全备份</figcaption>
-</figure>
-<ol type="1">
-<li><code>first_lsn</code>备份集中第一个日志记录的日志序列号</li>
-<li><code>last_lsn</code>备份集之后的下一条日志记录的日志序列号</li>
-<li><code>(first_lsn, last_lsn-1)</code>
-这个日志备份所包含的所有日志序列
-<ol type="1">
-<li><code>last_lsn-1</code>
-表示前面一条日志序列号，序列号不一定以1递减</li>
-</ol></li>
-<li><code>(first_lsn, last_lsn)</code>表示做数据恢复时，在做roll
-forward（前滚）动作时，一定要遍历的LSN</li>
-<li><code>database_backup_lsn</code>
-标识上一次数据库做全备份的起始LSN</li>
-<li><code>Type</code>标识数据库备份的类型
-<ol type="1">
-<li>D(数据库)， L(日志)， I(差异数据库)，F(文件或文件组)</li>
-</ol></li>
-</ol></li>
-<li><p>进行一个操作之后，做日志备份</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> TESTTABLE<br>(number <span class="hljs-type">int</span>,<br> name nvarchar(<span class="hljs-number">50</span>)<br>)<br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TESTTABLE <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;aaaa&#x27;</span>)<br>GO<br>BACKUP LOG Archive <span class="hljs-keyword">TO</span> DISK<span class="hljs-operator">=</span><span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\AdvLog2.bak&#x27;</span><br></code></pre></td></tr></table></figure>
-<p>再次查询备份记录，可以看到</p>
-<figure>
-<img
-src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/image-20220629094538203.png"
-alt="查询数据库的历史备份记录，显示一个新的日志备份" />
-<figcaption
-aria-hidden="true">查询数据库的历史备份记录，显示一个新的日志备份</figcaption>
-</figure>
-<p>新增的日志记录，而且下一次日志备份的first_lsn总是等于上一次日志备份的last_lsn，保证了连续性</p></li>
-<li><p>进行一个操作，然后进行差异备份</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TESTTABLE <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">3</span>, <span class="hljs-string">&#x27;cccc&#x27;</span>)<br>GO<br>BACKUP DATABASE Archive <span class="hljs-keyword">TO</span> DISK<span class="hljs-operator">=</span><span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\AdvDiff4.bak&#x27;</span> <span class="hljs-keyword">WITH</span> DIFFERENTIAL<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/image-20220629095933722.png"
-alt="查询数据库的历史备份记录，显示一个差异备份" />
-<figcaption
-aria-hidden="true">查询数据库的历史备份记录，显示一个差异备份</figcaption>
-</figure>
-<p>可以看到新增了差异备份</p></li>
-<li><p>在查询结果中，我们可以发现</p>
-<ol type="1">
-<li>不管是全备份还是差异备份，都不会影响LSN的序列
-<ol type="1">
-<li>只要有全备份和该全备份之后的所有日志备份，即可恢复</li>
-</ol></li>
-<li>日志备份的LSN是连续的</li>
-</ol></li>
-</ol>
-<h3 id="文件或文件组备份">文件或文件组备份</h3>
-<p><u>完整文件备份</u></p>
-<ol type="1">
-<li>备份一个或多个文件或文件组中的所有数据</li>
-<li>在完整恢复模式下，一整套完整文件备份和跨所有文件备份的日志备份合起来，等同于一个完整数据库备份</li>
-<li>文件备份能够只还原损坏的文件，加快恢复速度</li>
-<li>文件备份在默认情况下包含足够的日志记录，可以将文件前滚至备份操作的末尾（简单模式下必须一起备份所有读/写文件）</li>
-</ol>
-<p><u>文件备份的优点</u></p>
-<ol type="1">
-<li>更快从故障恢复</li>
-<li>增加了计划和媒体处理的灵活性</li>
-<li>适用于超大型数据库</li>
-</ol>
-<p><u>文件备份的缺点</u></p>
-<ol type="1">
-<li>管理较复杂</li>
-<li>必须维护一组完整的文件备份，否则无法恢复整个数据库</li>
-<li>对于完整/大容量日志恢复模式，必须维护一个或多个日志备份，这些日志备份至少涵盖第一个完整文件备份和最后一个完整备份之间的时间间隔</li>
-<li>在完整恢复模式下，恢复一个文件组备份，需要恢复文件组备份本身，并需要依次恢复从上一次完整数据库备份后，到恢复的目标时间点为止的所有日志备份以保证同步（需要恢复的事务日志备份数量庞大）</li>
-</ol>
-<p><u>文件备份策略</u></p>
-<figure>
-<img
-src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/clip_image002-16570809862958.jpg"
-alt="文件组备份" />
-<figcaption aria-hidden="true">文件组备份</figcaption>
-</figure>
-<ol type="1">
-<li>最好执行完整数据库备份并在第一个文件备份开始之前开始日志备份</li>
-<li>图中可看到，在创建数据库（在t0时间）之后立即执行完整数据库备份（在t1时间），事务日志备份按照设置的适合数据库业务要求的间隔执行。</li>
-</ol>
-<h2 id="选择数据库还原方案">选择数据库还原方案</h2>
-<p>无论以何种方式还原数据，在恢复数据库前，SQL
-Server数据库引擎都会保证整个数据库在逻辑上的一致性。例如，还原一个文件以后，必须恢复完整的一套日志文件备份，以便将该文件里的事务前滚足够长度，与数据库保持一致，才能恢复该文件并使其在线。</p>
-<p><u>不同恢复模式所支持的各种还原方案</u></p>
-<table>
-
-<thead>
-<tr class="header">
-<th>还原方案</th>
-<th>在简单恢复模式下</th>
-<th>在完整/大容量日志恢复模式下</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>数据库 完整还原</td>
-<td>这是基本的还原策略。
-　数据库完整还原可能涉及完整数据库备份的简单还原和恢复。另外，完整的数据库还原还可能涉及还原完整数据库备份，以及还原和恢复差异备份</td>
-<td>这是基本的还原策略。数据库完整还原涉及还原完整数据库备份或差异备份（如果有），以及还原所有后续日志备份（按顺序）。通过恢复并还原上一次日志备份(RESTORE
-WITH RECOVERY)，完成数据库完整还原,过程中数据库处于离线状态</td>
-</tr>
-<tr class="even">
-<td>文件还原</td>
-<td>只能还原损坏的只读文件，但不还原整个数据库。所以实用性不是很强</td>
-<td>能够还原一个或多个文件，而不还原整个数据库。可以在数据库处于离线状态或数据库保持在线状态（对于SQL
-Server
-2005的某些版本）时执行文件还原。在文件还原过程中，包含正在还原的文件的文件组一直处于离线状态。其他文件组有可能被访问</td>
-</tr>
-<tr class="odd">
-<td>页面还原</td>
-<td>不适用</td>
-<td>还原损坏的页面。可以在数据库处于离线状态或数据库保持在线状态（对于SQL
-Server
-的企业版）时执行页面还原。在页面还原过程中，正在还原的页面一直处于离线状态。
-　必须具有完整的日志备份链（包含当前日志文件），并且必须恢复所有这些日志备份，以使页面与当前日志文件保持一致</td>
-</tr>
-<tr class="even">
-<td>段落还原</td>
-<td>按文件组级别并从主文件组和所有读写辅助文件组开始，分阶段还原和恢复数据库</td>
-<td>按文件组级别并从主文件组开始，分阶段还原和恢复数据库</td>
-</tr>
-</tbody>
-</table>
-<p><u>每种恢复模式支持的还原方案以及适用范围</u></p>
-<table>
-
-<thead>
-<tr class="header">
-<th>还原操作</th>
-<th>完整恢复模式</th>
-<th>大容量日志恢复模式</th>
-<th>简单恢复模式</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>数据还原</td>
-<td>完整还原（如果日志可用）</td>
-<td>某些数据将丢失</td>
-<td>自上次完整备份或差异备份后的任何数据将丢失</td>
-</tr>
-<tr class="even">
-<td>时点还原</td>
-<td>日志备份所涵盖的任何时间</td>
-<td>日志备份包含任何大容量日志更改时不允许</td>
-<td>不支持</td>
-</tr>
-<tr class="odd">
-<td>文件还原*</td>
-<td>完全支持</td>
-<td>不完全支持</td>
-<td>仅对只读辅助文件可用</td>
-</tr>
-<tr class="even">
-<td>页面还原*</td>
-<td>完全支持</td>
-<td>不完全支持</td>
-<td>无</td>
-</tr>
-<tr class="odd">
-<td>段落还原*</td>
-<td>完全支持</td>
-<td>不完全支持</td>
-<td>仅对只读辅助文件可用</td>
-</tr>
-</tbody>
-</table>
-<p>* 仅适用于SQL Server企业版</p>
-<h3 id="数据库完整还原">数据库完整还原</h3>
-<p>将一个数据库从无到有，完整地还原出来，是最常使用的还原操作。在简单情况下，还原操作只需要一个完整数据库备份、一个差异数据库备份和后续日志备份。</p>
-<p><u>数据库恢复到故障点的基本步骤</u></p>
-<p>数据库需满足：</p>
-<ol type="1">
-<li>恢复模式必须是完整恢复模式
-<ol type="1">
-<li>如果源数据库是简单模式，则没有相应的日志备份</li>
-</ol></li>
-<li>灾难发生前，数据库曾经做过一个完整数据库备份（或有一套完整的文件备份）。</li>
-<li>在上次完整数据库备份后，做过的任何日志备份每个都能找到</li>
-</ol>
-<p>步骤：</p>
-<ol type="1">
-<li><p>备份活动事务日志（也称为日志尾部）。</p></li>
-<li><p>还原最新完整数据库备份，而且不做事务恢复<code>RESTORE DATABASE *database_name* FROM *backup_device* WITH NORECOVERY</code></p></li>
-<li><p>如果存在差异备份，则还原最新的差异备份，而不做事务恢复<code>WITH NORECOVERY</code></p></li>
-<li><p>从还原备份后创建的第一个事务日志备份开始，使用<code>NORECOVERY</code>依次还原日志</p></li>
-<li><p>恢复数据库到某个时间点<code>RESTORE DATABASE *database_name* WITH STOPAT='????????', RECOVERY</code>。此步骤也可以与还原上一次日志备份结合使用</p></li>
-</ol>
-<p>实例：
-恢复AdventureWorks数据库，在此示例之前，数据库已经做过一个数据库完整备份和一个日志备份。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">--灾难发生后，试图创建一个尾日志备份</span><br>BACKUP LOG AdventureWorks <br><span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Z:\SQLServerBackups\AdventureWorks.bak&#x27;</span><br>   <span class="hljs-keyword">WITH</span> NORECOVERY; <br>GO<br><span class="hljs-comment">--从备份恢复一个全备份</span><br>RESTORE DATABASE AdventureWorks <br>  <span class="hljs-keyword">FROM</span> DISK <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Z:\SQLServerBackups\AdventureWorks.bak&#x27;</span> <br>  <span class="hljs-keyword">WITH</span> FILE<span class="hljs-operator">=</span><span class="hljs-number">1</span>, <br>    NORECOVERY;<br><br><span class="hljs-comment">--从备份中恢复一个正常的日志备份</span><br>RESTORE LOG AdventureWorks <br>  <span class="hljs-keyword">FROM</span> DISK <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Z:\SQLServerBackups\AdventureWorks.bak&#x27;</span> <br>  <span class="hljs-keyword">WITH</span> FILE<span class="hljs-operator">=</span><span class="hljs-number">2</span>, <br>    NORECOVERY;<br><br><span class="hljs-comment">--用STOPAT恢复尾日志备份</span><br>RESTORE LOG AdventureWorks <br>  <span class="hljs-keyword">FROM</span> DISK <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Z:\SQLServerBackups\AdventureWorks.bak&#x27;</span><br>  <span class="hljs-keyword">WITH</span> FILE<span class="hljs-operator">=</span><span class="hljs-number">3</span>, STOPAT<span class="hljs-operator">=</span><span class="hljs-string">&#x27;XXXX xx:xx:xx&#x27;</span>,<br>   RECOVERY;<br>GO<br></code></pre></td></tr></table></figure>
-<p><u>完整还原优点</u></p>
-<ol type="1">
-<li>管理和执行都比较简单</li>
-<li>是最广泛使用的还原方案</li>
-</ol>
-<p><u>完整还原缺点</u></p>
-<ol type="1">
-<li>数据库的完整备份恢复耗时太长</li>
-<li>完整备份大小占空间</li>
-</ol>
-<h3 id="文件还原">文件还原</h3>
-<p><u>从文件备份和差异文件备份中还原一个或多个受损文件的基本步骤</u></p>
-<ol type="1">
-<li>创建活动事务日志的尾日志备份
-<ol type="1">
-<li>对于离线文件还原，在文件还原之前必须先进行一次尾日志备份</li>
-<li>对于在线文件还原，在文件还原之后必须先进行一次日志备份</li>
-</ol></li>
-<li>从每个损坏的文件的最新文件备份还原相应文件</li>
-<li>针对每个还原的文件，还原最近的差异文件备份（如果有）。</li>
-<li>按顺序还原事务日志备份，从覆盖最早还原文件的备份开始，到在步骤1中创建的尾日志备份结束。</li>
-</ol>
-<p><u>示例</u></p>
-<p>数据库abc（完整恢复模式）包含三个文件组，文件组A为读/写文件组，而文件组B和C是只读的。最初，所有文件组都处于在线状态。现在文件组A中的文件a1已损坏，数据库管理员决定在数据库处于在线状态时还原该文件。</p>
-<ol type="1">
-<li><p>在线还原文件a1</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE DATABASE adb FILE<span class="hljs-operator">=</span><span class="hljs-string">&#x27;a1&#x27;</span> <span class="hljs-keyword">FROM</span> backup <span class="hljs-keyword">WITH</span> NORECOVERY<br></code></pre></td></tr></table></figure>
-<p>文件a1处于RESTORING状态，文件组A处于离线状态</p></li>
-<li><p>进行新的日志备份以确保捕获到该文件离线时的点</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 之前曾经做过两次日志备份</span><br>BACKUP LOG adb <span class="hljs-keyword">TO</span> log_backup3 <span class="hljs-keyword">WITH</span> COPY_ONLY<br></code></pre></td></tr></table></figure></li>
-<li><p>在线还原日志备份</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE LOG adb <span class="hljs-keyword">FROM</span> log_backup1 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> log_backup2 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> log_backup3 <span class="hljs-keyword">WITH</span> RECOVERY<br></code></pre></td></tr></table></figure>
-<p>文件a1现处于在线状态。数据库恢复完成</p></li>
-</ol>
-<h3 id="页面还原">页面还原</h3>
-<p>页面还原用于修复隔离的损坏页。页面还原仅可以还原数据页。</p>
-<p><u>不能使用页面还原的内容</u></p>
-<ol type="1">
-<li>事务日志</li>
-<li>分配页：全局分配映射（GAM）页、共享全局分配映射（SGAM）页和页可用空间（PFS）页</li>
-<li>所有数据文件的页0（文件启动页）</li>
-<li>页1:9（数据库启动页）</li>
-<li>全文目录（Fulltext search catalog）</li>
-</ol>
-<p><u>使用页面还原的要求</u></p>
-<ol type="1">
-<li>数据库必须使用完整恢复模式。使用大容量日志恢复模式时可能不能成功。简单恢复模式无法使用这一功能。</li>
-<li>只读文件组中的页面无法还原</li>
-<li>还原顺序必须从完整备份、文件备份或文件组备份中恢复页面开始</li>
-<li>页面还原需要截止到当前日志文件的连续（无截断）日志备份，并且必须恢复所有这些日志备份后，页才能恢复到当前正常状态</li>
-<li>数据库备份和页面还原不能同时运行</li>
-</ol>
-<p><u>页面还原的基本步骤</u></p>
-<ol type="1">
-<li>获取要还原的损坏页的页ID
-<ol type="1">
-<li>查询msdb数据库里的<code>suspect_pages</code>表</li>
-<li>查询监视事件和SQL Server errorlog文件里所报出的错误信息</li>
-</ol></li>
-<li>从包含页的完整数据库备份、文件备份或文件组备份开始进行页面还原</li>
-<li>应用最近的差异备份</li>
-<li>应用后续日志备份</li>
-<li>创建新的数据库尾日志备份</li>
-<li>还原新的尾日志备份</li>
-</ol>
-<p><u>示例</u></p>
-<p>使用NORECOVERY还原文件B的4个损坏页。随后，将使用NORECOVERY应用两个日志备份，然后是尾日志备份（使用RECOVERY还原）。文件B的文件ID为1，损坏的页的页ID分别为57、202、916和1016。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE DATABASE <span class="hljs-operator">&lt;</span>database<span class="hljs-operator">&gt;</span> PAGE<span class="hljs-operator">=</span><span class="hljs-string">&#x27;1:57, 1:202, 1:916, 1:1016&#x27;</span><br>   <span class="hljs-keyword">FROM</span> <span class="hljs-operator">&lt;</span>file_backup_of_file_B<span class="hljs-operator">&gt;</span> <br>   <span class="hljs-keyword">WITH</span> NORECOVERY;<br>RESTORE LOG <span class="hljs-operator">&lt;</span>database<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-operator">&lt;</span>log_backup<span class="hljs-operator">&gt;</span> <br>   <span class="hljs-keyword">WITH</span> NORECOVERY;<br>RESTORE LOG <span class="hljs-operator">&lt;</span>database<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-operator">&lt;</span>log_backup<span class="hljs-operator">&gt;</span> <br>   <span class="hljs-keyword">WITH</span> NORECOVERY; <br>BACKUP LOG <span class="hljs-operator">&lt;</span>database<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">TO</span> <span class="hljs-operator">&lt;</span>new_log_backup<span class="hljs-operator">&gt;</span> <br>RESTORE LOG <span class="hljs-operator">&lt;</span>database<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-operator">&lt;</span>new_log_backup<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">WITH</span> RECOVERY;<br>GO<br></code></pre></td></tr></table></figure>
-<h3 id="段落还原">段落还原</h3>
-<p>段落还原包括从主文件组开始的一系列还原顺序，有时也可以从一个或多个辅助文件组开始。在还原顺序结束后，如果恢复的文件有效并且与数据库一致，则恢复的文件将能直接变为在线状态，恢复用户访问。</p>
-<p><u>离线段落还原方案</u></p>
-<ol type="1">
-<li>数据库在部分还原顺序之后处于在线状态</li>
-<li>尚未还原的文件组保持离线状态，而数据库必须进入离线状态后，才能继续还原没有还原的文件组</li>
-</ol>
-<p><u>在线段落还原方案</u></p>
-<ol type="1">
-<li>SQL Server 企业版</li>
-<li>数据库在完成部分还原顺序后，主文件组已经被恢复，它和所有其他已恢复的辅助文件组都处于可用状态，数据库进入在线状态，用户可以访问</li>
-<li>尚未还原的文件组保持离线状态，而后面还原这些文件组时，数据库还能保持在线状态</li>
-<li>如果仅还原了一部分文件组，则数据库和这些文件组有关的事务可能会被挂起，影响一部分数据页面的访问</li>
-</ol>
-<p>在简单恢复模式下，可以被推迟恢复的只有只读文件组。</p>
-<p>在完整恢复模式或大容量日志恢复模式下，任何包含多个文件组的数据库都可以使用段落还原，并且可以将数据库还原到任何时间点。</p>
-<p><u>段落还原顺序</u></p>
-<ol type="1">
-<li><p>部分还原顺序</p>
-<p>第一个RESTORE DATABASE语句必须执行以下操作：</p>
-<ol type="1">
-<li>指定PARTIAL选项（只能指定一次）</li>
-<li>使用包含主文件组的任何完整数据库备份，还原部分备份来启动部分还原顺序。</li>
-<li>若要还原到特定的时间点，必须在部分还原顺序中指定该时间。还原顺序的每个后续步骤都必须指定相同的时间点</li>
-</ol></li>
-<li><p>文件组还原顺序会使其他文件组在线并处于与数据库一致的某个点</p>
-<ol type="1">
-<li>如果特定只读文件未损坏且与数据库一致，则该文件无须还原。</li>
-<li>如果在文件备份创建之前，只读文件组就已处于只读状态，则该文件组无须应用日志备份，并且文件还原会跳过日志备份的应用过程。</li>
-<li>如果文件组是读/写文件组，则必须将未中断的日志备份链应用于上一次完整还原或差异还原，文件组才能前进到当前的日志文件</li>
-</ol></li>
-</ol>
-<p><u>段落还原的优点</u></p>
-<ol type="1">
-<li>能帮助让最重要的数据最先上线</li>
-<li>能允许在数据库恢复其他文件组的时候，先前已恢复的文件组仍保持在线状态</li>
-</ol>
-<p><u>示例</u></p>
-<p>数据库adb将在发生灾难性事件后还原到一台新计算机。该数据库使用完整恢复模式。发生灾难性事件前所有文件组都处于在线状态。文件组B是只读的。必须还原所有辅助文件组，但这些辅助文件组将按重要性顺序进行还原：A最高，其次是C，最后是B。在此示例中，存在4个日志备份，其中包括尾日志备份。</p>
-<ol type="1">
-<li><p>备份日志尾部（是后面还原顺序中将要应用的最后一个备份）</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 数据库已损坏，因此创建尾日志备份要使用NO_TRUNCATE选项</span><br>BACKUP LOG adb <span class="hljs-keyword">TO</span> tailLogBackup <span class="hljs-keyword">WITH</span> NORECOVERY, NO_TRUNCATE<br></code></pre></td></tr></table></figure></li>
-<li><p>还原顺序</p>
-<ol type="1">
-<li><p>部分还原主文件组和辅助文件组A</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE DATABASE adb FILEGROUP<span class="hljs-operator">=</span><span class="hljs-string">&#x27;Primary&#x27;</span> <span class="hljs-keyword">FROM</span> backup1 <br>   <span class="hljs-keyword">WITH</span> PARTIAL, NORECOVERY<br>RESTORE DATABASE adb FILEGROUP<span class="hljs-operator">=</span><span class="hljs-string">&#x27;A&#x27;</span> <span class="hljs-keyword">FROM</span> backup2 <br>   <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> backup3 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> backup4 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> backup5 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> tailLogBackup <span class="hljs-keyword">WITH</span> RECOVERY<br></code></pre></td></tr></table></figure>
-<ol type="1">
-<li>主文件组和辅助文件组A处于在线状态</li>
-<li>文件组B和C中的所有文件都处于恢复挂起状态，处于离线状态。</li>
-<li>步骤1中的最后一条RESTORE
-LOG语句的消息会指出：由于文件组C不可用，因此涉及此文件组的事务回滚已延迟</li>
-</ol></li>
-<li><p>在线还原文件组C</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE DATABASE adb FILEGROUP<span class="hljs-operator">=</span><span class="hljs-string">&#x27;C&#x27;</span> <span class="hljs-keyword">FROM</span> backup2a <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> backup3 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> backup4 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> backup5 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> tailLogBackup <span class="hljs-keyword">WITH</span> RECOVERY<br></code></pre></td></tr></table></figure>
-<ol type="1">
-<li>主文件组及文件组A和C处于在线状态</li>
-<li>文件组B中的文件处于恢复挂起状态，该文件组处于离线状态</li>
-<li>解析延迟的事务后，日志被截断</li>
-</ol></li>
-<li><p>在线还原文件组B</p>
-<p>文件组B的备份是在该文件组变为只读状态之后进行的，因此，在恢复过程中无须再恢复日志备份。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE DATABASE adb FILEGROUP<span class="hljs-operator">=</span><span class="hljs-string">&#x27;B&#x27;</span> <span class="hljs-keyword">FROM</span> backup2b <span class="hljs-keyword">WITH</span> RECOVERY<br></code></pre></td></tr></table></figure>
-<p>所有文件组现在都处于在线状态</p></li>
-</ol>
-<h3 id="孤立用户故障排除">孤立用户故障排除</h3>
-<p><u>SQL Server的用户安全管理</u></p>
-<ol type="1">
-<li><p>服务器层</p>
-<ol type="1">
-<li><p>登录账号（Login）</p></li>
-<li><p>管理整个SQL Server服务器，开启跟踪，修改SQL
-Server安全配置，备份所有数据库等</p></li>
-<li><p>所有登录账号的信息，存放在master数据库里</p>
-<ol type="1">
-<li><p>查询<code>sys.server_principals</code></p>
-<figure>
-<img
-src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/image-20220707101818615.png"
-alt="查询sys.server_principals" />
-<figcaption aria-hidden="true">查询sys.server_principals</figcaption>
-</figure></li>
-</ol></li>
-<li><p>每个登录账号都有一个唯一编号SID</p>
-<ol type="1">
-<li>对于Windows Login, SID就是Windows用户在域里的SID</li>
-<li>对于SQL Login, 会随机生成SID，每次生成的SID都有可能不一样</li>
-</ol></li>
-</ol></li>
-<li><p>数据库层</p>
-<ol type="1">
-<li>数据库用户（Database User）</li>
-<li>可以设置它对这个特定的数据库有读写、修改表格结构、存储过程定义等权限</li>
-<li>查询<code>sys.database_principals</code>了解用户信息</li>
-<li>每个数据库用户除了名字，也有一个唯一的SID</li>
-</ol></li>
-<li><p>SQL
-Server登录账户必须要和某个数据库用户相对应后，才能被数据库接纳</p>
-<ol type="1">
-<li>即用户数据库sys.database_principals里的SID和master数据库sys.server_principals里的SID匹配</li>
-<li>对于Windows登录账号，如果新的服务器和原先的服务器在同一个域里，那么同样的Windows登录账号会有一样的SID</li>
-<li>对于SQL登录账号，当用户数据库恢复到新的服务器上后，master数据库sys.server_principals里并没有这个账号，但是用户数据库里还是有“test”这个数据库用户，于是这个用户被“孤立”了</li>
-</ol></li>
-<li><p>检测孤立用户</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">USE <span class="hljs-operator">&lt;</span>database_name<span class="hljs-operator">&gt;</span>;<br>GO; <br><span class="hljs-keyword">EXEC</span> sp_change_users_login <span class="hljs-string">&#x27;Report&#x27;</span>;<br></code></pre></td></tr></table></figure></li>
-<li><p>链接孤立用户</p>
-<ol type="1">
-<li><p>SQL登录账号</p>
-<ol type="1">
-<li><p>创建相应的SQL登陆账号</p></li>
-<li><p>使用命令重新链接服务器登录账户与数据库用户，修改SID为一致</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">USE <span class="hljs-operator">&lt;</span>database_name<span class="hljs-operator">&gt;</span>;<br>GO<br><span class="hljs-keyword">EXEC</span> sp_change_users_login <span class="hljs-variable">@Action</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;update_one&#x27;</span>, <span class="hljs-variable">@UserNamePattern</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;&lt;database_user&gt;&#x27;</span>, <span class="hljs-variable">@LoginName</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;&lt;login_name&gt;&#x27;</span>;<br></code></pre></td></tr></table></figure></li>
-</ol></li>
-<li><p>Windows登录账号</p>
-<ol type="1">
-<li>如果SID不同，说明域也发生了变化</li>
-<li>Windows服务器登录账户和数据库用户是不能强制链接在一起的</li>
-</ol></li>
-</ol></li>
-</ol></li>
-</ol>
-<h2 id="系统数据库备份与恢复">系统数据库备份与恢复</h2>
-<p>每次进行过系统更新后，都必须备份多个系统数据库</p>
-<p>有任何数据库在服务器实例上使用了复制，则还必须备份distribution系统数据库</p>
-<table>
-
-<thead>
-<tr class="header">
-<th>系统数据库</th>
-<th>说　　明</th>
-<th>是否支 持备份</th>
-<th>恢复 模式</th>
-<th>注　　释</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>master</td>
-<td>记录SQL Server系统的所有系统级信息的数据库</td>
-<td>支持</td>
-<td>简单</td>
-<td>必须经常备份master数据库，以便根据业务需要充分保护数据。建议使用定期备份计划，这样在大量更新之后可以补充更多的备份</td>
-</tr>
-<tr class="even">
-<td>model</td>
-<td>在SQL Server实例上为所有数据库创建的模板</td>
-<td>支持</td>
-<td>用户 可配置</td>
-<td>仅在业务需要时备份model数据库，例如自定义其数据库选项后立即备份。
-最佳方法：建议您仅根据需要创建model数据库的完整数据库备份。由于model数据库较小而且很少更改，因此无须备份日志</td>
-</tr>
-<tr class="odd">
-<td>msdb</td>
-<td>SQL
-Server代理用来安排警报和作业以及记录操作员信息的数据库。msdb数据库还包含历史记录表，例如备份和还原历史记录表</td>
-<td>支持</td>
-<td>简单 （默认值）</td>
-<td>更新时备份msdb数据库</td>
-</tr>
-<tr class="even">
-<td>Resource（RDB）</td>
-<td>包含SQL Server附带的所有系统对象副本的只读数据库</td>
-<td>不支持</td>
-<td>—</td>
-<td>Resource数据库位于mssqlsy-
-stemresource.mdf文件中，该文件仅包含代码。因此，SQL
-Server不能备份Resource数据库</td>
-</tr>
-<tr class="odd">
-<td>tempdb</td>
-<td>用于保存临时或中间结果集的工作空间。每次启动SQL
-Server实例时都会重新创建此数据库。服务器实例关闭时，将永久删除tempdb数据库中的所有数据</td>
-<td>不支持</td>
-<td>简单</td>
-<td>无法备份tempdb系统数据库</td>
-</tr>
-<tr class="even">
-<td>distribution</td>
-<td>只有将服务器配置为复制分发服务器时才存在此数据库。此数据库存储元数据、各种复制的历史记录数据以及用于事务复制的事务</td>
-<td>支持</td>
-<td>简单</td>
-<td>根据您具体的复制配置决定</td>
-</tr>
-</tbody>
-</table>
-<h3 id="master数据库">master数据库</h3>
-<p>建议经常做master的完整数据库备份</p>
-<p><u>Master数据库包含的信息</u></p>
-<ol type="1">
-<li>SQL
-Server系统的所有系统级信息，例如登录账户、系统配置设置、端点和凭据以及访问其他数据库服务器所需的信息</li>
-<li>记录启动服务器实例所需的初始化信息，每个其他数据库的主文件位置</li>
-<li>是SQL Server启动的时候打开的第一个数据库</li>
-</ol>
-<p><u>重建master数据库</u></p>
-<ol type="1">
-<li>如果由于master数据库损坏严重到无法启动服务器实例，又没有备份，则必须重建</li>
-<li>重建master数据库将使所有的系统数据库恢复到其原始状态，SQL
-Server就像被重装过一样</li>
-</ol>
-<p><u>导致master数据库更新并要求进行备份的操作类型</u></p>
-<ol type="1">
-<li>创建或删除用户数据库
-<ol type="1">
-<li>用户数据库自动增长以容纳新数据时，master数据库不受影响</li>
-</ol></li>
-<li>添加或删除文件和文件组</li>
-<li>添加登录或其他与登录安全相关的操作
-<ol type="1">
-<li>数据库层面的安全操作（如向数据库中添加用户）对master数据库没有影响</li>
-</ol></li>
-<li>更改服务器范围的配置选项或数据库配置选项</li>
-<li>创建或删除逻辑备份设备</li>
-<li>配置用于分布式查询和远程过程调用（RPC）的服务器，如添加链接服务器或远程登录</li>
-</ol>
-<p><u>恢复master数据库</u></p>
-<ol type="1">
-<li>RESTOR</li>
-<li>还原master数据库后，SQL Server实例将自动停止</li>
-<li>将master数据库恢复到一台新的服务器上时，文件地址会发生变化，需要使用单用户模式启动SQL
-Server，将master数据库里的信息修改成新的地址
-<ol type="1">
-<li>单用户模式重新启动服务器时，应首先停止所有SQL
-Server服务（服务器实例本身除外），并停止所有SQL Server实用工具</li>
-</ol></li>
-</ol>
-<h3 id="model数据库">model数据库</h3>
-<ol type="1">
-<li>model数据库是SQL Server使用的模板</li>
-<li>model数据库的全部内容（包括数据库选项）都会被复制到新的数据库</li>
-<li>不推荐做任何修改，不要把任何用户数据放在这个数据库里</li>
-<li>还原model数据库与对用户数据库执行完整的数据库还原相同</li>
-</ol>
-<h3 id="msdb数据库">msdb数据库</h3>
-<ol type="1">
-<li>存储数据，包括计划信息以及备份与还原历史记录信息</li>
-<li>SQL
-Server将在msdb数据库中自动维护一份完整的在线备份与还原历史记录</li>
-<li>默认情况下，msdb数据库使用简单恢复模式</li>
-<li>如果在恢复用户数据库时使用msdb数据库中的备份与还原历史记录信息，建议对msdb数据库使用完整恢复模式</li>
-</ol>
-<h3 id="tempdb">tempdb</h3>
-<ol type="1">
-<li>每次启动SQL Server时都会重新创建tempdb数据库</li>
-<li>不需要备份</li>
-</ol>
-<h3 id="资源数据库resource-database">资源数据库（Resource
-Database）</h3>
-<ol type="1">
-<li>只读数据库</li>
-<li>包含了SQL
-Server中的所有系统对象，不包含任何用户数据或用户元数据</li>
-<li>对于同一个版本的SQL Server，它们的Resource数据库应该都是一样的</li>
-<li>物理文件名：mssqlsystemresource.mdf和mssqlsystemresource.ldf</li>
-<li>每个SQL
-Server实例都有且只有一个关联的mssqlsystemresource.mdf文件，并且实例间不共享此文件</li>
-<li>理论上不用备份Resource数据库，但是最好做基于文件的备份或基于磁盘的备份，恢复时注意版本问题</li>
-</ol>
-<h2
-id="带有filestream功能的数据库备份和恢复">带有FILESTREAM功能的数据库备份和恢复</h2>
-<p>对于有FILESTREAM功能的数据库，在进行备份和恢复时，会自动包含FILESTREAM数据，并不需要额外做文件级别的备份和恢复。</p>
-<ol type="1">
-<li><p>启动FILESTREAM</p>
-<ol type="1">
-<li><p>打开数据库的配置管理器，找到数据库服务，并右键点击属性。找到FILESTREAM的设置，启用FILESTREAM</p></li>
-<li><p>执行语句</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">EXEC</span> sp_configure filestream_access_level, <span class="hljs-number">2</span><br>RECONFIGURE<br></code></pre></td></tr></table></figure></li>
-<li><p>重新启动数据库服务</p></li>
-</ol></li>
-<li><p>创建TESTDB，指定文件组</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> DATABASE TESTFSDB<br>GO<br><br><span class="hljs-keyword">ALTER</span> DATABASE TESTFSDB <br><span class="hljs-keyword">ADD</span> FILEGROUOP [FSGroup] <span class="hljs-keyword">CONTAINS</span> FILESTREAM<br>GO<br><br><span class="hljs-keyword">ALTER</span> DATABASE TESTFSDB<br><span class="hljs-keyword">ADD</span> FILE (NAME<span class="hljs-operator">=</span>N’FSDATA’, FILENAME<span class="hljs-operator">=</span>N’D:\FSData’) <span class="hljs-keyword">TO</span> FILEGROUP FSGroup<br>GO<br></code></pre></td></tr></table></figure></li>
-<li><p>创建表并开启FILESTREAM功能</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">use TESTFSDB<br>go<br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> FSTable<br>(<br>[Id] [uniqueidentifier] ROWGUIDCOL <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">UNIQUE</span>, <br>[FileName] NVARCHAR(<span class="hljs-number">100</span>) ,<br>[BlobData] <span class="hljs-type">VARBINARY</span>(MAX) FILESTREAM <span class="hljs-keyword">NULL</span><br>)<br></code></pre></td></tr></table></figure></li>
-<li><p>插入数据</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> FSTable<br><span class="hljs-keyword">SELECT</span> NEWID(), <span class="hljs-string">&#x27;File1&#x27;</span>, <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> <br>OPENROWSET(BULK N<span class="hljs-string">&#x27;D:\temp\Image.jpg&#x27;</span>, SINGLE_BLOB) <span class="hljs-keyword">AS</span> Document<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> FSTable<br><span class="hljs-keyword">SELECT</span> NEWID(), <span class="hljs-string">&#x27;File2&#x27;</span>, <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> <br>OPENROWSET(BULK N<span class="hljs-string">&#x27;D:\temp\Image.jpg&#x27;</span>, SINGLE_BLOB) <span class="hljs-keyword">AS</span> Document<br></code></pre></td></tr></table></figure></li>
-<li><p>备份</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">BACKUP DATABASE [TESTFSDB] <span class="hljs-keyword">TO</span> DISK<span class="hljs-operator">=</span><span class="hljs-string">&#x27;C:\temp\TESTFSDB.bak&#x27;</span><br>BACKUP LOG [TESTFSDB] <span class="hljs-keyword">TO</span> DISK<span class="hljs-operator">=</span><span class="hljs-string">&#x27;C:\temp\TESTFSDB.bak&#x27;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>我们关闭数据库服务，并且删除整个D:。随后，重新启动数据库服务，并依据TESTFSDB.bak文件对数据库TESTFSDB进行恢复。</p></li>
-<li><p>我们会发现，D:。并且查询表FSTable，我们能得到正确的数据。</p></li>
-</ol>
-<p>## 应对由于备份损坏导致的还原错误</p>
-<ol type="1">
-<li><p>忽略错误继续执行操作</p>
-<ol type="1">
-<li><p>使用CONTINUE_AFTER_ERROR，使还原操作跳过错误继续进行，并还原SQL
-Server现在所能还原的所有内容</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE DATABASE database_name <br><span class="hljs-keyword">FROM</span> backup_device <span class="hljs-keyword">WITH</span> CONTINUE_AFTER_ERROR, [ NORECOVERY ]<br></code></pre></td></tr></table></figure></li>
-<li><p>如果错误发生在一些比较关键的地方，比如某个数据文件的文件头信息，那么恢复还是有可能完全失败，数据库无法恢复</p></li>
-<li><p>在忽略错误后，使用DBCC CHECKDB（WITH TABLOCK）修复数据库</p></li>
-</ol></li>
-<li><p>建立备用（Standby）服务器</p>
-<ol type="1">
-<li>将做好的备份使用Log
-Shipping或者其他类似的机制在备用服务器上预先恢复好</li>
-</ol></li>
-</ol>
-<h2
-id="实例将数据库系统在一台新服务器上恢复">实例：将数据库系统在一台新服务器上恢复</h2>
-<p>假设现在管理员遇到了下面这些挑战：</p>
+    <title>Script_Backup databases iteratively and truncate name</title>
+    <url>/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/</url>
+    <content><![CDATA[<h1
+id="script_backup-databases-iteratively-and-truncate-name">Script_Backup
+databases iteratively and truncate name</h1>
+<p><u>Problem</u></p>
+<p>For the database backup script, if the name <code>@dbname</code> is
+too long, longer than <code>128</code>, there will be an error since the
+length of <code>name</code> column in <code>msdb.dbo.backupset</code> is
+<code>nvarchar(128)</code>.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br></code></pre></td></tr></table></figure>
+<p><u>Script logic</u></p>
 <ul>
-<li><p>原先服务器出现硬件故障，已经无法启动。需要将整个SQL
-Server系统紧急迁移到一台备用服务器上。（备用服务器名字叫sqlserverpc，SQL
-Server是默认实例。）</p></li>
-<li><p>备用服务器和原服务器不同名，SQL
-Server安装的路径也不一样。（备用服务器安装路径为C:FilesSQL
-Server.4。）</p></li>
-<li><p>因为良好的备份策略，现在手头有最新的master、msdb和model数据库备份，以及其他所有用户数据库备份。</p></li>
-<li><p>现在需要将系统数据库恢复，以还原所有数据库系统信息（用户、密码、任务等）。然后才能恢复用户数据库。</p></li>
+<li>Backup all databases except for some required databases</li>
+<li>Truncate necessary characters when the length is larger than
+<code>128</code></li>
 </ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@name</span>_small NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@path</span>_small NVARCHAR(<span class="hljs-number">512</span>)  <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileName</span>_small NVARCHAR(<span class="hljs-number">512</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileDate</span>_small NVARCHAR(<span class="hljs-number">40</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@errorMessage</span> NVARCHAR(<span class="hljs-number">256</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@dbName</span> NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@counter</span> <span class="hljs-type">int</span><br><br><span class="hljs-comment">-- specify database backup directory</span><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\&#x27;</span>   <br><br><span class="hljs-comment">-- specify filename format</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@fileDate</span>_small <span class="hljs-operator">=</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">101</span>),<span class="hljs-string">&#x27;/&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <span class="hljs-operator">+</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">108</span>),<span class="hljs-string">&#x27;:&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <br><br><span class="hljs-comment">-- Cursor for small databases </span><br><span class="hljs-keyword">DECLARE</span> db_cursor_small <span class="hljs-keyword">CURSOR</span> READ_ONLY <span class="hljs-keyword">FOR</span>  <br><span class="hljs-keyword">SELECT</span> name <br><span class="hljs-keyword">FROM</span> master.sys.databases <br><span class="hljs-keyword">WHERE</span> name <br><span class="hljs-keyword">NOT</span> <span class="hljs-keyword">IN</span> (<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span>,<span class="hljs-string">&#x27;tempdb&#x27;</span>)  <span class="hljs-comment">-- Fill in databases you want to exclude here</span><br><span class="hljs-keyword">AND</span> state <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is online</span><br><span class="hljs-keyword">AND</span> is_in_standby <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is not read only for log shipping</span><br><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as required:&#x27;</span>)<br>PRINT N<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span><br>PRINT N<span class="hljs-string">&#x27;tempdb&#x27;</span><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as they are not ONLINE:&#x27;</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@xmltmp</span> xml <span class="hljs-operator">=</span> (<span class="hljs-keyword">SELECT</span> name, state_desc <span class="hljs-keyword">FROM</span> sys.databases <span class="hljs-keyword">where</span> state_desc <span class="hljs-operator">&lt;&gt;</span> <span class="hljs-string">&#x27;ONLINE&#x27;</span> <span class="hljs-keyword">FOR</span> XML AUTO)<br>PRINT <span class="hljs-keyword">CONVERT</span>(NVARCHAR(MAX), <span class="hljs-variable">@xmltmp</span>)<br><br><span class="hljs-keyword">OPEN</span> db_cursor_small   <br><span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><br> <br>WHILE @<span class="hljs-variable">@FETCH</span>_STATUS <span class="hljs-operator">=</span> <span class="hljs-number">0</span>   <br><span class="hljs-keyword">BEGIN</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">+</span> <span class="hljs-number">1</span><br>   <span class="hljs-comment">-- Truncate database name if too long</span><br>   IF len(<span class="hljs-variable">@name</span>_small<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small) <span class="hljs-operator">&gt;</span> <span class="hljs-number">128</span><br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">LEFT</span>(<span class="hljs-variable">@name</span>_small,len(<span class="hljs-variable">@name</span>_small)<span class="hljs-operator">-</span>len(<span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small))<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small<br>   <span class="hljs-keyword">ELSE</span> <br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;_&#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@fileDate</span>_small<br>   PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>   PRINT(<span class="hljs-string">&#x27;Start backup database: &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; AS &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span>)<br>			<br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-operator">=</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;.BAK&#x27;</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@errorMessage</span> <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Verify failed. Backup information for database &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; not found.&#x27;</span><br>   BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>   NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br>   <span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">AS</span> <span class="hljs-type">int</span><br>   <span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-operator">=</span> position <span class="hljs-keyword">FROM</span> msdb..backupset <br>   <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <br>   <span class="hljs-keyword">AND</span> backup_set_id<span class="hljs-operator">=</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">max</span>(backup_set_id) <span class="hljs-keyword">FROM</span> msdb..backupset <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small)<br>   IF <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">BEGIN</span> RAISERROR(<span class="hljs-variable">@errorMessage</span>, <span class="hljs-number">16</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">END</span><br>   RESTORE VERIFYONLY <span class="hljs-keyword">FROM</span>  DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span>  FILE <span class="hljs-operator">=</span> <span class="hljs-variable">@backupSetId</span>,  NOUNLOAD,  NOREWIND<br>  <br>   <span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><span class="hljs-keyword">END</span>   <br>PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>PRINT(<span class="hljs-string">&#x27;Total backups:&#x27;</span>)<br>PRINT(<span class="hljs-variable">@counter</span>)<br><br><span class="hljs-keyword">CLOSE</span> db_cursor_small   <br><span class="hljs-keyword">DEALLOCATE</span> db_cursor_small<br><br></code></pre></td></tr></table></figure>
+<img src="/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/image001.png" class="" title="Script result">
+<blockquote>
+<p>This was the very first T-SQL script I write when I interned as a
+Support Engineer at Microsoft.</p>
+</blockquote>
 ]]></content>
       <tags>
-        <tag>SQL Server</tag>
-        <tag>Note</tag>
+        <tag>T-SQL</tag>
+        <tag>My Work</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Web crawler for Shenzhen Exchange</title>
+    <url>/2022/07/08/Web%20crawler%20for%20Shenzhen%20Exchange/</url>
+    <content><![CDATA[<h1 id="web-crawler-for-shenzhen-exchange">Web crawler for Shenzhen
+Exchange</h1>
+<p><a
+href="https://github.com/jason5306/WebCrawlerForShenzhenExchange">深圳互动易公司问答数据爬虫Github</a></p>
+<img src="/2022/07/08/Web%20crawler%20for%20Shenzhen%20Exchange/DemoImg.png" class="" title="DemoImg">
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> selenium <span class="hljs-keyword">import</span> webdriver<br><span class="hljs-keyword">from</span> selenium.webdriver.chrome.service <span class="hljs-keyword">import</span> Service<br><span class="hljs-keyword">from</span> selenium.webdriver.common.action_chains <span class="hljs-keyword">import</span> ActionChains<br><span class="hljs-keyword">from</span> selenium.webdriver.common.keys <span class="hljs-keyword">import</span> Keys<br><span class="hljs-keyword">from</span> bs4 <span class="hljs-keyword">import</span> BeautifulSoup<br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> time<br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><br><span class="hljs-comment"># 深交所公司代码</span><br>code = pd.read_excel(<span class="hljs-string">&#x27;./code.xlsx&#x27;</span>, header = <span class="hljs-number">0</span>, dtype=<span class="hljs-built_in">str</span>)<br>code_list = code[<span class="hljs-string">&#x27;code&#x27;</span>].tolist()<br><br><br><span class="hljs-comment">#for code in code_list:</span><br>driver = webdriver.Chrome()<br><span class="hljs-comment"># a new window for QA site</span><br>driver2 = webdriver.Chrome()<br>url = <span class="hljs-string">&#x27;http://irm.cninfo.com.cn/ircs/index&#x27;</span><br><br><span class="hljs-keyword">for</span> code <span class="hljs-keyword">in</span> code_list:<br><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Collecting data for company ... &#x27;</span> + code + <span class="hljs-string">&#x27;...........&#x27;</span>)<br><br>    driver.set_window_size(<span class="hljs-number">1000</span>,<span class="hljs-number">30000</span>)<br><br>    driver.get(url)<br>    table_content_translate_box = []<br>    <span class="hljs-comment">#while(True): # Stop manually </span><br><br>    <span class="hljs-comment"># scoll down</span><br>    <span class="hljs-comment">#driver.execute_script(&quot;window.scrollBy(0,8000)&quot;)</span><br>    <span class="hljs-comment">#time.sleep(1)</span><br><br>    <span class="hljs-comment"># find search box and search company code</span><br>    time.sleep(<span class="hljs-number">2</span>)<br>    searc_box = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-input__inner&#x27;</span>)<br>    searc_box.click()<br>    time.sleep(<span class="hljs-number">1</span>)<br>    searc_box.send_keys(code)<br>    searc_box.send_keys(Keys.ENTER)<br>    time.sleep(<span class="hljs-number">1</span>)<br><br>    <span class="hljs-comment"># go to QA section</span><br>    tablist = driver.find_element_by_css_selector(<span class="hljs-string">&#x27;.el-tabs__nav.is-top&#x27;</span>)<br>    tablist.find_element_by_id(<span class="hljs-string">&#x27;tab-2&#x27;</span>).click()<br><br>    <span class="hljs-comment"># find date search</span><br>    date_search_box = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-range-input&#x27;</span>)<br>    date_search_box.click()<br>    date_search_box.clear()<br>    time.sleep(<span class="hljs-number">1</span>)<br>    date_search_box.send_keys(<span class="hljs-string">&#x27;2012-01-01&#x27;</span>)<br>    time.sleep(<span class="hljs-number">1</span>)<br>    action = ActionChains(driver)<br>    action.move_by_offset(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>).click().perform()<br><br><br>    <span class="hljs-comment"># max page number</span><br>    page = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-pager&#x27;</span>)<br>    pages = page.find_elements_by_class_name(<span class="hljs-string">&#x27;number&#x27;</span>)<br>    page_number = []<br>    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> pages:<br>        page_number.append(<span class="hljs-built_in">int</span>(item.text))<br>        <span class="hljs-comment">#print(item.text)</span><br><br>    max_page_number = <span class="hljs-built_in">max</span>(page_number)<br>    <span class="hljs-comment">#print(max_page_number)</span><br><br>    <span class="hljs-comment">#data_ids = []</span><br><br>    <span class="hljs-comment"># header</span><br>    result = []<br>    header = [<span class="hljs-string">&#x27;深市代码&#x27;</span>, <span class="hljs-string">&#x27;提问&#x27;</span>, <span class="hljs-string">&#x27;提问时间&#x27;</span>, <span class="hljs-string">&#x27;回复&#x27;</span>, <span class="hljs-string">&#x27;回复时间&#x27;</span>]<br>    result.append(header)<br><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        <span class="hljs-comment"># current page number</span><br>        page = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-pager&#x27;</span>)<br>        active_page_number = page.find_element_by_css_selector(<span class="hljs-string">&#x27;.number.active&#x27;</span>).text<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Current page:&quot;</span> + <span class="hljs-built_in">str</span>(max_page_number) + <span class="hljs-string">&#x27;/&#x27;</span> + <span class="hljs-built_in">str</span>(active_page_number))<br><br><br>        <span class="hljs-comment"># find QA of this page </span><br>        search_content_box = driver.find_elements_by_class_name(<span class="hljs-string">&#x27;search-content-box&#x27;</span>)<br>        time.sleep(<span class="hljs-number">1</span>)<br>        <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> search_content_box:<br>            temp_item1 = item.find_element_by_css_selector(<span class="hljs-string">&#x27;.item-question.left-content.table-list.pd-r-20&#x27;</span>)<br>            temp_item2 = temp_item1.find_element_by_css_selector(<span class="hljs-string">&#x27;.table-content.div-translate&#x27;</span>)<br>            data_id = temp_item2.get_attribute(<span class="hljs-string">&#x27;data-id&#x27;</span>)<br>            <span class="hljs-built_in">print</span>(data_id)<br>            <span class="hljs-comment">#data_ids.append(data_id)</span><br>            time.sleep(<span class="hljs-number">1</span>)<br><br>            <span class="hljs-comment"># get QA for each data id</span><br>            url_QA = <span class="hljs-string">&#x27;http://irm.cninfo.com.cn/ircs/question/questionDetail?questionId=&#x27;</span> + data_id<br>            driver2.get(url_QA)<br>            time.sleep(<span class="hljs-number">3</span>)<br>            <span class="hljs-comment"># have Q and A</span><br>            Q = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.question-detail.translate-box.pd-30&#x27;</span>).text<br>            time.sleep(<span class="hljs-number">1</span>)<br>            <span class="hljs-built_in">print</span>(Q)<br>            Qtime = driver2.find_element_by_class_name(<span class="hljs-string">&#x27;question-time&#x27;</span>).text.split(<span class="hljs-string">&#x27;·&#x27;</span>)[<span class="hljs-number">0</span>]<br>            time.sleep(<span class="hljs-number">1</span>)<br>            <span class="hljs-built_in">print</span>(Qtime)<br>            <span class="hljs-keyword">try</span>:<br>                A = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.left-content.no-data&#x27;</span>).text<br>                <span class="hljs-built_in">print</span>(A)<br>                Atime = <span class="hljs-string">&#x27;暂无回复&#x27;</span><br>                <span class="hljs-built_in">print</span>(Atime)<br>            <span class="hljs-keyword">except</span> Exception:<br><br>                A = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.reply-content.translate-box&#x27;</span>).text<br>                <span class="hljs-built_in">print</span>(A)<br><br>                Atime = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.question-time.hidden-xs-only&#x27;</span>).text.split(<span class="hljs-string">&#x27;：&#x27;</span>)[<span class="hljs-number">1</span>]<br>                <span class="hljs-built_in">print</span>(Atime)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;________________&#x27;</span>)<br>            time.sleep(<span class="hljs-number">2</span>)<br>            result.append([code, Q, Qtime, A, Atime])<br><br><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Page finished&#x27;</span>)<br><br>        <span class="hljs-comment"># next page</span><br>        next_btn = driver.find_element_by_class_name(<span class="hljs-string">&#x27;btn-next&#x27;</span>)<br>        next_btn.find_element_by_css_selector(<span class="hljs-string">&#x27;.el-icon.el-icon-arrow-right&#x27;</span>).click()<br>        time.sleep(<span class="hljs-number">1</span>)<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">int</span>(active_page_number) == max_page_number:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;All pages done&quot;</span>)<br>            <span class="hljs-keyword">break</span><br>    <span class="hljs-comment"># export to csv        </span><br>        df = pd.DataFrame(result)<br>        df.to_csv(<span class="hljs-string">&#x27;./&#x27;</span>+code+<span class="hljs-string">&#x27;.csv&#x27;</span>, index = <span class="hljs-literal">False</span>, header = <span class="hljs-number">0</span>)<br></code></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>Python</tag>
+        <tag>My Work</tag>
+        <tag>Web Crawler</tag>
       </tags>
   </entry>
   <entry>
@@ -4454,200 +3954,6 @@ Server会让那个操作等待。直到文件自动增长结束了，原先的�
       </tags>
   </entry>
   <entry>
-    <title>Script_Backup databases iteratively and truncate name</title>
-    <url>/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/</url>
-    <content><![CDATA[<h1
-id="script_backup-databases-iteratively-and-truncate-name">Script_Backup
-databases iteratively and truncate name</h1>
-<p><u>Problem</u></p>
-<p>For the database backup script, if the name <code>@dbname</code> is
-too long, longer than <code>128</code>, there will be an error since the
-length of <code>name</code> column in <code>msdb.dbo.backupset</code> is
-<code>nvarchar(128)</code>.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br></code></pre></td></tr></table></figure>
-<p><u>Script logic</u></p>
-<ul>
-<li>Backup all databases except for some required databases</li>
-<li>Truncate necessary characters when the length is larger than
-<code>128</code></li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@name</span>_small NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@path</span>_small NVARCHAR(<span class="hljs-number">512</span>)  <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileName</span>_small NVARCHAR(<span class="hljs-number">512</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileDate</span>_small NVARCHAR(<span class="hljs-number">40</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@errorMessage</span> NVARCHAR(<span class="hljs-number">256</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@dbName</span> NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@counter</span> <span class="hljs-type">int</span><br><br><span class="hljs-comment">-- specify database backup directory</span><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\&#x27;</span>   <br><br><span class="hljs-comment">-- specify filename format</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@fileDate</span>_small <span class="hljs-operator">=</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">101</span>),<span class="hljs-string">&#x27;/&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <span class="hljs-operator">+</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">108</span>),<span class="hljs-string">&#x27;:&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <br><br><span class="hljs-comment">-- Cursor for small databases </span><br><span class="hljs-keyword">DECLARE</span> db_cursor_small <span class="hljs-keyword">CURSOR</span> READ_ONLY <span class="hljs-keyword">FOR</span>  <br><span class="hljs-keyword">SELECT</span> name <br><span class="hljs-keyword">FROM</span> master.sys.databases <br><span class="hljs-keyword">WHERE</span> name <br><span class="hljs-keyword">NOT</span> <span class="hljs-keyword">IN</span> (<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span>,<span class="hljs-string">&#x27;tempdb&#x27;</span>)  <span class="hljs-comment">-- Fill in databases you want to exclude here</span><br><span class="hljs-keyword">AND</span> state <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is online</span><br><span class="hljs-keyword">AND</span> is_in_standby <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is not read only for log shipping</span><br><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as required:&#x27;</span>)<br>PRINT N<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span><br>PRINT N<span class="hljs-string">&#x27;tempdb&#x27;</span><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as they are not ONLINE:&#x27;</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@xmltmp</span> xml <span class="hljs-operator">=</span> (<span class="hljs-keyword">SELECT</span> name, state_desc <span class="hljs-keyword">FROM</span> sys.databases <span class="hljs-keyword">where</span> state_desc <span class="hljs-operator">&lt;&gt;</span> <span class="hljs-string">&#x27;ONLINE&#x27;</span> <span class="hljs-keyword">FOR</span> XML AUTO)<br>PRINT <span class="hljs-keyword">CONVERT</span>(NVARCHAR(MAX), <span class="hljs-variable">@xmltmp</span>)<br><br><span class="hljs-keyword">OPEN</span> db_cursor_small   <br><span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><br> <br>WHILE @<span class="hljs-variable">@FETCH</span>_STATUS <span class="hljs-operator">=</span> <span class="hljs-number">0</span>   <br><span class="hljs-keyword">BEGIN</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">+</span> <span class="hljs-number">1</span><br>   <span class="hljs-comment">-- Truncate database name if too long</span><br>   IF len(<span class="hljs-variable">@name</span>_small<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small) <span class="hljs-operator">&gt;</span> <span class="hljs-number">128</span><br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">LEFT</span>(<span class="hljs-variable">@name</span>_small,len(<span class="hljs-variable">@name</span>_small)<span class="hljs-operator">-</span>len(<span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small))<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small<br>   <span class="hljs-keyword">ELSE</span> <br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;_&#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@fileDate</span>_small<br>   PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>   PRINT(<span class="hljs-string">&#x27;Start backup database: &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; AS &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span>)<br>			<br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-operator">=</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;.BAK&#x27;</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@errorMessage</span> <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Verify failed. Backup information for database &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; not found.&#x27;</span><br>   BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>   NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br>   <span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">AS</span> <span class="hljs-type">int</span><br>   <span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-operator">=</span> position <span class="hljs-keyword">FROM</span> msdb..backupset <br>   <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <br>   <span class="hljs-keyword">AND</span> backup_set_id<span class="hljs-operator">=</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">max</span>(backup_set_id) <span class="hljs-keyword">FROM</span> msdb..backupset <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small)<br>   IF <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">BEGIN</span> RAISERROR(<span class="hljs-variable">@errorMessage</span>, <span class="hljs-number">16</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">END</span><br>   RESTORE VERIFYONLY <span class="hljs-keyword">FROM</span>  DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span>  FILE <span class="hljs-operator">=</span> <span class="hljs-variable">@backupSetId</span>,  NOUNLOAD,  NOREWIND<br>  <br>   <span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><span class="hljs-keyword">END</span>   <br>PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>PRINT(<span class="hljs-string">&#x27;Total backups:&#x27;</span>)<br>PRINT(<span class="hljs-variable">@counter</span>)<br><br><span class="hljs-keyword">CLOSE</span> db_cursor_small   <br><span class="hljs-keyword">DEALLOCATE</span> db_cursor_small<br><br></code></pre></td></tr></table></figure>
-<img src="/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/image001.png" class="" title="Script result">
-<blockquote>
-<p>This was the very first T-SQL script I write when I interned as a
-Support Engineer at Microsoft.</p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>T-SQL</tag>
-        <tag>My Work</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SQL Server IAM Page</title>
-    <url>/2022/06/26/SQL%20Server%20IAM%20Page/</url>
-    <content><![CDATA[<h1 id="sql-server-iam-page">SQL Server IAM Page</h1>
-<p>Index Allocation Map (IAM) pages keep track of the extents in a 4 GB
-section of a database file used by an allocation unit.</p>
-<p><u>Allocation unit</u></p>
-<p>An allocation unit is a set of pages belonging to a single partition
-in a table or index and comprises pages of one of three storage
-types:</p>
-<ol type="1">
-<li>pages holding regular in-row data</li>
-<li>pages holding Large Object (LOB) data</li>
-<li>pages holding row-overflow data</li>
-</ol>
-<p><u>Multiple IAM pages</u></p>
-<p>A single IAM page covers only a 4 GB section of a single file.</p>
-<ol type="1">
-<li>if the partition spans files</li>
-<li>if the file is more than 4 GB in size</li>
-<li>if the partition uses pages in more than one 4 GB section</li>
-</ol>
-<p><u>IAM page structure</u></p>
-<ol type="1">
-<li>96-byte page header</li>
-<li>An IAM page header
-<ol type="1">
-<li>Contains eight page-pointer slots</li>
-</ol></li>
-<li>Contains bitmap
-<ol type="1">
-<li>A set of bits that map a range of extents onto a file</li>
-<li>Each bit of the bitmap represents an extent in the range</li>
-<li>1, is allocated; 0, unallocated</li>
-</ol></li>
-</ol>
-<p>Running the defined procedure <code>sp_AllocationMetadata</code> in
-the <code>AdventureWorks2019</code>, we can see the page number of the
-first IAM pages.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">EXEC</span> [sp_AllocationMetadata] N<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>;<br>GO<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623131334311.png"
-alt="sp_AllocationMetadata result" />
-<figcaption aria-hidden="true">sp_AllocationMetadata result</figcaption>
-</figure>
-<p>As we can see, the object <code>Employee</code> has 6 partitions. For
-the partition that has partition ID of <code>72057594056933376</code>,
-its first IAM page is <code>2105</code>.</p>
-<p>Then let's take a closer look at the page <code>2105</code>.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">3</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623133029678.png"
-alt="Mode 3 result" />
-<figcaption aria-hidden="true">Mode 3 result</figcaption>
-</figure>
-<p>The 8 slots listed under the <code>Single Page Allocations</code>
-mean they are in the mixed extent.</p>
-<p>Following the <code>Extent Alloc Status Slot</code> are pages in
-uniform extent. The result suggests that page <code>12640</code> and
-page <code>12672</code> are allocated</p>
-<p>We can check the allocation status by running the query:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> allocated_page_file_id <span class="hljs-keyword">AS</span> [FileID],<br>allocated_page_page_id <span class="hljs-keyword">AS</span> [PageID],<br>page_type_desc,extent_page_id<span class="hljs-operator">/</span><span class="hljs-number">8</span> <span class="hljs-keyword">AS</span> ExtentID,<br>is_mixed_page_allocation,<br>extent_page_id <span class="hljs-keyword">AS</span> [<span class="hljs-keyword">First</span> Page <span class="hljs-keyword">in</span> Extent],<br>extent_page_id<span class="hljs-operator">+</span><span class="hljs-number">7</span> <span class="hljs-keyword">AS</span> [LastPage <span class="hljs-keyword">in</span> Extent],<br>is_allocated <br><span class="hljs-keyword">FROM</span> sys.dm_db_database_page_allocations(db_id(),object_id(<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>),<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-string">&#x27;detailed&#x27;</span>)  <br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> allocated_page_page_id<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623134406196.png"
-alt="Allocation status result" />
-<figcaption aria-hidden="true">Allocation status result</figcaption>
-</figure>
-<p>As shown in the result, page <code>12640</code> and
-<code>12672</code> are allocated, and clearly there are
-<code>(12672-12640)/8=4</code> extents between them, which is proved by
-the corresponding extent ID, <code>1580</code> and
-<code>1584</code>.</p>
-<p>Let's validate our observation by dive into the page in mode 1.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">1</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623140010858.png"
-alt="Mode 1 result" />
-<figcaption aria-hidden="true">Mode 1 result</figcaption>
-</figure>
-<ol type="1">
-<li><p><code>0000381f</code> is fixed.</p></li>
-<li><p>Slot 0 is for mixed extent; Slot 1 is for the uniform
-extent</p></li>
-<li><p>For string <code>00000000 0010</code> and
-<code>0100 00000000</code> in Slot 1</p>
-<p>Each bit in the table stands for one extent.</p>
-<p>Note we need to convert little-endian into normal binary.</p>
-<table>
-<thead>
-<tr class="header">
-<th>HEX</th>
-<th>00 00 00 00 00</th>
-<th>10</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Binary (Little endian)</td>
-<td>many 0</td>
-<td>0001 0000</td>
-</tr>
-<tr class="even">
-<td>Binary (normal)</td>
-<td>many 0</td>
-<td>0000 1000</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th>HEX</th>
-<th>01</th>
-<th>00 00 00 00 00</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Binary (Little endian)</td>
-<td>0000 0001</td>
-<td>many 0</td>
-</tr>
-<tr class="even">
-<td>Binary (normal)</td>
-<td>1000 0000</td>
-<td>many 0</td>
-</tr>
-</tbody>
-</table>
-<p>That is, for <code>10 01</code> we have
-<code>0000 1000 1000 0000</code> in binary, the difference is 4 extent,
-from <code>1580</code> to <code>1584</code>.</p>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220624094601306.png"
-alt="Endian example" />
-<figcaption aria-hidden="true">Endian example</figcaption>
-</figure></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Web crawler for Shenzhen Exchange</title>
-    <url>/2022/07/08/Web%20crawler%20for%20Shenzhen%20Exchange/</url>
-    <content><![CDATA[<h1 id="web-crawler-for-shenzhen-exchange">Web crawler for Shenzhen
-Exchange</h1>
-<p><a
-href="https://github.com/jason5306/WebCrawlerForShenzhenExchange">深圳互动易公司问答数据爬虫Github</a></p>
-<img src="/2022/07/08/Web%20crawler%20for%20Shenzhen%20Exchange/DemoImg.png" class="" title="DemoImg">
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> selenium <span class="hljs-keyword">import</span> webdriver<br><span class="hljs-keyword">from</span> selenium.webdriver.chrome.service <span class="hljs-keyword">import</span> Service<br><span class="hljs-keyword">from</span> selenium.webdriver.common.action_chains <span class="hljs-keyword">import</span> ActionChains<br><span class="hljs-keyword">from</span> selenium.webdriver.common.keys <span class="hljs-keyword">import</span> Keys<br><span class="hljs-keyword">from</span> bs4 <span class="hljs-keyword">import</span> BeautifulSoup<br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> time<br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><br><span class="hljs-comment"># 深交所公司代码</span><br>code = pd.read_excel(<span class="hljs-string">&#x27;./code.xlsx&#x27;</span>, header = <span class="hljs-number">0</span>, dtype=<span class="hljs-built_in">str</span>)<br>code_list = code[<span class="hljs-string">&#x27;code&#x27;</span>].tolist()<br><br><br><span class="hljs-comment">#for code in code_list:</span><br>driver = webdriver.Chrome()<br><span class="hljs-comment"># a new window for QA site</span><br>driver2 = webdriver.Chrome()<br>url = <span class="hljs-string">&#x27;http://irm.cninfo.com.cn/ircs/index&#x27;</span><br><br><span class="hljs-keyword">for</span> code <span class="hljs-keyword">in</span> code_list:<br><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Collecting data for company ... &#x27;</span> + code + <span class="hljs-string">&#x27;...........&#x27;</span>)<br><br>    driver.set_window_size(<span class="hljs-number">1000</span>,<span class="hljs-number">30000</span>)<br><br>    driver.get(url)<br>    table_content_translate_box = []<br>    <span class="hljs-comment">#while(True): # Stop manually </span><br><br>    <span class="hljs-comment"># scoll down</span><br>    <span class="hljs-comment">#driver.execute_script(&quot;window.scrollBy(0,8000)&quot;)</span><br>    <span class="hljs-comment">#time.sleep(1)</span><br><br>    <span class="hljs-comment"># find search box and search company code</span><br>    time.sleep(<span class="hljs-number">2</span>)<br>    searc_box = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-input__inner&#x27;</span>)<br>    searc_box.click()<br>    time.sleep(<span class="hljs-number">1</span>)<br>    searc_box.send_keys(code)<br>    searc_box.send_keys(Keys.ENTER)<br>    time.sleep(<span class="hljs-number">1</span>)<br><br>    <span class="hljs-comment"># go to QA section</span><br>    tablist = driver.find_element_by_css_selector(<span class="hljs-string">&#x27;.el-tabs__nav.is-top&#x27;</span>)<br>    tablist.find_element_by_id(<span class="hljs-string">&#x27;tab-2&#x27;</span>).click()<br><br>    <span class="hljs-comment"># find date search</span><br>    date_search_box = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-range-input&#x27;</span>)<br>    date_search_box.click()<br>    date_search_box.clear()<br>    time.sleep(<span class="hljs-number">1</span>)<br>    date_search_box.send_keys(<span class="hljs-string">&#x27;2012-01-01&#x27;</span>)<br>    time.sleep(<span class="hljs-number">1</span>)<br>    action = ActionChains(driver)<br>    action.move_by_offset(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>).click().perform()<br><br><br>    <span class="hljs-comment"># max page number</span><br>    page = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-pager&#x27;</span>)<br>    pages = page.find_elements_by_class_name(<span class="hljs-string">&#x27;number&#x27;</span>)<br>    page_number = []<br>    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> pages:<br>        page_number.append(<span class="hljs-built_in">int</span>(item.text))<br>        <span class="hljs-comment">#print(item.text)</span><br><br>    max_page_number = <span class="hljs-built_in">max</span>(page_number)<br>    <span class="hljs-comment">#print(max_page_number)</span><br><br>    <span class="hljs-comment">#data_ids = []</span><br><br>    <span class="hljs-comment"># header</span><br>    result = []<br>    header = [<span class="hljs-string">&#x27;深市代码&#x27;</span>, <span class="hljs-string">&#x27;提问&#x27;</span>, <span class="hljs-string">&#x27;提问时间&#x27;</span>, <span class="hljs-string">&#x27;回复&#x27;</span>, <span class="hljs-string">&#x27;回复时间&#x27;</span>]<br>    result.append(header)<br><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        <span class="hljs-comment"># current page number</span><br>        page = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-pager&#x27;</span>)<br>        active_page_number = page.find_element_by_css_selector(<span class="hljs-string">&#x27;.number.active&#x27;</span>).text<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Current page:&quot;</span> + <span class="hljs-built_in">str</span>(max_page_number) + <span class="hljs-string">&#x27;/&#x27;</span> + <span class="hljs-built_in">str</span>(active_page_number))<br><br><br>        <span class="hljs-comment"># find QA of this page </span><br>        search_content_box = driver.find_elements_by_class_name(<span class="hljs-string">&#x27;search-content-box&#x27;</span>)<br>        time.sleep(<span class="hljs-number">1</span>)<br>        <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> search_content_box:<br>            temp_item1 = item.find_element_by_css_selector(<span class="hljs-string">&#x27;.item-question.left-content.table-list.pd-r-20&#x27;</span>)<br>            temp_item2 = temp_item1.find_element_by_css_selector(<span class="hljs-string">&#x27;.table-content.div-translate&#x27;</span>)<br>            data_id = temp_item2.get_attribute(<span class="hljs-string">&#x27;data-id&#x27;</span>)<br>            <span class="hljs-built_in">print</span>(data_id)<br>            <span class="hljs-comment">#data_ids.append(data_id)</span><br>            time.sleep(<span class="hljs-number">1</span>)<br><br>            <span class="hljs-comment"># get QA for each data id</span><br>            url_QA = <span class="hljs-string">&#x27;http://irm.cninfo.com.cn/ircs/question/questionDetail?questionId=&#x27;</span> + data_id<br>            driver2.get(url_QA)<br>            time.sleep(<span class="hljs-number">3</span>)<br>            <span class="hljs-comment"># have Q and A</span><br>            Q = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.question-detail.translate-box.pd-30&#x27;</span>).text<br>            time.sleep(<span class="hljs-number">1</span>)<br>            <span class="hljs-built_in">print</span>(Q)<br>            Qtime = driver2.find_element_by_class_name(<span class="hljs-string">&#x27;question-time&#x27;</span>).text.split(<span class="hljs-string">&#x27;·&#x27;</span>)[<span class="hljs-number">0</span>]<br>            time.sleep(<span class="hljs-number">1</span>)<br>            <span class="hljs-built_in">print</span>(Qtime)<br>            <span class="hljs-keyword">try</span>:<br>                A = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.left-content.no-data&#x27;</span>).text<br>                <span class="hljs-built_in">print</span>(A)<br>                Atime = <span class="hljs-string">&#x27;暂无回复&#x27;</span><br>                <span class="hljs-built_in">print</span>(Atime)<br>            <span class="hljs-keyword">except</span> Exception:<br><br>                A = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.reply-content.translate-box&#x27;</span>).text<br>                <span class="hljs-built_in">print</span>(A)<br><br>                Atime = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.question-time.hidden-xs-only&#x27;</span>).text.split(<span class="hljs-string">&#x27;：&#x27;</span>)[<span class="hljs-number">1</span>]<br>                <span class="hljs-built_in">print</span>(Atime)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;________________&#x27;</span>)<br>            time.sleep(<span class="hljs-number">2</span>)<br>            result.append([code, Q, Qtime, A, Atime])<br><br><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Page finished&#x27;</span>)<br><br>        <span class="hljs-comment"># next page</span><br>        next_btn = driver.find_element_by_class_name(<span class="hljs-string">&#x27;btn-next&#x27;</span>)<br>        next_btn.find_element_by_css_selector(<span class="hljs-string">&#x27;.el-icon.el-icon-arrow-right&#x27;</span>).click()<br>        time.sleep(<span class="hljs-number">1</span>)<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">int</span>(active_page_number) == max_page_number:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;All pages done&quot;</span>)<br>            <span class="hljs-keyword">break</span><br>    <span class="hljs-comment"># export to csv        </span><br>        df = pd.DataFrame(result)<br>        df.to_csv(<span class="hljs-string">&#x27;./&#x27;</span>+code+<span class="hljs-string">&#x27;.csv&#x27;</span>, index = <span class="hljs-literal">False</span>, header = <span class="hljs-number">0</span>)<br></code></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>Python</tag>
-        <tag>My Work</tag>
-        <tag>Web Crawler</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Xevent Reader</title>
     <url>/2022/08/17/Xevent%20Reader/</url>
     <content><![CDATA[<h1 id="xevent-reader">Xevent Reader</h1>
@@ -4825,64 +4131,758 @@ faster.</p>
       </tags>
   </entry>
   <entry>
-    <title>SQL Server Backup</title>
-    <url>/2022/06/06/SQL%20Server%20Backup/</url>
-    <content><![CDATA[<h1 id="sql-server-backup">SQL Server Backup</h1>
-<p><strong>Full Backup</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Windows\AdventureWorks2019_20220602.bak&#x27;</span>;<br></code></pre></td></tr></table></figure>
-<p>If get an error like this:</p>
+    <title>SQL Server 2012 实施与管理实战指南Note：数据库备份与恢复</title>
+    <url>/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</url>
+    <content><![CDATA[<h1 id="sql-server-2012-实施与管理实战指南note数据库备份与恢复">SQL
+Server 2012 实施与管理实战指南Note：数据库备份与恢复</h1>
+<h2 id="备份类型">备份类型</h2>
+<p>SQL Server提供的11种主要备份方法:</p>
+<table>
+
+<thead>
+<tr class="header">
+<th>分　　级</th>
+<th>数据备份</th>
+<th></th>
+<th></th>
+<th>日志备份</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>数据库级</td>
+<td>完整数据库备份</td>
+<td>仅复制完整数据库备份</td>
+<td>差异数据库备份</td>
+<td>（一般） 日志备份</td>
+<td>仅复制 日志备份</td>
+</tr>
+<tr class="even">
+<td>文件级</td>
+<td>完整文件备份</td>
+<td>仅复制完整文件备份</td>
+<td>差异文件备份</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>部分</td>
+<td>完整部分备份</td>
+<td>仅复制完整部分备份</td>
+<td>差异部分备份</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>最常用的备份方法:</p>
+<table>
+<thead>
+<tr class="header">
+<th>分　　级</th>
+<th>数据备份</th>
+<th></th>
+<th>日志备份</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>数据库级</td>
+<td>完整数据库备份</td>
+<td>差异数据库备份</td>
+<td>（一般）日志备份</td>
+</tr>
+<tr class="even">
+<td>文件级</td>
+<td>完整文件备份</td>
+<td>差异文件备份</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="完整数据库备份">完整数据库备份</h3>
+<ol type="1">
+<li>拷贝下数据库里的所有信息</li>
+<li>数据库在这段时间里还会发生变化，完整数据库备份还要对部分事务日志进行备份</li>
+</ol>
+<h3 id="文件备份">文件备份</h3>
+<ol type="1">
+<li>备份一个或多个文件或文件组中的所有数据</li>
+<li>在完整恢复模式下，一整套完整文件备份+跨所有文件备份的日志备份=完整数据库备份</li>
+<li>能够指定还原损坏的文件，以加快恢复速度</li>
+</ol>
+<h3 id="部分备份">部分备份</h3>
+<ol type="1">
+<li>默认只备份数据库的可读写部分</li>
+</ol>
+<h3 id="差异备份">差异备份</h3>
+<ol type="1">
+<li>要求数据库之前做过一次完整备份（基准）</li>
+<li>捕获自基准以来发生改变的数据</li>
+<li>便于执行频繁备份，从而降低了数据丢失的风险</li>
+</ol>
+<h3 id="事务日志备份">事务日志备份</h3>
+<ol type="1">
+<li>每个日志备份都包括创建备份时处于活动状态的部分事务日志，以及先前日志备份中未备份的所有日志记录</li>
+<li>不间断的日志备份序列包含数据库的完整（即连续不断的）日志链</li>
+</ol>
+<h3 id="仅复制备份">仅复制备份</h3>
+<p>防止将要做的备份会破坏现有的备份，维护日志链</p>
+<h4 id="仅复制完整备份">仅复制完整备份</h4>
+<ol type="1">
+<li>备份整个数据库内容</li>
+<li>但不改变差异备份的基准，不影响差异备份序列</li>
+</ol>
+<h4 id="仅复制日志备份">仅复制日志备份</h4>
+<ol type="1">
+<li>备份当前日志文件里现有的内容</li>
+<li>但不会清空日志文件里备份下的日志，不影响常规日志备份的序列</li>
+</ol>
+<h2 id="选择备份策略和恢复模式">选择备份策略和恢复模式</h2>
+<h3 id="简单恢复模式下的备份">简单恢复模式下的备份</h3>
 <figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100125253.png"
-alt="image-20220606100125253" />
-<figcaption aria-hidden="true">image-20220606100125253</figcaption>
+<img
+src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/clip_image002.jpg"
+alt="简单模式下的备份和还原策略" />
+<figcaption aria-hidden="true">简单模式下的备份和还原策略</figcaption>
 </figure>
-<p>It means that the SQL server has no permission to the location. To
-fix this, in the <strong>SQL Server Configuration Manager</strong>, we
-can find that the SQL service is logged on as
-<code>NT Service\MSSQLSERVER</code>.</p>
+<ol type="1">
+<li><p>不能做日志备份</p></li>
+<li><p>只能将数据库恢复到最后一次备份的结尾</p></li>
+<li><p>工作损失风险会随时间增长而增加</p></li>
+<li><p>可加入差异备份</p>
+<ol type="1">
+<li><p>建立数据库备份后，后续建立差异备份</p></li>
+<li><p>可以使用在数据量稍大，能够容忍较长时间数据丢失的数据库上</p>
 <figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100346465.png"
-alt="image-20220606100346465" />
-<figcaption aria-hidden="true">image-20220606100346465</figcaption>
-</figure>
-<p>Then right-click on the folder you want to access, <strong>properties
---&gt; security</strong>, and add permission to the
-<code>NT Service\MSSQLSERVER</code>.</p>
+<img
+src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/clip_image002-16563991129832.jpg"
+alt="使用差异数据库备份补充数据库完整备份" />
+<figcaption
+aria-hidden="true">使用差异数据库备份补充数据库完整备份</figcaption>
+</figure></li>
+<li><p>无法满足较大数据库，或不允许较长时间数据丢失的情况</p></li>
+</ol></li>
+</ol>
+<h3 id="完整恢复模式下的备份">完整恢复模式下的备份</h3>
+<p>使用日志备份</p>
+<ol type="1">
+<li><p>日志备份只拷贝上次日志备份以来的所有日志记录，开销小</p></li>
+<li><p>可以将数据库还原到日志备份内包含的任何时点</p></li>
+<li><p>缺点：</p>
+<ol type="1">
+<li>数量多</li>
+<li>需要严格按照备份产生的顺序进行恢复，管理复杂</li>
+</ol></li>
+<li><p>备份策略</p>
+<ol type="1">
+<li><p>基本</p>
 <figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100858530.png"
-alt="image-20220606100858530" />
-<figcaption aria-hidden="true">image-20220606100858530</figcaption>
+<img
+src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/clip_image002-16564066494734.jpg"
+alt="完整恢复模式下的最简单备份策略" />
+<figcaption
+aria-hidden="true">完整恢复模式下的最简单备份策略</figcaption>
 </figure>
-<p><strong>Backup with differential</strong></p>
-<p>This will back up the changed pages from the previous full
-backup.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup changes start from last full backup, save changed page only</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> differential;<br></code></pre></td></tr></table></figure>
-<p><strong>Backup with copy_only</strong></p>
-<p>This will leave the DCM (diff change map) unchanged, meaning that if
-we are back up with differential, it will also backup changes from the
-last full backup.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup, leave (DCM) diff change map unchanged, compressed</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> copy_only, compression;<br></code></pre></td></tr></table></figure>
-<p>The DCM records the changes made to the page of the database, we can
-view the DCM of the specific database by</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc page(<span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>, <span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
+<p>在还原这3个备份前，数据库管理员必须备份活动日志（日志尾部，即尚未备份的日志）。然后还原Db_1、Log_1和Log_2，并且不恢复数据库。接着，数据库管理员还原并恢复尾（Tail）日志备份。这一步将可以把数据库恢复到故障点，从而恢复所有数据。如果灾难毁坏的是日志文件，使得尾日志不能成功备份和恢复，那这次灾难造成的数据丢失就是从Log_2以后的所有修改。</p></li>
+<li><p>加上差异备份</p>
 <figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101710464.png"
-alt="image-20220606101710464" />
-<figcaption aria-hidden="true">image-20220606101710464</figcaption>
+<img
+src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/clip_image002-16564069300966.jpg"
+alt="使用差异数据库备份及日志备份来补充完整数据库备份" />
+<figcaption
+aria-hidden="true">使用差异数据库备份及日志备份来补充完整数据库备份</figcaption>
 </figure>
-<p><strong>Backup log files</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup log AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602.trn&#x27;</span>;<br></code></pre></td></tr></table></figure>
-<p>We can view the information of log files of databases by</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc sqlperf(logspace)<br></code></pre></td></tr></table></figure>
+<p>在第一个数据库备份完成后，每天会做一个差异数据库备份，而在工作时间进行若干日志备份。例行日志备份将工作丢失的风险降为丢失自最近日志备份之后所做的更改。</p></li>
+</ol></li>
+</ol>
+<h3
+id="案例完整恢复模式下的数据库备份">案例：完整恢复模式下的数据库备份</h3>
+<p>对于数据库<code>Archive</code></p>
+<ol type="1">
+<li><p>全备份</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">BACKUP DATABASE [Archive] <span class="hljs-keyword">TO</span> DISK<span class="hljs-operator">=</span><span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\AdvFull1.bak&#x27;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>查询历史上的备份信息</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> s.first_lsn, s.last_lsn, <br>				s.database_backup_lsn, s.backup_finish_date,<br>				s.type, y.physical_device_name  <br><span class="hljs-keyword">FROM</span> msdb..backupset <span class="hljs-keyword">AS</span> s <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span><br>msdb..backupfile <span class="hljs-keyword">AS</span> f <span class="hljs-keyword">ON</span> f.backup_set_id <span class="hljs-operator">=</span> s.backup_set_id <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span><br>msdb..backupmediaset <span class="hljs-keyword">AS</span> m <span class="hljs-keyword">ON</span> s.media_set_id <span class="hljs-operator">=</span> m.media_set_id <span class="hljs-keyword">INNER</span> <span class="hljs-keyword">JOIN</span><br>msdb..backupmediafamily <span class="hljs-keyword">AS</span> y <span class="hljs-keyword">ON</span> m.media_set_id <span class="hljs-operator">=</span> y.media_set_id<br><span class="hljs-keyword">WHERE</span>  (s.database_name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Archive&#x27;</span>) <br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span>  s.backup_finish_date <span class="hljs-keyword">DESC</span>;<br></code></pre></td></tr></table></figure>
 <figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101859208.png"
-alt="image-20220606101859208" />
-<figcaption aria-hidden="true">image-20220606101859208</figcaption>
+<img
+src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/image-20220628175642522.png"
+alt="查询数据库的历史备份记录，显示一个全备份" />
+<figcaption
+aria-hidden="true">查询数据库的历史备份记录，显示一个全备份</figcaption>
 </figure>
+<ol type="1">
+<li><code>first_lsn</code>备份集中第一个日志记录的日志序列号</li>
+<li><code>last_lsn</code>备份集之后的下一条日志记录的日志序列号</li>
+<li><code>(first_lsn, last_lsn-1)</code>
+这个日志备份所包含的所有日志序列
+<ol type="1">
+<li><code>last_lsn-1</code>
+表示前面一条日志序列号，序列号不一定以1递减</li>
+</ol></li>
+<li><code>(first_lsn, last_lsn)</code>表示做数据恢复时，在做roll
+forward（前滚）动作时，一定要遍历的LSN</li>
+<li><code>database_backup_lsn</code>
+标识上一次数据库做全备份的起始LSN</li>
+<li><code>Type</code>标识数据库备份的类型
+<ol type="1">
+<li>D(数据库)， L(日志)， I(差异数据库)，F(文件或文件组)</li>
+</ol></li>
+</ol></li>
+<li><p>进行一个操作之后，做日志备份</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> TESTTABLE<br>(number <span class="hljs-type">int</span>,<br> name nvarchar(<span class="hljs-number">50</span>)<br>)<br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TESTTABLE <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;aaaa&#x27;</span>)<br>GO<br>BACKUP LOG Archive <span class="hljs-keyword">TO</span> DISK<span class="hljs-operator">=</span><span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\AdvLog2.bak&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>再次查询备份记录，可以看到</p>
+<figure>
+<img
+src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/image-20220629094538203.png"
+alt="查询数据库的历史备份记录，显示一个新的日志备份" />
+<figcaption
+aria-hidden="true">查询数据库的历史备份记录，显示一个新的日志备份</figcaption>
+</figure>
+<p>新增的日志记录，而且下一次日志备份的first_lsn总是等于上一次日志备份的last_lsn，保证了连续性</p></li>
+<li><p>进行一个操作，然后进行差异备份</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TESTTABLE <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">3</span>, <span class="hljs-string">&#x27;cccc&#x27;</span>)<br>GO<br>BACKUP DATABASE Archive <span class="hljs-keyword">TO</span> DISK<span class="hljs-operator">=</span><span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\AdvDiff4.bak&#x27;</span> <span class="hljs-keyword">WITH</span> DIFFERENTIAL<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/image-20220629095933722.png"
+alt="查询数据库的历史备份记录，显示一个差异备份" />
+<figcaption
+aria-hidden="true">查询数据库的历史备份记录，显示一个差异备份</figcaption>
+</figure>
+<p>可以看到新增了差异备份</p></li>
+<li><p>在查询结果中，我们可以发现</p>
+<ol type="1">
+<li>不管是全备份还是差异备份，都不会影响LSN的序列
+<ol type="1">
+<li>只要有全备份和该全备份之后的所有日志备份，即可恢复</li>
+</ol></li>
+<li>日志备份的LSN是连续的</li>
+</ol></li>
+</ol>
+<h3 id="文件或文件组备份">文件或文件组备份</h3>
+<p><u>完整文件备份</u></p>
+<ol type="1">
+<li>备份一个或多个文件或文件组中的所有数据</li>
+<li>在完整恢复模式下，一整套完整文件备份和跨所有文件备份的日志备份合起来，等同于一个完整数据库备份</li>
+<li>文件备份能够只还原损坏的文件，加快恢复速度</li>
+<li>文件备份在默认情况下包含足够的日志记录，可以将文件前滚至备份操作的末尾（简单模式下必须一起备份所有读/写文件）</li>
+</ol>
+<p><u>文件备份的优点</u></p>
+<ol type="1">
+<li>更快从故障恢复</li>
+<li>增加了计划和媒体处理的灵活性</li>
+<li>适用于超大型数据库</li>
+</ol>
+<p><u>文件备份的缺点</u></p>
+<ol type="1">
+<li>管理较复杂</li>
+<li>必须维护一组完整的文件备份，否则无法恢复整个数据库</li>
+<li>对于完整/大容量日志恢复模式，必须维护一个或多个日志备份，这些日志备份至少涵盖第一个完整文件备份和最后一个完整备份之间的时间间隔</li>
+<li>在完整恢复模式下，恢复一个文件组备份，需要恢复文件组备份本身，并需要依次恢复从上一次完整数据库备份后，到恢复的目标时间点为止的所有日志备份以保证同步（需要恢复的事务日志备份数量庞大）</li>
+</ol>
+<p><u>文件备份策略</u></p>
+<figure>
+<img
+src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/clip_image002-16570809862958.jpg"
+alt="文件组备份" />
+<figcaption aria-hidden="true">文件组备份</figcaption>
+</figure>
+<ol type="1">
+<li>最好执行完整数据库备份并在第一个文件备份开始之前开始日志备份</li>
+<li>图中可看到，在创建数据库（在t0时间）之后立即执行完整数据库备份（在t1时间），事务日志备份按照设置的适合数据库业务要求的间隔执行。</li>
+</ol>
+<h2 id="选择数据库还原方案">选择数据库还原方案</h2>
+<p>无论以何种方式还原数据，在恢复数据库前，SQL
+Server数据库引擎都会保证整个数据库在逻辑上的一致性。例如，还原一个文件以后，必须恢复完整的一套日志文件备份，以便将该文件里的事务前滚足够长度，与数据库保持一致，才能恢复该文件并使其在线。</p>
+<p><u>不同恢复模式所支持的各种还原方案</u></p>
+<table>
+
+<thead>
+<tr class="header">
+<th>还原方案</th>
+<th>在简单恢复模式下</th>
+<th>在完整/大容量日志恢复模式下</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>数据库 完整还原</td>
+<td>这是基本的还原策略。
+　数据库完整还原可能涉及完整数据库备份的简单还原和恢复。另外，完整的数据库还原还可能涉及还原完整数据库备份，以及还原和恢复差异备份</td>
+<td>这是基本的还原策略。数据库完整还原涉及还原完整数据库备份或差异备份（如果有），以及还原所有后续日志备份（按顺序）。通过恢复并还原上一次日志备份(RESTORE
+WITH RECOVERY)，完成数据库完整还原,过程中数据库处于离线状态</td>
+</tr>
+<tr class="even">
+<td>文件还原</td>
+<td>只能还原损坏的只读文件，但不还原整个数据库。所以实用性不是很强</td>
+<td>能够还原一个或多个文件，而不还原整个数据库。可以在数据库处于离线状态或数据库保持在线状态（对于SQL
+Server
+2005的某些版本）时执行文件还原。在文件还原过程中，包含正在还原的文件的文件组一直处于离线状态。其他文件组有可能被访问</td>
+</tr>
+<tr class="odd">
+<td>页面还原</td>
+<td>不适用</td>
+<td>还原损坏的页面。可以在数据库处于离线状态或数据库保持在线状态（对于SQL
+Server
+的企业版）时执行页面还原。在页面还原过程中，正在还原的页面一直处于离线状态。
+　必须具有完整的日志备份链（包含当前日志文件），并且必须恢复所有这些日志备份，以使页面与当前日志文件保持一致</td>
+</tr>
+<tr class="even">
+<td>段落还原</td>
+<td>按文件组级别并从主文件组和所有读写辅助文件组开始，分阶段还原和恢复数据库</td>
+<td>按文件组级别并从主文件组开始，分阶段还原和恢复数据库</td>
+</tr>
+</tbody>
+</table>
+<p><u>每种恢复模式支持的还原方案以及适用范围</u></p>
+<table>
+
+<thead>
+<tr class="header">
+<th>还原操作</th>
+<th>完整恢复模式</th>
+<th>大容量日志恢复模式</th>
+<th>简单恢复模式</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>数据还原</td>
+<td>完整还原（如果日志可用）</td>
+<td>某些数据将丢失</td>
+<td>自上次完整备份或差异备份后的任何数据将丢失</td>
+</tr>
+<tr class="even">
+<td>时点还原</td>
+<td>日志备份所涵盖的任何时间</td>
+<td>日志备份包含任何大容量日志更改时不允许</td>
+<td>不支持</td>
+</tr>
+<tr class="odd">
+<td>文件还原*</td>
+<td>完全支持</td>
+<td>不完全支持</td>
+<td>仅对只读辅助文件可用</td>
+</tr>
+<tr class="even">
+<td>页面还原*</td>
+<td>完全支持</td>
+<td>不完全支持</td>
+<td>无</td>
+</tr>
+<tr class="odd">
+<td>段落还原*</td>
+<td>完全支持</td>
+<td>不完全支持</td>
+<td>仅对只读辅助文件可用</td>
+</tr>
+</tbody>
+</table>
+<p>* 仅适用于SQL Server企业版</p>
+<h3 id="数据库完整还原">数据库完整还原</h3>
+<p>将一个数据库从无到有，完整地还原出来，是最常使用的还原操作。在简单情况下，还原操作只需要一个完整数据库备份、一个差异数据库备份和后续日志备份。</p>
+<p><u>数据库恢复到故障点的基本步骤</u></p>
+<p>数据库需满足：</p>
+<ol type="1">
+<li>恢复模式必须是完整恢复模式
+<ol type="1">
+<li>如果源数据库是简单模式，则没有相应的日志备份</li>
+</ol></li>
+<li>灾难发生前，数据库曾经做过一个完整数据库备份（或有一套完整的文件备份）。</li>
+<li>在上次完整数据库备份后，做过的任何日志备份每个都能找到</li>
+</ol>
+<p>步骤：</p>
+<ol type="1">
+<li><p>备份活动事务日志（也称为日志尾部）。</p></li>
+<li><p>还原最新完整数据库备份，而且不做事务恢复<code>RESTORE DATABASE *database_name* FROM *backup_device* WITH NORECOVERY</code></p></li>
+<li><p>如果存在差异备份，则还原最新的差异备份，而不做事务恢复<code>WITH NORECOVERY</code></p></li>
+<li><p>从还原备份后创建的第一个事务日志备份开始，使用<code>NORECOVERY</code>依次还原日志</p></li>
+<li><p>恢复数据库到某个时间点<code>RESTORE DATABASE *database_name* WITH STOPAT='????????', RECOVERY</code>。此步骤也可以与还原上一次日志备份结合使用</p></li>
+</ol>
+<p>实例：
+恢复AdventureWorks数据库，在此示例之前，数据库已经做过一个数据库完整备份和一个日志备份。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">--灾难发生后，试图创建一个尾日志备份</span><br>BACKUP LOG AdventureWorks <br><span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Z:\SQLServerBackups\AdventureWorks.bak&#x27;</span><br>   <span class="hljs-keyword">WITH</span> NORECOVERY; <br>GO<br><span class="hljs-comment">--从备份恢复一个全备份</span><br>RESTORE DATABASE AdventureWorks <br>  <span class="hljs-keyword">FROM</span> DISK <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Z:\SQLServerBackups\AdventureWorks.bak&#x27;</span> <br>  <span class="hljs-keyword">WITH</span> FILE<span class="hljs-operator">=</span><span class="hljs-number">1</span>, <br>    NORECOVERY;<br><br><span class="hljs-comment">--从备份中恢复一个正常的日志备份</span><br>RESTORE LOG AdventureWorks <br>  <span class="hljs-keyword">FROM</span> DISK <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Z:\SQLServerBackups\AdventureWorks.bak&#x27;</span> <br>  <span class="hljs-keyword">WITH</span> FILE<span class="hljs-operator">=</span><span class="hljs-number">2</span>, <br>    NORECOVERY;<br><br><span class="hljs-comment">--用STOPAT恢复尾日志备份</span><br>RESTORE LOG AdventureWorks <br>  <span class="hljs-keyword">FROM</span> DISK <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Z:\SQLServerBackups\AdventureWorks.bak&#x27;</span><br>  <span class="hljs-keyword">WITH</span> FILE<span class="hljs-operator">=</span><span class="hljs-number">3</span>, STOPAT<span class="hljs-operator">=</span><span class="hljs-string">&#x27;XXXX xx:xx:xx&#x27;</span>,<br>   RECOVERY;<br>GO<br></code></pre></td></tr></table></figure>
+<p><u>完整还原优点</u></p>
+<ol type="1">
+<li>管理和执行都比较简单</li>
+<li>是最广泛使用的还原方案</li>
+</ol>
+<p><u>完整还原缺点</u></p>
+<ol type="1">
+<li>数据库的完整备份恢复耗时太长</li>
+<li>完整备份大小占空间</li>
+</ol>
+<h3 id="文件还原">文件还原</h3>
+<p><u>从文件备份和差异文件备份中还原一个或多个受损文件的基本步骤</u></p>
+<ol type="1">
+<li>创建活动事务日志的尾日志备份
+<ol type="1">
+<li>对于离线文件还原，在文件还原之前必须先进行一次尾日志备份</li>
+<li>对于在线文件还原，在文件还原之后必须先进行一次日志备份</li>
+</ol></li>
+<li>从每个损坏的文件的最新文件备份还原相应文件</li>
+<li>针对每个还原的文件，还原最近的差异文件备份（如果有）。</li>
+<li>按顺序还原事务日志备份，从覆盖最早还原文件的备份开始，到在步骤1中创建的尾日志备份结束。</li>
+</ol>
+<p><u>示例</u></p>
+<p>数据库abc（完整恢复模式）包含三个文件组，文件组A为读/写文件组，而文件组B和C是只读的。最初，所有文件组都处于在线状态。现在文件组A中的文件a1已损坏，数据库管理员决定在数据库处于在线状态时还原该文件。</p>
+<ol type="1">
+<li><p>在线还原文件a1</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE DATABASE adb FILE<span class="hljs-operator">=</span><span class="hljs-string">&#x27;a1&#x27;</span> <span class="hljs-keyword">FROM</span> backup <span class="hljs-keyword">WITH</span> NORECOVERY<br></code></pre></td></tr></table></figure>
+<p>文件a1处于RESTORING状态，文件组A处于离线状态</p></li>
+<li><p>进行新的日志备份以确保捕获到该文件离线时的点</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 之前曾经做过两次日志备份</span><br>BACKUP LOG adb <span class="hljs-keyword">TO</span> log_backup3 <span class="hljs-keyword">WITH</span> COPY_ONLY<br></code></pre></td></tr></table></figure></li>
+<li><p>在线还原日志备份</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE LOG adb <span class="hljs-keyword">FROM</span> log_backup1 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> log_backup2 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> log_backup3 <span class="hljs-keyword">WITH</span> RECOVERY<br></code></pre></td></tr></table></figure>
+<p>文件a1现处于在线状态。数据库恢复完成</p></li>
+</ol>
+<h3 id="页面还原">页面还原</h3>
+<p>页面还原用于修复隔离的损坏页。页面还原仅可以还原数据页。</p>
+<p><u>不能使用页面还原的内容</u></p>
+<ol type="1">
+<li>事务日志</li>
+<li>分配页：全局分配映射（GAM）页、共享全局分配映射（SGAM）页和页可用空间（PFS）页</li>
+<li>所有数据文件的页0（文件启动页）</li>
+<li>页1:9（数据库启动页）</li>
+<li>全文目录（Fulltext search catalog）</li>
+</ol>
+<p><u>使用页面还原的要求</u></p>
+<ol type="1">
+<li>数据库必须使用完整恢复模式。使用大容量日志恢复模式时可能不能成功。简单恢复模式无法使用这一功能。</li>
+<li>只读文件组中的页面无法还原</li>
+<li>还原顺序必须从完整备份、文件备份或文件组备份中恢复页面开始</li>
+<li>页面还原需要截止到当前日志文件的连续（无截断）日志备份，并且必须恢复所有这些日志备份后，页才能恢复到当前正常状态</li>
+<li>数据库备份和页面还原不能同时运行</li>
+</ol>
+<p><u>页面还原的基本步骤</u></p>
+<ol type="1">
+<li>获取要还原的损坏页的页ID
+<ol type="1">
+<li>查询msdb数据库里的<code>suspect_pages</code>表</li>
+<li>查询监视事件和SQL Server errorlog文件里所报出的错误信息</li>
+</ol></li>
+<li>从包含页的完整数据库备份、文件备份或文件组备份开始进行页面还原</li>
+<li>应用最近的差异备份</li>
+<li>应用后续日志备份</li>
+<li>创建新的数据库尾日志备份</li>
+<li>还原新的尾日志备份</li>
+</ol>
+<p><u>示例</u></p>
+<p>使用NORECOVERY还原文件B的4个损坏页。随后，将使用NORECOVERY应用两个日志备份，然后是尾日志备份（使用RECOVERY还原）。文件B的文件ID为1，损坏的页的页ID分别为57、202、916和1016。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE DATABASE <span class="hljs-operator">&lt;</span>database<span class="hljs-operator">&gt;</span> PAGE<span class="hljs-operator">=</span><span class="hljs-string">&#x27;1:57, 1:202, 1:916, 1:1016&#x27;</span><br>   <span class="hljs-keyword">FROM</span> <span class="hljs-operator">&lt;</span>file_backup_of_file_B<span class="hljs-operator">&gt;</span> <br>   <span class="hljs-keyword">WITH</span> NORECOVERY;<br>RESTORE LOG <span class="hljs-operator">&lt;</span>database<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-operator">&lt;</span>log_backup<span class="hljs-operator">&gt;</span> <br>   <span class="hljs-keyword">WITH</span> NORECOVERY;<br>RESTORE LOG <span class="hljs-operator">&lt;</span>database<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-operator">&lt;</span>log_backup<span class="hljs-operator">&gt;</span> <br>   <span class="hljs-keyword">WITH</span> NORECOVERY; <br>BACKUP LOG <span class="hljs-operator">&lt;</span>database<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">TO</span> <span class="hljs-operator">&lt;</span>new_log_backup<span class="hljs-operator">&gt;</span> <br>RESTORE LOG <span class="hljs-operator">&lt;</span>database<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">FROM</span> <span class="hljs-operator">&lt;</span>new_log_backup<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">WITH</span> RECOVERY;<br>GO<br></code></pre></td></tr></table></figure>
+<h3 id="段落还原">段落还原</h3>
+<p>段落还原包括从主文件组开始的一系列还原顺序，有时也可以从一个或多个辅助文件组开始。在还原顺序结束后，如果恢复的文件有效并且与数据库一致，则恢复的文件将能直接变为在线状态，恢复用户访问。</p>
+<p><u>离线段落还原方案</u></p>
+<ol type="1">
+<li>数据库在部分还原顺序之后处于在线状态</li>
+<li>尚未还原的文件组保持离线状态，而数据库必须进入离线状态后，才能继续还原没有还原的文件组</li>
+</ol>
+<p><u>在线段落还原方案</u></p>
+<ol type="1">
+<li>SQL Server 企业版</li>
+<li>数据库在完成部分还原顺序后，主文件组已经被恢复，它和所有其他已恢复的辅助文件组都处于可用状态，数据库进入在线状态，用户可以访问</li>
+<li>尚未还原的文件组保持离线状态，而后面还原这些文件组时，数据库还能保持在线状态</li>
+<li>如果仅还原了一部分文件组，则数据库和这些文件组有关的事务可能会被挂起，影响一部分数据页面的访问</li>
+</ol>
+<p>在简单恢复模式下，可以被推迟恢复的只有只读文件组。</p>
+<p>在完整恢复模式或大容量日志恢复模式下，任何包含多个文件组的数据库都可以使用段落还原，并且可以将数据库还原到任何时间点。</p>
+<p><u>段落还原顺序</u></p>
+<ol type="1">
+<li><p>部分还原顺序</p>
+<p>第一个RESTORE DATABASE语句必须执行以下操作：</p>
+<ol type="1">
+<li>指定PARTIAL选项（只能指定一次）</li>
+<li>使用包含主文件组的任何完整数据库备份，还原部分备份来启动部分还原顺序。</li>
+<li>若要还原到特定的时间点，必须在部分还原顺序中指定该时间。还原顺序的每个后续步骤都必须指定相同的时间点</li>
+</ol></li>
+<li><p>文件组还原顺序会使其他文件组在线并处于与数据库一致的某个点</p>
+<ol type="1">
+<li>如果特定只读文件未损坏且与数据库一致，则该文件无须还原。</li>
+<li>如果在文件备份创建之前，只读文件组就已处于只读状态，则该文件组无须应用日志备份，并且文件还原会跳过日志备份的应用过程。</li>
+<li>如果文件组是读/写文件组，则必须将未中断的日志备份链应用于上一次完整还原或差异还原，文件组才能前进到当前的日志文件</li>
+</ol></li>
+</ol>
+<p><u>段落还原的优点</u></p>
+<ol type="1">
+<li>能帮助让最重要的数据最先上线</li>
+<li>能允许在数据库恢复其他文件组的时候，先前已恢复的文件组仍保持在线状态</li>
+</ol>
+<p><u>示例</u></p>
+<p>数据库adb将在发生灾难性事件后还原到一台新计算机。该数据库使用完整恢复模式。发生灾难性事件前所有文件组都处于在线状态。文件组B是只读的。必须还原所有辅助文件组，但这些辅助文件组将按重要性顺序进行还原：A最高，其次是C，最后是B。在此示例中，存在4个日志备份，其中包括尾日志备份。</p>
+<ol type="1">
+<li><p>备份日志尾部（是后面还原顺序中将要应用的最后一个备份）</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 数据库已损坏，因此创建尾日志备份要使用NO_TRUNCATE选项</span><br>BACKUP LOG adb <span class="hljs-keyword">TO</span> tailLogBackup <span class="hljs-keyword">WITH</span> NORECOVERY, NO_TRUNCATE<br></code></pre></td></tr></table></figure></li>
+<li><p>还原顺序</p>
+<ol type="1">
+<li><p>部分还原主文件组和辅助文件组A</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE DATABASE adb FILEGROUP<span class="hljs-operator">=</span><span class="hljs-string">&#x27;Primary&#x27;</span> <span class="hljs-keyword">FROM</span> backup1 <br>   <span class="hljs-keyword">WITH</span> PARTIAL, NORECOVERY<br>RESTORE DATABASE adb FILEGROUP<span class="hljs-operator">=</span><span class="hljs-string">&#x27;A&#x27;</span> <span class="hljs-keyword">FROM</span> backup2 <br>   <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> backup3 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> backup4 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> backup5 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> tailLogBackup <span class="hljs-keyword">WITH</span> RECOVERY<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>主文件组和辅助文件组A处于在线状态</li>
+<li>文件组B和C中的所有文件都处于恢复挂起状态，处于离线状态。</li>
+<li>步骤1中的最后一条RESTORE
+LOG语句的消息会指出：由于文件组C不可用，因此涉及此文件组的事务回滚已延迟</li>
+</ol></li>
+<li><p>在线还原文件组C</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE DATABASE adb FILEGROUP<span class="hljs-operator">=</span><span class="hljs-string">&#x27;C&#x27;</span> <span class="hljs-keyword">FROM</span> backup2a <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> backup3 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> backup4 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> backup5 <span class="hljs-keyword">WITH</span> NORECOVERY<br>RESTORE LOG adb <span class="hljs-keyword">FROM</span> tailLogBackup <span class="hljs-keyword">WITH</span> RECOVERY<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>主文件组及文件组A和C处于在线状态</li>
+<li>文件组B中的文件处于恢复挂起状态，该文件组处于离线状态</li>
+<li>解析延迟的事务后，日志被截断</li>
+</ol></li>
+<li><p>在线还原文件组B</p>
+<p>文件组B的备份是在该文件组变为只读状态之后进行的，因此，在恢复过程中无须再恢复日志备份。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE DATABASE adb FILEGROUP<span class="hljs-operator">=</span><span class="hljs-string">&#x27;B&#x27;</span> <span class="hljs-keyword">FROM</span> backup2b <span class="hljs-keyword">WITH</span> RECOVERY<br></code></pre></td></tr></table></figure>
+<p>所有文件组现在都处于在线状态</p></li>
+</ol>
+<h3 id="孤立用户故障排除">孤立用户故障排除</h3>
+<p><u>SQL Server的用户安全管理</u></p>
+<ol type="1">
+<li><p>服务器层</p>
+<ol type="1">
+<li><p>登录账号（Login）</p></li>
+<li><p>管理整个SQL Server服务器，开启跟踪，修改SQL
+Server安全配置，备份所有数据库等</p></li>
+<li><p>所有登录账号的信息，存放在master数据库里</p>
+<ol type="1">
+<li><p>查询<code>sys.server_principals</code></p>
+<figure>
+<img
+src="/2022/07/29/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/image-20220707101818615.png"
+alt="查询sys.server_principals" />
+<figcaption aria-hidden="true">查询sys.server_principals</figcaption>
+</figure></li>
+</ol></li>
+<li><p>每个登录账号都有一个唯一编号SID</p>
+<ol type="1">
+<li>对于Windows Login, SID就是Windows用户在域里的SID</li>
+<li>对于SQL Login, 会随机生成SID，每次生成的SID都有可能不一样</li>
+</ol></li>
+</ol></li>
+<li><p>数据库层</p>
+<ol type="1">
+<li>数据库用户（Database User）</li>
+<li>可以设置它对这个特定的数据库有读写、修改表格结构、存储过程定义等权限</li>
+<li>查询<code>sys.database_principals</code>了解用户信息</li>
+<li>每个数据库用户除了名字，也有一个唯一的SID</li>
+</ol></li>
+<li><p>SQL
+Server登录账户必须要和某个数据库用户相对应后，才能被数据库接纳</p>
+<ol type="1">
+<li>即用户数据库sys.database_principals里的SID和master数据库sys.server_principals里的SID匹配</li>
+<li>对于Windows登录账号，如果新的服务器和原先的服务器在同一个域里，那么同样的Windows登录账号会有一样的SID</li>
+<li>对于SQL登录账号，当用户数据库恢复到新的服务器上后，master数据库sys.server_principals里并没有这个账号，但是用户数据库里还是有“test”这个数据库用户，于是这个用户被“孤立”了</li>
+</ol></li>
+<li><p>检测孤立用户</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">USE <span class="hljs-operator">&lt;</span>database_name<span class="hljs-operator">&gt;</span>;<br>GO; <br><span class="hljs-keyword">EXEC</span> sp_change_users_login <span class="hljs-string">&#x27;Report&#x27;</span>;<br></code></pre></td></tr></table></figure></li>
+<li><p>链接孤立用户</p>
+<ol type="1">
+<li><p>SQL登录账号</p>
+<ol type="1">
+<li><p>创建相应的SQL登陆账号</p></li>
+<li><p>使用命令重新链接服务器登录账户与数据库用户，修改SID为一致</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">USE <span class="hljs-operator">&lt;</span>database_name<span class="hljs-operator">&gt;</span>;<br>GO<br><span class="hljs-keyword">EXEC</span> sp_change_users_login <span class="hljs-variable">@Action</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;update_one&#x27;</span>, <span class="hljs-variable">@UserNamePattern</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;&lt;database_user&gt;&#x27;</span>, <span class="hljs-variable">@LoginName</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;&lt;login_name&gt;&#x27;</span>;<br></code></pre></td></tr></table></figure></li>
+</ol></li>
+<li><p>Windows登录账号</p>
+<ol type="1">
+<li>如果SID不同，说明域也发生了变化</li>
+<li>Windows服务器登录账户和数据库用户是不能强制链接在一起的</li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+<h2 id="系统数据库备份与恢复">系统数据库备份与恢复</h2>
+<p>每次进行过系统更新后，都必须备份多个系统数据库</p>
+<p>有任何数据库在服务器实例上使用了复制，则还必须备份distribution系统数据库</p>
+<table>
+
+<thead>
+<tr class="header">
+<th>系统数据库</th>
+<th>说　　明</th>
+<th>是否支 持备份</th>
+<th>恢复 模式</th>
+<th>注　　释</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>master</td>
+<td>记录SQL Server系统的所有系统级信息的数据库</td>
+<td>支持</td>
+<td>简单</td>
+<td>必须经常备份master数据库，以便根据业务需要充分保护数据。建议使用定期备份计划，这样在大量更新之后可以补充更多的备份</td>
+</tr>
+<tr class="even">
+<td>model</td>
+<td>在SQL Server实例上为所有数据库创建的模板</td>
+<td>支持</td>
+<td>用户 可配置</td>
+<td>仅在业务需要时备份model数据库，例如自定义其数据库选项后立即备份。
+最佳方法：建议您仅根据需要创建model数据库的完整数据库备份。由于model数据库较小而且很少更改，因此无须备份日志</td>
+</tr>
+<tr class="odd">
+<td>msdb</td>
+<td>SQL
+Server代理用来安排警报和作业以及记录操作员信息的数据库。msdb数据库还包含历史记录表，例如备份和还原历史记录表</td>
+<td>支持</td>
+<td>简单 （默认值）</td>
+<td>更新时备份msdb数据库</td>
+</tr>
+<tr class="even">
+<td>Resource（RDB）</td>
+<td>包含SQL Server附带的所有系统对象副本的只读数据库</td>
+<td>不支持</td>
+<td>—</td>
+<td>Resource数据库位于mssqlsy-
+stemresource.mdf文件中，该文件仅包含代码。因此，SQL
+Server不能备份Resource数据库</td>
+</tr>
+<tr class="odd">
+<td>tempdb</td>
+<td>用于保存临时或中间结果集的工作空间。每次启动SQL
+Server实例时都会重新创建此数据库。服务器实例关闭时，将永久删除tempdb数据库中的所有数据</td>
+<td>不支持</td>
+<td>简单</td>
+<td>无法备份tempdb系统数据库</td>
+</tr>
+<tr class="even">
+<td>distribution</td>
+<td>只有将服务器配置为复制分发服务器时才存在此数据库。此数据库存储元数据、各种复制的历史记录数据以及用于事务复制的事务</td>
+<td>支持</td>
+<td>简单</td>
+<td>根据您具体的复制配置决定</td>
+</tr>
+</tbody>
+</table>
+<h3 id="master数据库">master数据库</h3>
+<p>建议经常做master的完整数据库备份</p>
+<p><u>Master数据库包含的信息</u></p>
+<ol type="1">
+<li>SQL
+Server系统的所有系统级信息，例如登录账户、系统配置设置、端点和凭据以及访问其他数据库服务器所需的信息</li>
+<li>记录启动服务器实例所需的初始化信息，每个其他数据库的主文件位置</li>
+<li>是SQL Server启动的时候打开的第一个数据库</li>
+</ol>
+<p><u>重建master数据库</u></p>
+<ol type="1">
+<li>如果由于master数据库损坏严重到无法启动服务器实例，又没有备份，则必须重建</li>
+<li>重建master数据库将使所有的系统数据库恢复到其原始状态，SQL
+Server就像被重装过一样</li>
+</ol>
+<p><u>导致master数据库更新并要求进行备份的操作类型</u></p>
+<ol type="1">
+<li>创建或删除用户数据库
+<ol type="1">
+<li>用户数据库自动增长以容纳新数据时，master数据库不受影响</li>
+</ol></li>
+<li>添加或删除文件和文件组</li>
+<li>添加登录或其他与登录安全相关的操作
+<ol type="1">
+<li>数据库层面的安全操作（如向数据库中添加用户）对master数据库没有影响</li>
+</ol></li>
+<li>更改服务器范围的配置选项或数据库配置选项</li>
+<li>创建或删除逻辑备份设备</li>
+<li>配置用于分布式查询和远程过程调用（RPC）的服务器，如添加链接服务器或远程登录</li>
+</ol>
+<p><u>恢复master数据库</u></p>
+<ol type="1">
+<li>RESTOR</li>
+<li>还原master数据库后，SQL Server实例将自动停止</li>
+<li>将master数据库恢复到一台新的服务器上时，文件地址会发生变化，需要使用单用户模式启动SQL
+Server，将master数据库里的信息修改成新的地址
+<ol type="1">
+<li>单用户模式重新启动服务器时，应首先停止所有SQL
+Server服务（服务器实例本身除外），并停止所有SQL Server实用工具</li>
+</ol></li>
+</ol>
+<h3 id="model数据库">model数据库</h3>
+<ol type="1">
+<li>model数据库是SQL Server使用的模板</li>
+<li>model数据库的全部内容（包括数据库选项）都会被复制到新的数据库</li>
+<li>不推荐做任何修改，不要把任何用户数据放在这个数据库里</li>
+<li>还原model数据库与对用户数据库执行完整的数据库还原相同</li>
+</ol>
+<h3 id="msdb数据库">msdb数据库</h3>
+<ol type="1">
+<li>存储数据，包括计划信息以及备份与还原历史记录信息</li>
+<li>SQL
+Server将在msdb数据库中自动维护一份完整的在线备份与还原历史记录</li>
+<li>默认情况下，msdb数据库使用简单恢复模式</li>
+<li>如果在恢复用户数据库时使用msdb数据库中的备份与还原历史记录信息，建议对msdb数据库使用完整恢复模式</li>
+</ol>
+<h3 id="tempdb">tempdb</h3>
+<ol type="1">
+<li>每次启动SQL Server时都会重新创建tempdb数据库</li>
+<li>不需要备份</li>
+</ol>
+<h3 id="资源数据库resource-database">资源数据库（Resource
+Database）</h3>
+<ol type="1">
+<li>只读数据库</li>
+<li>包含了SQL
+Server中的所有系统对象，不包含任何用户数据或用户元数据</li>
+<li>对于同一个版本的SQL Server，它们的Resource数据库应该都是一样的</li>
+<li>物理文件名：mssqlsystemresource.mdf和mssqlsystemresource.ldf</li>
+<li>每个SQL
+Server实例都有且只有一个关联的mssqlsystemresource.mdf文件，并且实例间不共享此文件</li>
+<li>理论上不用备份Resource数据库，但是最好做基于文件的备份或基于磁盘的备份，恢复时注意版本问题</li>
+</ol>
+<h2
+id="带有filestream功能的数据库备份和恢复">带有FILESTREAM功能的数据库备份和恢复</h2>
+<p>对于有FILESTREAM功能的数据库，在进行备份和恢复时，会自动包含FILESTREAM数据，并不需要额外做文件级别的备份和恢复。</p>
+<ol type="1">
+<li><p>启动FILESTREAM</p>
+<ol type="1">
+<li><p>打开数据库的配置管理器，找到数据库服务，并右键点击属性。找到FILESTREAM的设置，启用FILESTREAM</p></li>
+<li><p>执行语句</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">EXEC</span> sp_configure filestream_access_level, <span class="hljs-number">2</span><br>RECONFIGURE<br></code></pre></td></tr></table></figure></li>
+<li><p>重新启动数据库服务</p></li>
+</ol></li>
+<li><p>创建TESTDB，指定文件组</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> DATABASE TESTFSDB<br>GO<br><br><span class="hljs-keyword">ALTER</span> DATABASE TESTFSDB <br><span class="hljs-keyword">ADD</span> FILEGROUOP [FSGroup] <span class="hljs-keyword">CONTAINS</span> FILESTREAM<br>GO<br><br><span class="hljs-keyword">ALTER</span> DATABASE TESTFSDB<br><span class="hljs-keyword">ADD</span> FILE (NAME<span class="hljs-operator">=</span>N’FSDATA’, FILENAME<span class="hljs-operator">=</span>N’D:\FSData’) <span class="hljs-keyword">TO</span> FILEGROUP FSGroup<br>GO<br></code></pre></td></tr></table></figure></li>
+<li><p>创建表并开启FILESTREAM功能</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">use TESTFSDB<br>go<br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> FSTable<br>(<br>[Id] [uniqueidentifier] ROWGUIDCOL <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">UNIQUE</span>, <br>[FileName] NVARCHAR(<span class="hljs-number">100</span>) ,<br>[BlobData] <span class="hljs-type">VARBINARY</span>(MAX) FILESTREAM <span class="hljs-keyword">NULL</span><br>)<br></code></pre></td></tr></table></figure></li>
+<li><p>插入数据</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> FSTable<br><span class="hljs-keyword">SELECT</span> NEWID(), <span class="hljs-string">&#x27;File1&#x27;</span>, <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> <br>OPENROWSET(BULK N<span class="hljs-string">&#x27;D:\temp\Image.jpg&#x27;</span>, SINGLE_BLOB) <span class="hljs-keyword">AS</span> Document<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> FSTable<br><span class="hljs-keyword">SELECT</span> NEWID(), <span class="hljs-string">&#x27;File2&#x27;</span>, <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> <br>OPENROWSET(BULK N<span class="hljs-string">&#x27;D:\temp\Image.jpg&#x27;</span>, SINGLE_BLOB) <span class="hljs-keyword">AS</span> Document<br></code></pre></td></tr></table></figure></li>
+<li><p>备份</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">BACKUP DATABASE [TESTFSDB] <span class="hljs-keyword">TO</span> DISK<span class="hljs-operator">=</span><span class="hljs-string">&#x27;C:\temp\TESTFSDB.bak&#x27;</span><br>BACKUP LOG [TESTFSDB] <span class="hljs-keyword">TO</span> DISK<span class="hljs-operator">=</span><span class="hljs-string">&#x27;C:\temp\TESTFSDB.bak&#x27;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>我们关闭数据库服务，并且删除整个D:。随后，重新启动数据库服务，并依据TESTFSDB.bak文件对数据库TESTFSDB进行恢复。</p></li>
+<li><p>我们会发现，D:。并且查询表FSTable，我们能得到正确的数据。</p></li>
+</ol>
+<p>## 应对由于备份损坏导致的还原错误</p>
+<ol type="1">
+<li><p>忽略错误继续执行操作</p>
+<ol type="1">
+<li><p>使用CONTINUE_AFTER_ERROR，使还原操作跳过错误继续进行，并还原SQL
+Server现在所能还原的所有内容</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">RESTORE DATABASE database_name <br><span class="hljs-keyword">FROM</span> backup_device <span class="hljs-keyword">WITH</span> CONTINUE_AFTER_ERROR, [ NORECOVERY ]<br></code></pre></td></tr></table></figure></li>
+<li><p>如果错误发生在一些比较关键的地方，比如某个数据文件的文件头信息，那么恢复还是有可能完全失败，数据库无法恢复</p></li>
+<li><p>在忽略错误后，使用DBCC CHECKDB（WITH TABLOCK）修复数据库</p></li>
+</ol></li>
+<li><p>建立备用（Standby）服务器</p>
+<ol type="1">
+<li>将做好的备份使用Log
+Shipping或者其他类似的机制在备用服务器上预先恢复好</li>
+</ol></li>
+</ol>
+<h2
+id="实例将数据库系统在一台新服务器上恢复">实例：将数据库系统在一台新服务器上恢复</h2>
+<p>假设现在管理员遇到了下面这些挑战：</p>
+<ul>
+<li><p>原先服务器出现硬件故障，已经无法启动。需要将整个SQL
+Server系统紧急迁移到一台备用服务器上。（备用服务器名字叫sqlserverpc，SQL
+Server是默认实例。）</p></li>
+<li><p>备用服务器和原服务器不同名，SQL
+Server安装的路径也不一样。（备用服务器安装路径为C:FilesSQL
+Server.4。）</p></li>
+<li><p>因为良好的备份策略，现在手头有最新的master、msdb和model数据库备份，以及其他所有用户数据库备份。</p></li>
+<li><p>现在需要将系统数据库恢复，以还原所有数据库系统信息（用户、密码、任务等）。然后才能恢复用户数据库。</p></li>
+</ul>
 ]]></content>
       <tags>
         <tag>SQL Server</tag>
-        <tag>T-SQL</tag>
+        <tag>Note</tag>
       </tags>
   </entry>
 </search>
