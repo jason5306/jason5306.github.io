@@ -515,40 +515,6 @@ alt="image-20220607174939143" />
       </tags>
   </entry>
   <entry>
-    <title>Change Vote Weight of WSFC Node Servers</title>
-    <url>/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/</url>
-    <content><![CDATA[<h1 id="change-vote-weight-of-wsfc-node-servers">Change Vote Weight of
-WSFC Node Servers</h1>
-<p>Currently, my node servers have the voting values as the
-following.</p>
-<figure>
-<img
-src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171346007.png"
-alt="image-20220606171346007" />
-<figcaption aria-hidden="true">image-20220606171346007</figcaption>
-</figure>
-<p>In <strong>Windows PowerShell</strong>, we can view the node servers
-by <code>get-clusternode</code>.</p>
-<figure>
-<img
-src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171619268.png"
-alt="image-20220606171619268" />
-<figcaption aria-hidden="true">image-20220606171619268</figcaption>
-</figure>
-<p>Then, to change the vote weight,</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># (get-clusternode NODE_NAME).nodeweight = VALUE</span><br>(<span class="hljs-built_in">get-clusternode</span> tjxiem406VM).nodeweight = <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606172036812.png"
-alt="image-20220606172036812" />
-<figcaption aria-hidden="true">image-20220606172036812</figcaption>
-</figure>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Freeze SQL service manually using WinDbg</title>
     <url>/2022/06/06/Freeze%20SQL%20service%20manually%20using%20WinDbg/</url>
     <content><![CDATA[<h1 id="freeze-sql-service-manually-using-windbg">Freeze SQL service
@@ -609,632 +575,6 @@ SQL server will be brought online.</p>
       </tags>
   </entry>
   <entry>
-    <title>Install Always On 2019 For Failover Clusters</title>
-    <url>/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/</url>
-    <content><![CDATA[<h1 id="install-always-on-2019-for-failover-clusters">Install Always On
-2019 For Failover Clusters</h1>
-<h2 id="configure-sql-server">Configure SQL Server</h2>
-<p>On each of the node servers (replica), turn on <strong>SQL Server
-Configuration Manager</strong>, <strong>SQL Server Services --&gt; SQL
-Server (MSSQLSERVER) --&gt; Properties --&gt; Always on Availability
-Groups --&gt; Enable Always on Availability Groups</strong>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607094155497.png"
-alt="image-20220607094155497" />
-<figcaption aria-hidden="true">image-20220607094155497</figcaption>
-</figure>
-<p>Then we install a stand-alone SQL service for the two node servers
-(replica).</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607113534697.png"
-alt="image-20220607113534697" />
-<figcaption aria-hidden="true">image-20220607113534697</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607113818112.png"
-alt="image-20220607113818112" />
-<figcaption aria-hidden="true">image-20220607113818112</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114135531.png"
-alt="image-20220607114135531" />
-<figcaption aria-hidden="true">image-20220607114135531</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114435948.png"
-alt="image-20220607114435948" />
-<figcaption aria-hidden="true">image-20220607114435948</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114540380.png"
-alt="image-20220607114540380" />
-<figcaption aria-hidden="true">image-20220607114540380</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114626758.png"
-alt="image-20220607114626758" />
-<figcaption aria-hidden="true">image-20220607114626758</figcaption>
-</figure>
-<p>Also, we need to enable <strong>Always on Availability
-Groups</strong> service as we did before for the two stand-alone SQL
-services.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607132532145.png"
-alt="image-20220607132532145" />
-<figcaption aria-hidden="true">image-20220607132532145</figcaption>
-</figure>
-<p>Moreover, for the secondary replica, we need to make sure its local
-SQL service can be connected to the primary replica. In the <strong>SQL
-Server Configuration Manager</strong> of the secondary replica,
-<strong>SQL Server Network Configuration --&gt; Protocols for SQL2
-</strong>, enable <code>Named Pipes</code> and <code>TCP/IP</code>.</p>
-<p>You need to restart the servers to make all the changes.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607151315019.png"
-alt="image-20220607151315019" />
-<figcaption aria-hidden="true">image-20220607151315019</figcaption>
-</figure>
-<h2 id="restore-and-backup-databases">Restore and Backup Databases</h2>
-<p>If you have databases that need to be added to the AG, make sure that
-they are in <strong>Full Recovery Mode</strong> and remove these
-databases from any <strong>tlog backup maintenance</strong>. Here I need
-to restore and back up <code>AdventureWorks2019</code> database.</p>
-<p>Restore the database on the primary replica, SQL 1.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607151437088.png"
-alt="image-20220607151437088" />
-<figcaption aria-hidden="true">image-20220607151437088</figcaption>
-</figure>
-<p>Change the <code>Recovery Model</code> to <code>Full</code>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607103723163.png"
-alt="image-20220607103723163" />
-<figcaption aria-hidden="true">image-20220607103723163</figcaption>
-</figure>
-<p>Take Full and tlog backups of all databases before adding them to
-AG.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">--Full Backups</span><br>BACKUP DATABASE [AdventureWorks2019] <span class="hljs-keyword">TO</span>  DISK <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.SQL1\MSSQL\Backup\AdventureWorks2019_FullBackup_20220607.bak&#x27;</span> <br><span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,  <br>NAME <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;AdventureWorks2019-Full Database Backup&#x27;</span>, <br><span class="hljs-keyword">SKIP</span>, NOREWIND, NOUNLOAD, COMPRESSION,  STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span>, CHECKSUM<br>GO<br><br><span class="hljs-comment">--Tlog Backups</span><br>BACKUP LOG [AdventureWorks2019] <span class="hljs-keyword">TO</span>  DISK <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.SQL1\MSSQL\Backup\Adventureworks2019_TlogBackup_20220607.trn&#x27;</span> <br><span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,  <br>NAME <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;AdventureWorks2019-Full Database Backup&#x27;</span>, <br><span class="hljs-keyword">SKIP</span>, NOREWIND, NOUNLOAD, COMPRESSION,  STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span>, CHECKSUM<br>GO<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607140009216.png"
-alt="image-20220607140009216" />
-<figcaption aria-hidden="true">image-20220607140009216</figcaption>
-</figure>
-<h2 id="install-always-on">Install Always On</h2>
-<p>Connect to your primary replica, and start the <strong>New
-Availability Group Wizard</strong>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142521671.png"
-alt="image-20220607142521671" />
-<figcaption aria-hidden="true">image-20220607142521671</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607101944506.png"
-alt="image-20220607101944506" />
-<figcaption aria-hidden="true">image-20220607101944506</figcaption>
-</figure>
-<p>If the <code>status</code> of the database is not
-<code>Meets prerequisites</code>, check detailed information.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607104426006.png"
-alt="image-20220607104426006" />
-<figcaption aria-hidden="true">image-20220607104426006</figcaption>
-</figure>
-<p>Add secondary replica.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607140235168.png"
-alt="image-20220607140235168" />
-<figcaption aria-hidden="true">image-20220607140235168</figcaption>
-</figure>
-<p>In the <code>Endpoints</code> tab, to avoid the following warning, we
-need to set the <code>SQL Server Service Account</code> to the domain
-account instead of the local server service account. Note that the
-<code>Port Number</code> should be <strong>5022</strong></p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141252469.png"
-alt="image-20220607141252469" />
-<figcaption aria-hidden="true">image-20220607141252469</figcaption>
-</figure>
-<p>In the <strong>SQL Service Configuration Manager</strong> of both
-node servers, change the account name into the <strong>domain
-account</strong> as the following.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141542135.png"
-alt="image-20220607141542135" />
-<figcaption aria-hidden="true">image-20220607141542135</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141623518-16545825841621-16545825852083.png"
-alt="image-20220607141623518" />
-<figcaption aria-hidden="true">image-20220607141623518</figcaption>
-</figure>
-<p>Now, back to the wizard, refresh the page, and the account is
-successfully changed.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141929009.png"
-alt="image-20220607141929009" />
-<figcaption aria-hidden="true">image-20220607141929009</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142141848.png"
-alt="image-20220607142141848" />
-<figcaption aria-hidden="true">image-20220607142141848</figcaption>
-</figure>
-<p>Note that the <code>Port</code> should be <strong>1433</strong> and
-the <code>IP Address</code> should be an unused IP Address on the
-network.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142110076.png"
-alt="image-20220607142110076" />
-<figcaption aria-hidden="true">image-20220607142110076</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142223919.png"
-alt="image-20220607142223919" />
-<figcaption aria-hidden="true">image-20220607142223919</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142235554-16545829607005.png"
-alt="image-20220607142235554" />
-<figcaption aria-hidden="true">image-20220607142235554</figcaption>
-</figure>
-<p>If successfully installed, we can find an AG listener in the
-<strong>Failover Cluster Manager</strong>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607143200288.png"
-alt="image-20220607143200288" />
-<figcaption aria-hidden="true">image-20220607143200288</figcaption>
-</figure>
-<h2 id="configure-read-only-route">Configure Read-Only Route</h2>
-<h3 id="configuration">Configuration</h3>
-<p>In the <strong>Object Explorer</strong>, open the
-<strong>Properties</strong> of the AG. Change
-<code>Readable Secondary</code> in <strong>Availability
-Replicas</strong> to <code>Read-intent Only</code>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607154139066.png"
-alt="image-20220607154139066" />
-<figcaption aria-hidden="true">image-20220607154139066</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607161723678.png"
-alt="image-20220607161723678" />
-<figcaption aria-hidden="true">image-20220607161723678</figcaption>
-</figure>
-<p>For the two stand-alone SQL servers, in the <strong>SQL Server
-Configuration Manager</strong>, <strong>Protocols for SQL 1 --&gt;
-TCP/IP --&gt; Properties --&gt; IP Addresses --&gt; TPC Dynamic
-Ports</strong>, change the port to an unused one for both services. This
-step ensures we can find the servers using a Read-only routing URL with
-the same port.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093558782.png"
-alt="image-20220608093558782" />
-<figcaption aria-hidden="true">image-20220608093558782</figcaption>
-</figure>
-<p>Fill in the <code>Read-Only Routing URL</code> with
-<code>TCP://ComputerName.domain:port</code>. The <code>port</code> here
-should be the number set in the previous step. Then, click on the first
-instance, there will be two available replicas shown, add SQL2 and then
-add SQL1. Then, click on the second instance, there will also be two
-available replicas shown, add SQL1 and then add SQL2.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608101300076.png"
-alt="image-20220608101300076" />
-<figcaption aria-hidden="true">image-20220608101300076</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608101311244.png"
-alt="image-20220608101311244" />
-<figcaption aria-hidden="true">image-20220608101311244</figcaption>
-</figure>
-<p>Or, simply run the script.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">USE [master]<br> GO<br> <span class="hljs-keyword">ALTER</span> AVAILABILITY <span class="hljs-keyword">GROUP</span> [jiachengAG]<br> MODIFY REPLICA <span class="hljs-keyword">ON</span> N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span> <span class="hljs-keyword">WITH</span> (PRIMARY_ROLE(READ_ONLY_ROUTING_LIST <span class="hljs-operator">=</span> (N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span>,N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span>)))<br> GO<br> USE [master]<br> GO<br> <span class="hljs-keyword">ALTER</span> AVAILABILITY <span class="hljs-keyword">GROUP</span> [jiachengAG]<br> MODIFY REPLICA <span class="hljs-keyword">ON</span> N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span> <span class="hljs-keyword">WITH</span> (PRIMARY_ROLE(READ_ONLY_ROUTING_LIST <span class="hljs-operator">=</span> (N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span>,N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span>)))<br> GO<br></code></pre></td></tr></table></figure>
-<h3 id="test">Test</h3>
-<p>Connect the AG listener. Click <strong>Options</strong> to configure
-the connection.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093733764.png"
-alt="image-20220608093733764" />
-<figcaption aria-hidden="true">image-20220608093733764</figcaption>
-</figure>
-<p>Note that the connected database needs to be specified in
-<code>Connection Properties</code></p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093829901.png"
-alt="image-20220608093829901" />
-<figcaption aria-hidden="true">image-20220608093829901</figcaption>
-</figure>
-<p>Also, add <code>ApplicationIntent=ReadOnly</code> as connection
-strings to enable Read-only routing.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093924655.png"
-alt="image-20220608093924655" />
-<figcaption aria-hidden="true">image-20220608093924655</figcaption>
-</figure>
-<p>New a query, run the script, the Read-only routing works as I am
-working in the primary replica while it routes read-only connections to
-the secondary replica.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608094019762.png"
-alt="image-20220608094019762" />
-<figcaption aria-hidden="true">image-20220608094019762</figcaption>
-</figure>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SQL Server 2012 Internal Note_Logging and recovery</title>
-    <url>/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/</url>
-    <content><![CDATA[<h1 id="sql-server-2012-internal-note_logging-and-recovery">SQL Server
-2012 Internal Note_Logging and recovery</h1>
-<h2 id="transaction-log-internals">Transaction log internals</h2>
-<ol type="1">
-<li><p>The transaction log</p>
-<ol type="1">
-<li><p>records changes made to the database and stores enough
-information to allow SQL Server to recover the database</p></li>
-<li><p>Physically, the transaction log is one or more files associated
-with a database at the time the database is created or altered.</p></li>
-<li><p>Each log record is labeled with a unique log sequence number
-(LSN)</p></li>
-<li><p>Transaction log is written before the changes to the database are
-written (Buffer Manager)</p>
-<ol type="1">
-<li><p>Every time a page is changed, the LSN corresponding to the log
-entry for that change is written into the header of the data page</p>
-<p>Log records for a transaction are written to disk before the commit
-acknowledgement is sent to the client process</p></li>
-</ol></li>
-</ol></li>
-<li><p>Recovery is the process of reconciling the data files and the
-log.</p></li>
-<li><p>A restart recovery runs every time SQL Server is started</p>
-<ol type="1">
-<li>The process runs on each database because each database has its own
-transaction log.</li>
-</ol></li>
-<li><p>A restore recovery (or media recovery), is run by request when a
-restore operation is executed</p></li>
-</ol>
-<h3 id="phases-of-recovery">Phases of recovery</h3>
-<p>During recovery, only changes that occurred or were in progress since
-the last checkpoint are evaluated to determine whether they need to be
-redone or undone</p>
-<figure>
-<img
-src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220719155358320.png"
-alt="The three phases of the SQL Server recovery process" />
-<figcaption aria-hidden="true">The three phases of the SQL Server
-recovery process</figcaption>
-</figure>
-<p><u>Phase 1: Analysis</u></p>
-<ol type="1">
-<li>Starting at the last checkpoint record in the transaction log</li>
-<li>Constructs a dirty page table (DPT) consisting of pages that might
-have been dirty at the time SQL Server stopped</li>
-<li>Build an active transaction table that consists of uncommitted
-transactions at the time SQL Server stopped</li>
-</ol>
-<p><u>Phase 2: Redo</u></p>
-<ol type="1">
-<li>This phase returns the database to the state it was in at the time
-the SQL Server service stopped</li>
-<li>If the SQL Server service stops after a transaction commits but
-before the data is written out to the data pages, when SQL Server starts
-and runs recovery, the transaction must be rolled forward</li>
-</ol>
-<p><u>Phase 3: Undo</u></p>
-<ol type="1">
-<li>It rolls each of these active transactions back individually.</li>
-<li>Any uncommitted transaction at the time SQL Server stopped is undone
-so that the database reflects none of the changes</li>
-</ol>
-<p>SQL Server uses multiple threads to process the recovery operations
-on the different data bases simultaneously.</p>
-<h3 id="page-lsns-and-recovery">Page LSNs and recovery</h3>
-<p>Every database page has an LSN in the page header that reflects the
-location in the transaction log of the last log entry that modified a
-row on that page</p>
-<figure>
-<img
-src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220720103706785.png"
-alt="Comparing LSNs to decide whether to process the log entry during recovery" />
-<figcaption aria-hidden="true">Comparing LSNs to decide whether to
-process the log entry during recovery</figcaption>
-</figure>
-<p>A transaction log can’t be truncated before the point of the earliest
-transaction that’s still open</p>
-<p>If a transaction remains open, the log must be preserved because it’s
-still not clear whether the transaction is done or ever will be done</p>
-<h3 id="log-reading">Log reading</h3>
-<p>The transaction log enables SQL Server to guarantee recoverability in
-case of statement or system failure and to allow a system administrator
-to take backups of the changes to a SQL Server database</p>
-<h3 id="the-log-cache">The log cache</h3>
-<p><u>SQL Server caches log records before they are physically
-written</u></p>
-<ol type="1">
-<li>The log cache contains up to 128 entries on 64-bit systems or 32
-entries on 32-bit systems</li>
-<li>Each entry can maintain a buffer to store the log records before
-they get written to disk as a single block (from 512 bytes to 60
-KB)</li>
-<li>As the log buffers are written to disk, SQL Server can reuse the
-buffer</li>
-</ol>
-<p><u>Log pool</u></p>
-<ol type="1">
-<li>The log pool is a hash table hashed on the block ID and the database
-ID</li>
-<li>The log pool allows SQL Server to access sets of log records needed
-for different technologies that need access to the log</li>
-</ol>
-<h2 id="changes-in-log-size">Changes in log size</h2>
-<p>SQL Server always treats the log as one contiguous stream</p>
-<h3 id="understanding-virtual-log-files">Understanding virtual log
-files</h3>
-<p>The transaction log for any database is managed as a set of virtual
-log files (VLFs) whose size is determined internally by SQL Server based
-on the total size of all log files and the growth increment used when
-enlarging the log.</p>
-<p>A log always grows in units of entire VLFs and can be shrunk only to
-a VLF boundary</p>
-<figure>
-<img
-src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220720151742031.png"
-alt="Multiple VLFs that make up a physical log file" />
-<figcaption aria-hidden="true">Multiple VLFs that make up a physical log
-file</figcaption>
-</figure>
-<p><u>A VLF can be in one of four states</u></p>
-<p><strong>Active</strong></p>
-<p>The active portion of the log begins at the minimum LSN representing
-an active transaction. The active portion of the log ends at the last
-LSN written.</p>
-<p><strong>Recoverable</strong></p>
-<p>The portion of the log preceding the oldest active transaction is
-needed only to maintain a sequence of log backups for restoring the
-database to a former state</p>
-<p><strong>Reusable</strong></p>
-<p>If transaction log backups aren’t being maintained or you’ve already
-backed up the log, VLFs before the oldest active transaction aren’t
-needed and can be reused. Truncating or backing up the transaction log
-changes recoverable VLFs into reusable VLFs.</p>
-<p><strong>Unused</strong></p>
-<p>One or more VLFs at the physical end of the log files might not have
-been used yet if not enough logged activity has taken place</p>
-<h3 id="observing-virtual-log-files">Observing virtual log files</h3>
-<p><code>DBCC LOGINFO</code> to observe the key properties of virtual
-log files.</p>
-<figure>
-<img
-src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220720162036037.png"
-alt="Viewing VLFs" />
-<figcaption aria-hidden="true">Viewing VLFs</figcaption>
-</figure>
-<p><code>FileId</code>: indicates which of the log’s physical files
-contains the VLF</p>
-<p><code>FileSize</code> <code>StartOffset</code>in bytes</p>
-<p><code>FSeqNo</code>: the use order (logical order), the FSeqNo values
-don’t start at 0 or 1</p>
-<p><code>Status</code>: indicates whether the VLF is reusable. 2: either
-active or recoverable, 0: reusable or completely unused</p>
-<p><code>CreateLSN</code>: lists the current LSN value at the time the
-VLF was added to the transaction log, 0 means that the VLF was part of
-the original log file created when the database was created</p>
-<p>The first physical page of a log file contains header information,
-not log records, so the VLF is considered to start on the second
-page</p>
-<p>If all the VLFs in the log have a status of 2, SQL Server needs to
-add new VLFs to the log to record new transaction activity.</p>
-<p>Try to keep your VLFs less than 1 GB in size; try to keep the number
-of VLFs to no more than a few hundred, with possibly 1,000 as an upper
-limit.</p>
-<h3 id="using-multiple-log-files">Using multiple log files</h3>
-<p>All VLFs in one physical file are used before any VLFs in the second
-file are used.</p>
-<p>If none of the VLFs in multiple physical log files is available for
-reuse when a new VLF is needed, SQL Server adds new VLFs to each
-physical log file in round-robin fashion</p>
-<h3
-id="understanding-automatic-truncation-of-virtual-log-files">Understanding
-automatic truncation of virtual log files</h3>
-<p>SQL Server assumes that you’re not maintaining a sequence of log
-backups if any of the following is true (in autotruncate mode):</p>
-<ol type="1">
-<li>You have configured the database to truncate the log regularly by
-setting the recovery model to SIMPLE.</li>
-<li>You have never taken a full database backup</li>
-<li>You haven’t taken a full database backup since switching the
-database to FULL or BULK_ LOGGED recovery model from SIMPLE recovery
-model.</li>
-</ol>
-<p><code>sys.database_recovery_status</code> column
-<code>last_log_backup_lsn</code>, if <code>null</code>, then in
-autotruncate mode.</p>
-<p><u>Autotruncate mode</u></p>
-<p>SQL Server truncates the database’s transaction log every time it
-gets “full enough”</p>
-<p>“Full enough” means that more log records exist than can be redone in
-a reasonable amount of time during system startup—the recovery
-interval</p>
-<p>Truncation: all log records prior to the oldest active transaction
-are invalidated and all VLFs not containing any part of the active log
-are marked as reusable.</p>
-<p><u>The checkpoint process</u></p>
-<p>The thread checks the database and then truncates the inactive
-portion of the log.</p>
-<p>If the log is regularly truncated, SQL Server can reuse space in the
-physical file by cycling back to an earlier VLF when it reaches the end
-of the physical log file.</p>
-<h3 id="maintaining-a-recoverable-log">Maintaining a recoverable
-log</h3>
-<figure>
-<img
-src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220721120550290.png"
-alt="The active portion of the log cycling back to the beginning of the physical log file" />
-<figcaption aria-hidden="true">The active portion of the log cycling
-back to the beginning of the physical log file</figcaption>
-</figure>
-<p>If a log backup sequence is being maintained, the part of the log
-before the minimum LSN can’t be overwritten until those log records have
-actually been backed up. The VLF status stays at 2 until the log backup
-occurs. After the log backup, the status changes to 0 and SQL Server can
-cycle back to the beginning of the file.</p>
-<h3 id="automatically-shrinking-the-log">Automatically shrinking the
-log</h3>
-<p>A database should be truncated so that it’s the most shrinkable, and
-if the log is in autotruncate mode and the autoshrink option is set, the
-log is physically shrunk at regular intervals.</p>
-<p>Autotruncate means only that VLFs considered recoverable are marked
-as reusable at regular intervals, but VLFs in an active state aren’t
-affected.</p>
-<h3 id="viewing-the-log-file-size">Viewing the log file size</h3>
-<p><code>DBCC SQLPERF(‘logspace’)</code></p>
-<figure>
-<img
-src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220721143841535.png"
-alt="DBCC result" />
-<figcaption aria-hidden="true">DBCC result</figcaption>
-</figure>
-<p><code>sys.dm_os_performance_counters</code></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> instance_name <span class="hljs-keyword">as</span> [Database],<br> cntr_value <span class="hljs-keyword">as</span> &quot;LogFullPct&quot;<br><span class="hljs-keyword">FROM</span> sys.dm_os_performance_counters<br><span class="hljs-keyword">WHERE</span> counter_name <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;Percent Log Used%&#x27;</span><br> <span class="hljs-keyword">AND</span> instance_name <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> (<span class="hljs-string">&#x27;_Total&#x27;</span>, <span class="hljs-string">&#x27;mssqlsystemresource&#x27;</span>)<br> <span class="hljs-keyword">AND</span> cntr_value <span class="hljs-operator">&gt;</span> <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220721143923238.png"
-alt="View result" />
-<figcaption aria-hidden="true">View result</figcaption>
-</figure>
-<h2 id="database-backup-and-restore">Database backup and restore</h2>
-<h3 id="understanding-the-types-of-backups">Understanding the types of
-backups</h3>
-<p><u>Full backup</u></p>
-<p>Backup copies all the pages from a database onto a backup device</p>
-<p><u>Differential backup</u></p>
-<p>Backup copies only the extents that changed since the last full
-backup was made.</p>
-<p>Each time a full backup is made, all bits in the DIFF are cleared to
-0. When any page in an extent is changed, the bit in the DIFF page
-corresponding to that extent is changed to 1.</p>
-<p><u>Log backup</u></p>
-<p>Backup copies all log records that have been written to the
-transaction log since the last log backup was made.</p>
-<p><u>File and filegroup backup</u></p>
-<p>SQL Server records the current log sequence number (LSN) at the time
-the backup starts and again at the time the backup ends.</p>
-<h3 id="understanding-recovery-models">Understanding recovery
-models</h3>
-<h4 id="minimally-logged-operations">Minimally logged operations</h4>
-<p>Minimally logged operations are ones that don’t write every single
-individual row because doing so modifies the transaction log. At a
-minimum, enough information has to be logged when a minimally logged
-operation is performed to allow SQL Server to rollback a transaction
-that has failed. Even when SQL Server logs the changed data, it doesn’t
-actually write it to the log in the sequence that it was changed. It’s a
-feature that minimizes the amount of logging for the operations
-configured.</p>
-<h4 id="full-recovery-model">FULL recovery model</h4>
-<ol type="1">
-<li>the least risk of losing work</li>
-<li>all operations are fully logged</li>
-</ol>
-<h4 id="bulk_logged-recovery-model">BULK_LOGGED recovery model</h4>
-<p>When you execute one of these minimally logged operations in a
-database in BULK_LOGGED recovery, SQL Server logs only that the
-operation occurred and logs information about space allocations.</p>
-<p>Because of the reduced logging for minimally logged operations, the
-operations themselves can potentially be carried out much faster than in
-the FULL recovery model.(the speed improvement isn’t guaranteed)</p>
-<p>Minimally logged operations might actually be slower in BULK_LOGGED
-recovery than in FULL recovery in certain cases</p>
-<p>The BULK_LOGGED recovery model allows you to restore a database
-completely in case of media failure and gives you the best performance
-and least log space usage for certain minimally logged operations</p>
-<p>The time it takes to restore a log backup made in the BULK_LOGGED
-recovery model is similar to the time it takes to restore a log backup
-made in the FULL recovery mode</p>
-<h4 id="simple-recovery-model">SIMPLE recovery model</h4>
-<p>the logging that takes place in SIMPLE recovery is exactly the same
-as the logging in BULK_LOGGED recovery, but transaction log is truncated
-whenever a checkpoint occurs, the only types of backups that can be made
-are those that don’t require log backups</p>
-<h3 id="switching-recovery-models">Switching recovery models</h3>
-<p>When created, a database starts in whatever recovery model is used by
-the model database on the instance</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> DATABASE <span class="hljs-operator">&lt;</span>database_name<span class="hljs-operator">&gt;</span><br> <span class="hljs-keyword">SET</span> RECOVERY [<span class="hljs-keyword">FULL</span> <span class="hljs-operator">|</span> BULK_LOGGED <span class="hljs-operator">|</span> SIMPLE]<br></code></pre></td></tr></table></figure>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"># <span class="hljs-keyword">returns</span> the recovery model <span class="hljs-keyword">and</span> the state <span class="hljs-keyword">of</span> database<br><span class="hljs-keyword">SELECT</span> name, database_id, suser_sname(owner_sid) <span class="hljs-keyword">as</span> owner ,<br> state_desc, recovery_model_desc<br><span class="hljs-keyword">FROM</span> sys.databases<br><span class="hljs-keyword">WHERE</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;AdventureWorks2008R2&#x27;</span><br></code></pre></td></tr></table></figure>
-<h3 id="choosing-a-backup-type">Choosing a backup type</h3>
-<p><u>A differential backup</u></p>
-<ol type="1">
-<li>Is faster if your environment includes many changes to the same
-data. It backs up only the most recent change, whereas a log backup
-captures every individual update</li>
-<li>Captures the entire B-tree structures for new indexes, whereas a log
-backup captures each individual step in building the index.</li>
-<li>Is cumulative. When you recover from a media failure, only the most
-recent differential backup needs to be restored because it contains all
-the changes since the last full database backup</li>
-</ol>
-<p><u>A log backup</u></p>
-<ol type="1">
-<li>Allows you to restore to any point in time because it is a
-sequential record of all changes.</li>
-<li>This allows you to recover right up to the point of the
-failure.</li>
-<li>Is sequential and discrete, all log backups must be applied in the
-order that they were made.</li>
-</ol>
-<h3 id="restoring-a-database">Restoring a database</h3>
-<figure>
-<img
-src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220721153220762.png"
-alt="The combined use of log and differential backups, which reduces total restore time" />
-<figcaption aria-hidden="true">The combined use of log and differential
-backups, which reduces total restore time</figcaption>
-</figure>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-        <tag>Note</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Pyinstaller Reduce Packed Program Size</title>
     <url>/2022/08/16/Pyinstaller%20Reduce%20Packed%20Program%20Size/</url>
     <content><![CDATA[<h1 id="pyinstaller-reduce-packed-program-size">Pyinstaller Reduce
@@ -1272,6 +612,40 @@ the cmd window.</p>
 ]]></content>
       <tags>
         <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Change Vote Weight of WSFC Node Servers</title>
+    <url>/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/</url>
+    <content><![CDATA[<h1 id="change-vote-weight-of-wsfc-node-servers">Change Vote Weight of
+WSFC Node Servers</h1>
+<p>Currently, my node servers have the voting values as the
+following.</p>
+<figure>
+<img
+src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171346007.png"
+alt="image-20220606171346007" />
+<figcaption aria-hidden="true">image-20220606171346007</figcaption>
+</figure>
+<p>In <strong>Windows PowerShell</strong>, we can view the node servers
+by <code>get-clusternode</code>.</p>
+<figure>
+<img
+src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171619268.png"
+alt="image-20220606171619268" />
+<figcaption aria-hidden="true">image-20220606171619268</figcaption>
+</figure>
+<p>Then, to change the vote weight,</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># (get-clusternode NODE_NAME).nodeweight = VALUE</span><br>(<span class="hljs-built_in">get-clusternode</span> tjxiem406VM).nodeweight = <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606172036812.png"
+alt="image-20220606172036812" />
+<figcaption aria-hidden="true">image-20220606172036812</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
       </tags>
   </entry>
   <entry>
@@ -2123,6 +1497,632 @@ alt="Compatibility levels" />
       </tags>
   </entry>
   <entry>
+    <title>Install Always On 2019 For Failover Clusters</title>
+    <url>/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/</url>
+    <content><![CDATA[<h1 id="install-always-on-2019-for-failover-clusters">Install Always On
+2019 For Failover Clusters</h1>
+<h2 id="configure-sql-server">Configure SQL Server</h2>
+<p>On each of the node servers (replica), turn on <strong>SQL Server
+Configuration Manager</strong>, <strong>SQL Server Services --&gt; SQL
+Server (MSSQLSERVER) --&gt; Properties --&gt; Always on Availability
+Groups --&gt; Enable Always on Availability Groups</strong>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607094155497.png"
+alt="image-20220607094155497" />
+<figcaption aria-hidden="true">image-20220607094155497</figcaption>
+</figure>
+<p>Then we install a stand-alone SQL service for the two node servers
+(replica).</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607113534697.png"
+alt="image-20220607113534697" />
+<figcaption aria-hidden="true">image-20220607113534697</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607113818112.png"
+alt="image-20220607113818112" />
+<figcaption aria-hidden="true">image-20220607113818112</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114135531.png"
+alt="image-20220607114135531" />
+<figcaption aria-hidden="true">image-20220607114135531</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114435948.png"
+alt="image-20220607114435948" />
+<figcaption aria-hidden="true">image-20220607114435948</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114540380.png"
+alt="image-20220607114540380" />
+<figcaption aria-hidden="true">image-20220607114540380</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114626758.png"
+alt="image-20220607114626758" />
+<figcaption aria-hidden="true">image-20220607114626758</figcaption>
+</figure>
+<p>Also, we need to enable <strong>Always on Availability
+Groups</strong> service as we did before for the two stand-alone SQL
+services.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607132532145.png"
+alt="image-20220607132532145" />
+<figcaption aria-hidden="true">image-20220607132532145</figcaption>
+</figure>
+<p>Moreover, for the secondary replica, we need to make sure its local
+SQL service can be connected to the primary replica. In the <strong>SQL
+Server Configuration Manager</strong> of the secondary replica,
+<strong>SQL Server Network Configuration --&gt; Protocols for SQL2
+</strong>, enable <code>Named Pipes</code> and <code>TCP/IP</code>.</p>
+<p>You need to restart the servers to make all the changes.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607151315019.png"
+alt="image-20220607151315019" />
+<figcaption aria-hidden="true">image-20220607151315019</figcaption>
+</figure>
+<h2 id="restore-and-backup-databases">Restore and Backup Databases</h2>
+<p>If you have databases that need to be added to the AG, make sure that
+they are in <strong>Full Recovery Mode</strong> and remove these
+databases from any <strong>tlog backup maintenance</strong>. Here I need
+to restore and back up <code>AdventureWorks2019</code> database.</p>
+<p>Restore the database on the primary replica, SQL 1.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607151437088.png"
+alt="image-20220607151437088" />
+<figcaption aria-hidden="true">image-20220607151437088</figcaption>
+</figure>
+<p>Change the <code>Recovery Model</code> to <code>Full</code>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607103723163.png"
+alt="image-20220607103723163" />
+<figcaption aria-hidden="true">image-20220607103723163</figcaption>
+</figure>
+<p>Take Full and tlog backups of all databases before adding them to
+AG.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">--Full Backups</span><br>BACKUP DATABASE [AdventureWorks2019] <span class="hljs-keyword">TO</span>  DISK <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.SQL1\MSSQL\Backup\AdventureWorks2019_FullBackup_20220607.bak&#x27;</span> <br><span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,  <br>NAME <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;AdventureWorks2019-Full Database Backup&#x27;</span>, <br><span class="hljs-keyword">SKIP</span>, NOREWIND, NOUNLOAD, COMPRESSION,  STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span>, CHECKSUM<br>GO<br><br><span class="hljs-comment">--Tlog Backups</span><br>BACKUP LOG [AdventureWorks2019] <span class="hljs-keyword">TO</span>  DISK <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.SQL1\MSSQL\Backup\Adventureworks2019_TlogBackup_20220607.trn&#x27;</span> <br><span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,  <br>NAME <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;AdventureWorks2019-Full Database Backup&#x27;</span>, <br><span class="hljs-keyword">SKIP</span>, NOREWIND, NOUNLOAD, COMPRESSION,  STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span>, CHECKSUM<br>GO<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607140009216.png"
+alt="image-20220607140009216" />
+<figcaption aria-hidden="true">image-20220607140009216</figcaption>
+</figure>
+<h2 id="install-always-on">Install Always On</h2>
+<p>Connect to your primary replica, and start the <strong>New
+Availability Group Wizard</strong>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142521671.png"
+alt="image-20220607142521671" />
+<figcaption aria-hidden="true">image-20220607142521671</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607101944506.png"
+alt="image-20220607101944506" />
+<figcaption aria-hidden="true">image-20220607101944506</figcaption>
+</figure>
+<p>If the <code>status</code> of the database is not
+<code>Meets prerequisites</code>, check detailed information.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607104426006.png"
+alt="image-20220607104426006" />
+<figcaption aria-hidden="true">image-20220607104426006</figcaption>
+</figure>
+<p>Add secondary replica.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607140235168.png"
+alt="image-20220607140235168" />
+<figcaption aria-hidden="true">image-20220607140235168</figcaption>
+</figure>
+<p>In the <code>Endpoints</code> tab, to avoid the following warning, we
+need to set the <code>SQL Server Service Account</code> to the domain
+account instead of the local server service account. Note that the
+<code>Port Number</code> should be <strong>5022</strong></p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141252469.png"
+alt="image-20220607141252469" />
+<figcaption aria-hidden="true">image-20220607141252469</figcaption>
+</figure>
+<p>In the <strong>SQL Service Configuration Manager</strong> of both
+node servers, change the account name into the <strong>domain
+account</strong> as the following.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141542135.png"
+alt="image-20220607141542135" />
+<figcaption aria-hidden="true">image-20220607141542135</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141623518-16545825841621-16545825852083.png"
+alt="image-20220607141623518" />
+<figcaption aria-hidden="true">image-20220607141623518</figcaption>
+</figure>
+<p>Now, back to the wizard, refresh the page, and the account is
+successfully changed.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141929009.png"
+alt="image-20220607141929009" />
+<figcaption aria-hidden="true">image-20220607141929009</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142141848.png"
+alt="image-20220607142141848" />
+<figcaption aria-hidden="true">image-20220607142141848</figcaption>
+</figure>
+<p>Note that the <code>Port</code> should be <strong>1433</strong> and
+the <code>IP Address</code> should be an unused IP Address on the
+network.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142110076.png"
+alt="image-20220607142110076" />
+<figcaption aria-hidden="true">image-20220607142110076</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142223919.png"
+alt="image-20220607142223919" />
+<figcaption aria-hidden="true">image-20220607142223919</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142235554-16545829607005.png"
+alt="image-20220607142235554" />
+<figcaption aria-hidden="true">image-20220607142235554</figcaption>
+</figure>
+<p>If successfully installed, we can find an AG listener in the
+<strong>Failover Cluster Manager</strong>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607143200288.png"
+alt="image-20220607143200288" />
+<figcaption aria-hidden="true">image-20220607143200288</figcaption>
+</figure>
+<h2 id="configure-read-only-route">Configure Read-Only Route</h2>
+<h3 id="configuration">Configuration</h3>
+<p>In the <strong>Object Explorer</strong>, open the
+<strong>Properties</strong> of the AG. Change
+<code>Readable Secondary</code> in <strong>Availability
+Replicas</strong> to <code>Read-intent Only</code>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607154139066.png"
+alt="image-20220607154139066" />
+<figcaption aria-hidden="true">image-20220607154139066</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607161723678.png"
+alt="image-20220607161723678" />
+<figcaption aria-hidden="true">image-20220607161723678</figcaption>
+</figure>
+<p>For the two stand-alone SQL servers, in the <strong>SQL Server
+Configuration Manager</strong>, <strong>Protocols for SQL 1 --&gt;
+TCP/IP --&gt; Properties --&gt; IP Addresses --&gt; TPC Dynamic
+Ports</strong>, change the port to an unused one for both services. This
+step ensures we can find the servers using a Read-only routing URL with
+the same port.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093558782.png"
+alt="image-20220608093558782" />
+<figcaption aria-hidden="true">image-20220608093558782</figcaption>
+</figure>
+<p>Fill in the <code>Read-Only Routing URL</code> with
+<code>TCP://ComputerName.domain:port</code>. The <code>port</code> here
+should be the number set in the previous step. Then, click on the first
+instance, there will be two available replicas shown, add SQL2 and then
+add SQL1. Then, click on the second instance, there will also be two
+available replicas shown, add SQL1 and then add SQL2.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608101300076.png"
+alt="image-20220608101300076" />
+<figcaption aria-hidden="true">image-20220608101300076</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608101311244.png"
+alt="image-20220608101311244" />
+<figcaption aria-hidden="true">image-20220608101311244</figcaption>
+</figure>
+<p>Or, simply run the script.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">USE [master]<br> GO<br> <span class="hljs-keyword">ALTER</span> AVAILABILITY <span class="hljs-keyword">GROUP</span> [jiachengAG]<br> MODIFY REPLICA <span class="hljs-keyword">ON</span> N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span> <span class="hljs-keyword">WITH</span> (PRIMARY_ROLE(READ_ONLY_ROUTING_LIST <span class="hljs-operator">=</span> (N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span>,N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span>)))<br> GO<br> USE [master]<br> GO<br> <span class="hljs-keyword">ALTER</span> AVAILABILITY <span class="hljs-keyword">GROUP</span> [jiachengAG]<br> MODIFY REPLICA <span class="hljs-keyword">ON</span> N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span> <span class="hljs-keyword">WITH</span> (PRIMARY_ROLE(READ_ONLY_ROUTING_LIST <span class="hljs-operator">=</span> (N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span>,N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span>)))<br> GO<br></code></pre></td></tr></table></figure>
+<h3 id="test">Test</h3>
+<p>Connect the AG listener. Click <strong>Options</strong> to configure
+the connection.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093733764.png"
+alt="image-20220608093733764" />
+<figcaption aria-hidden="true">image-20220608093733764</figcaption>
+</figure>
+<p>Note that the connected database needs to be specified in
+<code>Connection Properties</code></p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093829901.png"
+alt="image-20220608093829901" />
+<figcaption aria-hidden="true">image-20220608093829901</figcaption>
+</figure>
+<p>Also, add <code>ApplicationIntent=ReadOnly</code> as connection
+strings to enable Read-only routing.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093924655.png"
+alt="image-20220608093924655" />
+<figcaption aria-hidden="true">image-20220608093924655</figcaption>
+</figure>
+<p>New a query, run the script, the Read-only routing works as I am
+working in the primary replica while it routes read-only connections to
+the secondary replica.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608094019762.png"
+alt="image-20220608094019762" />
+<figcaption aria-hidden="true">image-20220608094019762</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL Server 2012 Internal Note_Logging and recovery</title>
+    <url>/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/</url>
+    <content><![CDATA[<h1 id="sql-server-2012-internal-note_logging-and-recovery">SQL Server
+2012 Internal Note_Logging and recovery</h1>
+<h2 id="transaction-log-internals">Transaction log internals</h2>
+<ol type="1">
+<li><p>The transaction log</p>
+<ol type="1">
+<li><p>records changes made to the database and stores enough
+information to allow SQL Server to recover the database</p></li>
+<li><p>Physically, the transaction log is one or more files associated
+with a database at the time the database is created or altered.</p></li>
+<li><p>Each log record is labeled with a unique log sequence number
+(LSN)</p></li>
+<li><p>Transaction log is written before the changes to the database are
+written (Buffer Manager)</p>
+<ol type="1">
+<li><p>Every time a page is changed, the LSN corresponding to the log
+entry for that change is written into the header of the data page</p>
+<p>Log records for a transaction are written to disk before the commit
+acknowledgement is sent to the client process</p></li>
+</ol></li>
+</ol></li>
+<li><p>Recovery is the process of reconciling the data files and the
+log.</p></li>
+<li><p>A restart recovery runs every time SQL Server is started</p>
+<ol type="1">
+<li>The process runs on each database because each database has its own
+transaction log.</li>
+</ol></li>
+<li><p>A restore recovery (or media recovery), is run by request when a
+restore operation is executed</p></li>
+</ol>
+<h3 id="phases-of-recovery">Phases of recovery</h3>
+<p>During recovery, only changes that occurred or were in progress since
+the last checkpoint are evaluated to determine whether they need to be
+redone or undone</p>
+<figure>
+<img
+src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220719155358320.png"
+alt="The three phases of the SQL Server recovery process" />
+<figcaption aria-hidden="true">The three phases of the SQL Server
+recovery process</figcaption>
+</figure>
+<p><u>Phase 1: Analysis</u></p>
+<ol type="1">
+<li>Starting at the last checkpoint record in the transaction log</li>
+<li>Constructs a dirty page table (DPT) consisting of pages that might
+have been dirty at the time SQL Server stopped</li>
+<li>Build an active transaction table that consists of uncommitted
+transactions at the time SQL Server stopped</li>
+</ol>
+<p><u>Phase 2: Redo</u></p>
+<ol type="1">
+<li>This phase returns the database to the state it was in at the time
+the SQL Server service stopped</li>
+<li>If the SQL Server service stops after a transaction commits but
+before the data is written out to the data pages, when SQL Server starts
+and runs recovery, the transaction must be rolled forward</li>
+</ol>
+<p><u>Phase 3: Undo</u></p>
+<ol type="1">
+<li>It rolls each of these active transactions back individually.</li>
+<li>Any uncommitted transaction at the time SQL Server stopped is undone
+so that the database reflects none of the changes</li>
+</ol>
+<p>SQL Server uses multiple threads to process the recovery operations
+on the different data bases simultaneously.</p>
+<h3 id="page-lsns-and-recovery">Page LSNs and recovery</h3>
+<p>Every database page has an LSN in the page header that reflects the
+location in the transaction log of the last log entry that modified a
+row on that page</p>
+<figure>
+<img
+src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220720103706785.png"
+alt="Comparing LSNs to decide whether to process the log entry during recovery" />
+<figcaption aria-hidden="true">Comparing LSNs to decide whether to
+process the log entry during recovery</figcaption>
+</figure>
+<p>A transaction log can’t be truncated before the point of the earliest
+transaction that’s still open</p>
+<p>If a transaction remains open, the log must be preserved because it’s
+still not clear whether the transaction is done or ever will be done</p>
+<h3 id="log-reading">Log reading</h3>
+<p>The transaction log enables SQL Server to guarantee recoverability in
+case of statement or system failure and to allow a system administrator
+to take backups of the changes to a SQL Server database</p>
+<h3 id="the-log-cache">The log cache</h3>
+<p><u>SQL Server caches log records before they are physically
+written</u></p>
+<ol type="1">
+<li>The log cache contains up to 128 entries on 64-bit systems or 32
+entries on 32-bit systems</li>
+<li>Each entry can maintain a buffer to store the log records before
+they get written to disk as a single block (from 512 bytes to 60
+KB)</li>
+<li>As the log buffers are written to disk, SQL Server can reuse the
+buffer</li>
+</ol>
+<p><u>Log pool</u></p>
+<ol type="1">
+<li>The log pool is a hash table hashed on the block ID and the database
+ID</li>
+<li>The log pool allows SQL Server to access sets of log records needed
+for different technologies that need access to the log</li>
+</ol>
+<h2 id="changes-in-log-size">Changes in log size</h2>
+<p>SQL Server always treats the log as one contiguous stream</p>
+<h3 id="understanding-virtual-log-files">Understanding virtual log
+files</h3>
+<p>The transaction log for any database is managed as a set of virtual
+log files (VLFs) whose size is determined internally by SQL Server based
+on the total size of all log files and the growth increment used when
+enlarging the log.</p>
+<p>A log always grows in units of entire VLFs and can be shrunk only to
+a VLF boundary</p>
+<figure>
+<img
+src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220720151742031.png"
+alt="Multiple VLFs that make up a physical log file" />
+<figcaption aria-hidden="true">Multiple VLFs that make up a physical log
+file</figcaption>
+</figure>
+<p><u>A VLF can be in one of four states</u></p>
+<p><strong>Active</strong></p>
+<p>The active portion of the log begins at the minimum LSN representing
+an active transaction. The active portion of the log ends at the last
+LSN written.</p>
+<p><strong>Recoverable</strong></p>
+<p>The portion of the log preceding the oldest active transaction is
+needed only to maintain a sequence of log backups for restoring the
+database to a former state</p>
+<p><strong>Reusable</strong></p>
+<p>If transaction log backups aren’t being maintained or you’ve already
+backed up the log, VLFs before the oldest active transaction aren’t
+needed and can be reused. Truncating or backing up the transaction log
+changes recoverable VLFs into reusable VLFs.</p>
+<p><strong>Unused</strong></p>
+<p>One or more VLFs at the physical end of the log files might not have
+been used yet if not enough logged activity has taken place</p>
+<h3 id="observing-virtual-log-files">Observing virtual log files</h3>
+<p><code>DBCC LOGINFO</code> to observe the key properties of virtual
+log files.</p>
+<figure>
+<img
+src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220720162036037.png"
+alt="Viewing VLFs" />
+<figcaption aria-hidden="true">Viewing VLFs</figcaption>
+</figure>
+<p><code>FileId</code>: indicates which of the log’s physical files
+contains the VLF</p>
+<p><code>FileSize</code> <code>StartOffset</code>in bytes</p>
+<p><code>FSeqNo</code>: the use order (logical order), the FSeqNo values
+don’t start at 0 or 1</p>
+<p><code>Status</code>: indicates whether the VLF is reusable. 2: either
+active or recoverable, 0: reusable or completely unused</p>
+<p><code>CreateLSN</code>: lists the current LSN value at the time the
+VLF was added to the transaction log, 0 means that the VLF was part of
+the original log file created when the database was created</p>
+<p>The first physical page of a log file contains header information,
+not log records, so the VLF is considered to start on the second
+page</p>
+<p>If all the VLFs in the log have a status of 2, SQL Server needs to
+add new VLFs to the log to record new transaction activity.</p>
+<p>Try to keep your VLFs less than 1 GB in size; try to keep the number
+of VLFs to no more than a few hundred, with possibly 1,000 as an upper
+limit.</p>
+<h3 id="using-multiple-log-files">Using multiple log files</h3>
+<p>All VLFs in one physical file are used before any VLFs in the second
+file are used.</p>
+<p>If none of the VLFs in multiple physical log files is available for
+reuse when a new VLF is needed, SQL Server adds new VLFs to each
+physical log file in round-robin fashion</p>
+<h3
+id="understanding-automatic-truncation-of-virtual-log-files">Understanding
+automatic truncation of virtual log files</h3>
+<p>SQL Server assumes that you’re not maintaining a sequence of log
+backups if any of the following is true (in autotruncate mode):</p>
+<ol type="1">
+<li>You have configured the database to truncate the log regularly by
+setting the recovery model to SIMPLE.</li>
+<li>You have never taken a full database backup</li>
+<li>You haven’t taken a full database backup since switching the
+database to FULL or BULK_ LOGGED recovery model from SIMPLE recovery
+model.</li>
+</ol>
+<p><code>sys.database_recovery_status</code> column
+<code>last_log_backup_lsn</code>, if <code>null</code>, then in
+autotruncate mode.</p>
+<p><u>Autotruncate mode</u></p>
+<p>SQL Server truncates the database’s transaction log every time it
+gets “full enough”</p>
+<p>“Full enough” means that more log records exist than can be redone in
+a reasonable amount of time during system startup—the recovery
+interval</p>
+<p>Truncation: all log records prior to the oldest active transaction
+are invalidated and all VLFs not containing any part of the active log
+are marked as reusable.</p>
+<p><u>The checkpoint process</u></p>
+<p>The thread checks the database and then truncates the inactive
+portion of the log.</p>
+<p>If the log is regularly truncated, SQL Server can reuse space in the
+physical file by cycling back to an earlier VLF when it reaches the end
+of the physical log file.</p>
+<h3 id="maintaining-a-recoverable-log">Maintaining a recoverable
+log</h3>
+<figure>
+<img
+src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220721120550290.png"
+alt="The active portion of the log cycling back to the beginning of the physical log file" />
+<figcaption aria-hidden="true">The active portion of the log cycling
+back to the beginning of the physical log file</figcaption>
+</figure>
+<p>If a log backup sequence is being maintained, the part of the log
+before the minimum LSN can’t be overwritten until those log records have
+actually been backed up. The VLF status stays at 2 until the log backup
+occurs. After the log backup, the status changes to 0 and SQL Server can
+cycle back to the beginning of the file.</p>
+<h3 id="automatically-shrinking-the-log">Automatically shrinking the
+log</h3>
+<p>A database should be truncated so that it’s the most shrinkable, and
+if the log is in autotruncate mode and the autoshrink option is set, the
+log is physically shrunk at regular intervals.</p>
+<p>Autotruncate means only that VLFs considered recoverable are marked
+as reusable at regular intervals, but VLFs in an active state aren’t
+affected.</p>
+<h3 id="viewing-the-log-file-size">Viewing the log file size</h3>
+<p><code>DBCC SQLPERF(‘logspace’)</code></p>
+<figure>
+<img
+src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220721143841535.png"
+alt="DBCC result" />
+<figcaption aria-hidden="true">DBCC result</figcaption>
+</figure>
+<p><code>sys.dm_os_performance_counters</code></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> instance_name <span class="hljs-keyword">as</span> [Database],<br> cntr_value <span class="hljs-keyword">as</span> &quot;LogFullPct&quot;<br><span class="hljs-keyword">FROM</span> sys.dm_os_performance_counters<br><span class="hljs-keyword">WHERE</span> counter_name <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;Percent Log Used%&#x27;</span><br> <span class="hljs-keyword">AND</span> instance_name <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> (<span class="hljs-string">&#x27;_Total&#x27;</span>, <span class="hljs-string">&#x27;mssqlsystemresource&#x27;</span>)<br> <span class="hljs-keyword">AND</span> cntr_value <span class="hljs-operator">&gt;</span> <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220721143923238.png"
+alt="View result" />
+<figcaption aria-hidden="true">View result</figcaption>
+</figure>
+<h2 id="database-backup-and-restore">Database backup and restore</h2>
+<h3 id="understanding-the-types-of-backups">Understanding the types of
+backups</h3>
+<p><u>Full backup</u></p>
+<p>Backup copies all the pages from a database onto a backup device</p>
+<p><u>Differential backup</u></p>
+<p>Backup copies only the extents that changed since the last full
+backup was made.</p>
+<p>Each time a full backup is made, all bits in the DIFF are cleared to
+0. When any page in an extent is changed, the bit in the DIFF page
+corresponding to that extent is changed to 1.</p>
+<p><u>Log backup</u></p>
+<p>Backup copies all log records that have been written to the
+transaction log since the last log backup was made.</p>
+<p><u>File and filegroup backup</u></p>
+<p>SQL Server records the current log sequence number (LSN) at the time
+the backup starts and again at the time the backup ends.</p>
+<h3 id="understanding-recovery-models">Understanding recovery
+models</h3>
+<h4 id="minimally-logged-operations">Minimally logged operations</h4>
+<p>Minimally logged operations are ones that don’t write every single
+individual row because doing so modifies the transaction log. At a
+minimum, enough information has to be logged when a minimally logged
+operation is performed to allow SQL Server to rollback a transaction
+that has failed. Even when SQL Server logs the changed data, it doesn’t
+actually write it to the log in the sequence that it was changed. It’s a
+feature that minimizes the amount of logging for the operations
+configured.</p>
+<h4 id="full-recovery-model">FULL recovery model</h4>
+<ol type="1">
+<li>the least risk of losing work</li>
+<li>all operations are fully logged</li>
+</ol>
+<h4 id="bulk_logged-recovery-model">BULK_LOGGED recovery model</h4>
+<p>When you execute one of these minimally logged operations in a
+database in BULK_LOGGED recovery, SQL Server logs only that the
+operation occurred and logs information about space allocations.</p>
+<p>Because of the reduced logging for minimally logged operations, the
+operations themselves can potentially be carried out much faster than in
+the FULL recovery model.(the speed improvement isn’t guaranteed)</p>
+<p>Minimally logged operations might actually be slower in BULK_LOGGED
+recovery than in FULL recovery in certain cases</p>
+<p>The BULK_LOGGED recovery model allows you to restore a database
+completely in case of media failure and gives you the best performance
+and least log space usage for certain minimally logged operations</p>
+<p>The time it takes to restore a log backup made in the BULK_LOGGED
+recovery model is similar to the time it takes to restore a log backup
+made in the FULL recovery mode</p>
+<h4 id="simple-recovery-model">SIMPLE recovery model</h4>
+<p>the logging that takes place in SIMPLE recovery is exactly the same
+as the logging in BULK_LOGGED recovery, but transaction log is truncated
+whenever a checkpoint occurs, the only types of backups that can be made
+are those that don’t require log backups</p>
+<h3 id="switching-recovery-models">Switching recovery models</h3>
+<p>When created, a database starts in whatever recovery model is used by
+the model database on the instance</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> DATABASE <span class="hljs-operator">&lt;</span>database_name<span class="hljs-operator">&gt;</span><br> <span class="hljs-keyword">SET</span> RECOVERY [<span class="hljs-keyword">FULL</span> <span class="hljs-operator">|</span> BULK_LOGGED <span class="hljs-operator">|</span> SIMPLE]<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"># <span class="hljs-keyword">returns</span> the recovery model <span class="hljs-keyword">and</span> the state <span class="hljs-keyword">of</span> database<br><span class="hljs-keyword">SELECT</span> name, database_id, suser_sname(owner_sid) <span class="hljs-keyword">as</span> owner ,<br> state_desc, recovery_model_desc<br><span class="hljs-keyword">FROM</span> sys.databases<br><span class="hljs-keyword">WHERE</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;AdventureWorks2008R2&#x27;</span><br></code></pre></td></tr></table></figure>
+<h3 id="choosing-a-backup-type">Choosing a backup type</h3>
+<p><u>A differential backup</u></p>
+<ol type="1">
+<li>Is faster if your environment includes many changes to the same
+data. It backs up only the most recent change, whereas a log backup
+captures every individual update</li>
+<li>Captures the entire B-tree structures for new indexes, whereas a log
+backup captures each individual step in building the index.</li>
+<li>Is cumulative. When you recover from a media failure, only the most
+recent differential backup needs to be restored because it contains all
+the changes since the last full database backup</li>
+</ol>
+<p><u>A log backup</u></p>
+<ol type="1">
+<li>Allows you to restore to any point in time because it is a
+sequential record of all changes.</li>
+<li>This allows you to recover right up to the point of the
+failure.</li>
+<li>Is sequential and discrete, all log backups must be applied in the
+order that they were made.</li>
+</ol>
+<h3 id="restoring-a-database">Restoring a database</h3>
+<figure>
+<img
+src="/2022/07/10/SQL%20Server%202012%20Internal%20Note_Logging%20and%20recovery/image-20220721153220762.png"
+alt="The combined use of log and differential backups, which reduces total restore time" />
+<figcaption aria-hidden="true">The combined use of log and differential
+backups, which reduces total restore time</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+        <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SQL Server 2012 Internal Note_SQL Server Architecture and Configuration</title>
     <url>/2022/06/29/SQL%20Server%202012%20Internal%20Note_SQL%20Server%20Architecture%20and%20Configuration/</url>
     <content><![CDATA[<h2
@@ -2699,67 +2699,6 @@ Services不是Cluster-aware，可以人为配置为群集资源（不推荐）�
       <tags>
         <tag>SQL Server</tag>
         <tag>Note</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SQL Server Backup</title>
-    <url>/2022/06/06/SQL%20Server%20Backup/</url>
-    <content><![CDATA[<h1 id="sql-server-backup">SQL Server Backup</h1>
-<p><strong>Full Backup</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Windows\AdventureWorks2019_20220602.bak&#x27;</span>;<br></code></pre></td></tr></table></figure>
-<p>If get an error like this:</p>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100125253.png"
-alt="image-20220606100125253" />
-<figcaption aria-hidden="true">image-20220606100125253</figcaption>
-</figure>
-<p>It means that the SQL server has no permission to the location. To
-fix this, in the <strong>SQL Server Configuration Manager</strong>, we
-can find that the SQL service is logged on as
-<code>NT Service\MSSQLSERVER</code>.</p>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100346465.png"
-alt="image-20220606100346465" />
-<figcaption aria-hidden="true">image-20220606100346465</figcaption>
-</figure>
-<p>Then right-click on the folder you want to access, <strong>properties
---&gt; security</strong>, and add permission to the
-<code>NT Service\MSSQLSERVER</code>.</p>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100858530.png"
-alt="image-20220606100858530" />
-<figcaption aria-hidden="true">image-20220606100858530</figcaption>
-</figure>
-<p><strong>Backup with differential</strong></p>
-<p>This will back up the changed pages from the previous full
-backup.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup changes start from last full backup, save changed page only</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> differential;<br></code></pre></td></tr></table></figure>
-<p><strong>Backup with copy_only</strong></p>
-<p>This will leave the DCM (diff change map) unchanged, meaning that if
-we are back up with differential, it will also backup changes from the
-last full backup.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup, leave (DCM) diff change map unchanged, compressed</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> copy_only, compression;<br></code></pre></td></tr></table></figure>
-<p>The DCM records the changes made to the page of the database, we can
-view the DCM of the specific database by</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc page(<span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>, <span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101710464.png"
-alt="image-20220606101710464" />
-<figcaption aria-hidden="true">image-20220606101710464</figcaption>
-</figure>
-<p><strong>Backup log files</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup log AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602.trn&#x27;</span>;<br></code></pre></td></tr></table></figure>
-<p>We can view the information of log files of databases by</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc sqlperf(logspace)<br></code></pre></td></tr></table></figure>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101859208.png"
-alt="image-20220606101859208" />
-<figcaption aria-hidden="true">image-20220606101859208</figcaption>
-</figure>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-        <tag>T-SQL</tag>
       </tags>
   </entry>
   <entry>
@@ -3515,6 +3454,245 @@ Server.4。）</p></li>
       <tags>
         <tag>SQL Server</tag>
         <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL Server Backup</title>
+    <url>/2022/06/06/SQL%20Server%20Backup/</url>
+    <content><![CDATA[<h1 id="sql-server-backup">SQL Server Backup</h1>
+<p><strong>Full Backup</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Windows\AdventureWorks2019_20220602.bak&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>If get an error like this:</p>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100125253.png"
+alt="image-20220606100125253" />
+<figcaption aria-hidden="true">image-20220606100125253</figcaption>
+</figure>
+<p>It means that the SQL server has no permission to the location. To
+fix this, in the <strong>SQL Server Configuration Manager</strong>, we
+can find that the SQL service is logged on as
+<code>NT Service\MSSQLSERVER</code>.</p>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100346465.png"
+alt="image-20220606100346465" />
+<figcaption aria-hidden="true">image-20220606100346465</figcaption>
+</figure>
+<p>Then right-click on the folder you want to access, <strong>properties
+--&gt; security</strong>, and add permission to the
+<code>NT Service\MSSQLSERVER</code>.</p>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100858530.png"
+alt="image-20220606100858530" />
+<figcaption aria-hidden="true">image-20220606100858530</figcaption>
+</figure>
+<p><strong>Backup with differential</strong></p>
+<p>This will back up the changed pages from the previous full
+backup.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup changes start from last full backup, save changed page only</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> differential;<br></code></pre></td></tr></table></figure>
+<p><strong>Backup with copy_only</strong></p>
+<p>This will leave the DCM (diff change map) unchanged, meaning that if
+we are back up with differential, it will also backup changes from the
+last full backup.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup, leave (DCM) diff change map unchanged, compressed</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> copy_only, compression;<br></code></pre></td></tr></table></figure>
+<p>The DCM records the changes made to the page of the database, we can
+view the DCM of the specific database by</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc page(<span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>, <span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101710464.png"
+alt="image-20220606101710464" />
+<figcaption aria-hidden="true">image-20220606101710464</figcaption>
+</figure>
+<p><strong>Backup log files</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup log AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602.trn&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>We can view the information of log files of databases by</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc sqlperf(logspace)<br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101859208.png"
+alt="image-20220606101859208" />
+<figcaption aria-hidden="true">image-20220606101859208</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+        <tag>T-SQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL Server IAM Page</title>
+    <url>/2022/06/26/SQL%20Server%20IAM%20Page/</url>
+    <content><![CDATA[<h1 id="sql-server-iam-page">SQL Server IAM Page</h1>
+<p>Index Allocation Map (IAM) pages keep track of the extents in a 4 GB
+section of a database file used by an allocation unit.</p>
+<p><u>Allocation unit</u></p>
+<p>An allocation unit is a set of pages belonging to a single partition
+in a table or index and comprises pages of one of three storage
+types:</p>
+<ol type="1">
+<li>pages holding regular in-row data</li>
+<li>pages holding Large Object (LOB) data</li>
+<li>pages holding row-overflow data</li>
+</ol>
+<p><u>Multiple IAM pages</u></p>
+<p>A single IAM page covers only a 4 GB section of a single file.</p>
+<ol type="1">
+<li>if the partition spans files</li>
+<li>if the file is more than 4 GB in size</li>
+<li>if the partition uses pages in more than one 4 GB section</li>
+</ol>
+<p><u>IAM page structure</u></p>
+<ol type="1">
+<li>96-byte page header</li>
+<li>An IAM page header
+<ol type="1">
+<li>Contains eight page-pointer slots</li>
+</ol></li>
+<li>Contains bitmap
+<ol type="1">
+<li>A set of bits that map a range of extents onto a file</li>
+<li>Each bit of the bitmap represents an extent in the range</li>
+<li>1, is allocated; 0, unallocated</li>
+</ol></li>
+</ol>
+<p>Running the defined procedure <code>sp_AllocationMetadata</code> in
+the <code>AdventureWorks2019</code>, we can see the page number of the
+first IAM pages.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">EXEC</span> [sp_AllocationMetadata] N<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>;<br>GO<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623131334311.png"
+alt="sp_AllocationMetadata result" />
+<figcaption aria-hidden="true">sp_AllocationMetadata result</figcaption>
+</figure>
+<p>As we can see, the object <code>Employee</code> has 6 partitions. For
+the partition that has partition ID of <code>72057594056933376</code>,
+its first IAM page is <code>2105</code>.</p>
+<p>Then let's take a closer look at the page <code>2105</code>.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">3</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623133029678.png"
+alt="Mode 3 result" />
+<figcaption aria-hidden="true">Mode 3 result</figcaption>
+</figure>
+<p>The 8 slots listed under the <code>Single Page Allocations</code>
+mean they are in the mixed extent.</p>
+<p>Following the <code>Extent Alloc Status Slot</code> are pages in
+uniform extent. The result suggests that page <code>12640</code> and
+page <code>12672</code> are allocated</p>
+<p>We can check the allocation status by running the query:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> allocated_page_file_id <span class="hljs-keyword">AS</span> [FileID],<br>allocated_page_page_id <span class="hljs-keyword">AS</span> [PageID],<br>page_type_desc,extent_page_id<span class="hljs-operator">/</span><span class="hljs-number">8</span> <span class="hljs-keyword">AS</span> ExtentID,<br>is_mixed_page_allocation,<br>extent_page_id <span class="hljs-keyword">AS</span> [<span class="hljs-keyword">First</span> Page <span class="hljs-keyword">in</span> Extent],<br>extent_page_id<span class="hljs-operator">+</span><span class="hljs-number">7</span> <span class="hljs-keyword">AS</span> [LastPage <span class="hljs-keyword">in</span> Extent],<br>is_allocated <br><span class="hljs-keyword">FROM</span> sys.dm_db_database_page_allocations(db_id(),object_id(<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>),<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-string">&#x27;detailed&#x27;</span>)  <br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> allocated_page_page_id<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623134406196.png"
+alt="Allocation status result" />
+<figcaption aria-hidden="true">Allocation status result</figcaption>
+</figure>
+<p>As shown in the result, page <code>12640</code> and
+<code>12672</code> are allocated, and clearly there are
+<code>(12672-12640)/8=4</code> extents between them, which is proved by
+the corresponding extent ID, <code>1580</code> and
+<code>1584</code>.</p>
+<p>Let's validate our observation by dive into the page in mode 1.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">1</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623140010858.png"
+alt="Mode 1 result" />
+<figcaption aria-hidden="true">Mode 1 result</figcaption>
+</figure>
+<ol type="1">
+<li><p><code>0000381f</code> is fixed.</p></li>
+<li><p>Slot 0 is for mixed extent; Slot 1 is for the uniform
+extent</p></li>
+<li><p>For string <code>00000000 0010</code> and
+<code>0100 00000000</code> in Slot 1</p>
+<p>Each bit in the table stands for one extent.</p>
+<p>Note we need to convert little-endian into normal binary.</p>
+<table>
+<thead>
+<tr class="header">
+<th>HEX</th>
+<th>00 00 00 00 00</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Binary (Little endian)</td>
+<td>many 0</td>
+<td>0001 0000</td>
+</tr>
+<tr class="even">
+<td>Binary (normal)</td>
+<td>many 0</td>
+<td>0000 1000</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>HEX</th>
+<th>01</th>
+<th>00 00 00 00 00</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Binary (Little endian)</td>
+<td>0000 0001</td>
+<td>many 0</td>
+</tr>
+<tr class="even">
+<td>Binary (normal)</td>
+<td>1000 0000</td>
+<td>many 0</td>
+</tr>
+</tbody>
+</table>
+<p>That is, for <code>10 01</code> we have
+<code>0000 1000 1000 0000</code> in binary, the difference is 4 extent,
+from <code>1580</code> to <code>1584</code>.</p>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220624094601306.png"
+alt="Endian example" />
+<figcaption aria-hidden="true">Endian example</figcaption>
+</figure></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Script_Backup databases iteratively and truncate name</title>
+    <url>/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/</url>
+    <content><![CDATA[<h1
+id="script_backup-databases-iteratively-and-truncate-name">Script_Backup
+databases iteratively and truncate name</h1>
+<p><u>Problem</u></p>
+<p>For the database backup script, if the name <code>@dbname</code> is
+too long, longer than <code>128</code>, there will be an error since the
+length of <code>name</code> column in <code>msdb.dbo.backupset</code> is
+<code>nvarchar(128)</code>.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br></code></pre></td></tr></table></figure>
+<p><u>Script logic</u></p>
+<ul>
+<li>Backup all databases except for some required databases</li>
+<li>Truncate necessary characters when the length is larger than
+<code>128</code></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@name</span>_small NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@path</span>_small NVARCHAR(<span class="hljs-number">512</span>)  <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileName</span>_small NVARCHAR(<span class="hljs-number">512</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileDate</span>_small NVARCHAR(<span class="hljs-number">40</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@errorMessage</span> NVARCHAR(<span class="hljs-number">256</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@dbName</span> NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@counter</span> <span class="hljs-type">int</span><br><br><span class="hljs-comment">-- specify database backup directory</span><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\&#x27;</span>   <br><br><span class="hljs-comment">-- specify filename format</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@fileDate</span>_small <span class="hljs-operator">=</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">101</span>),<span class="hljs-string">&#x27;/&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <span class="hljs-operator">+</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">108</span>),<span class="hljs-string">&#x27;:&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <br><br><span class="hljs-comment">-- Cursor for small databases </span><br><span class="hljs-keyword">DECLARE</span> db_cursor_small <span class="hljs-keyword">CURSOR</span> READ_ONLY <span class="hljs-keyword">FOR</span>  <br><span class="hljs-keyword">SELECT</span> name <br><span class="hljs-keyword">FROM</span> master.sys.databases <br><span class="hljs-keyword">WHERE</span> name <br><span class="hljs-keyword">NOT</span> <span class="hljs-keyword">IN</span> (<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span>,<span class="hljs-string">&#x27;tempdb&#x27;</span>)  <span class="hljs-comment">-- Fill in databases you want to exclude here</span><br><span class="hljs-keyword">AND</span> state <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is online</span><br><span class="hljs-keyword">AND</span> is_in_standby <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is not read only for log shipping</span><br><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as required:&#x27;</span>)<br>PRINT N<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span><br>PRINT N<span class="hljs-string">&#x27;tempdb&#x27;</span><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as they are not ONLINE:&#x27;</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@xmltmp</span> xml <span class="hljs-operator">=</span> (<span class="hljs-keyword">SELECT</span> name, state_desc <span class="hljs-keyword">FROM</span> sys.databases <span class="hljs-keyword">where</span> state_desc <span class="hljs-operator">&lt;&gt;</span> <span class="hljs-string">&#x27;ONLINE&#x27;</span> <span class="hljs-keyword">FOR</span> XML AUTO)<br>PRINT <span class="hljs-keyword">CONVERT</span>(NVARCHAR(MAX), <span class="hljs-variable">@xmltmp</span>)<br><br><span class="hljs-keyword">OPEN</span> db_cursor_small   <br><span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><br> <br>WHILE @<span class="hljs-variable">@FETCH</span>_STATUS <span class="hljs-operator">=</span> <span class="hljs-number">0</span>   <br><span class="hljs-keyword">BEGIN</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">+</span> <span class="hljs-number">1</span><br>   <span class="hljs-comment">-- Truncate database name if too long</span><br>   IF len(<span class="hljs-variable">@name</span>_small<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small) <span class="hljs-operator">&gt;</span> <span class="hljs-number">128</span><br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">LEFT</span>(<span class="hljs-variable">@name</span>_small,len(<span class="hljs-variable">@name</span>_small)<span class="hljs-operator">-</span>len(<span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small))<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small<br>   <span class="hljs-keyword">ELSE</span> <br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;_&#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@fileDate</span>_small<br>   PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>   PRINT(<span class="hljs-string">&#x27;Start backup database: &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; AS &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span>)<br>			<br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-operator">=</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;.BAK&#x27;</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@errorMessage</span> <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Verify failed. Backup information for database &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; not found.&#x27;</span><br>   BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>   NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br>   <span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">AS</span> <span class="hljs-type">int</span><br>   <span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-operator">=</span> position <span class="hljs-keyword">FROM</span> msdb..backupset <br>   <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <br>   <span class="hljs-keyword">AND</span> backup_set_id<span class="hljs-operator">=</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">max</span>(backup_set_id) <span class="hljs-keyword">FROM</span> msdb..backupset <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small)<br>   IF <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">BEGIN</span> RAISERROR(<span class="hljs-variable">@errorMessage</span>, <span class="hljs-number">16</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">END</span><br>   RESTORE VERIFYONLY <span class="hljs-keyword">FROM</span>  DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span>  FILE <span class="hljs-operator">=</span> <span class="hljs-variable">@backupSetId</span>,  NOUNLOAD,  NOREWIND<br>  <br>   <span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><span class="hljs-keyword">END</span>   <br>PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>PRINT(<span class="hljs-string">&#x27;Total backups:&#x27;</span>)<br>PRINT(<span class="hljs-variable">@counter</span>)<br><br><span class="hljs-keyword">CLOSE</span> db_cursor_small   <br><span class="hljs-keyword">DEALLOCATE</span> db_cursor_small<br><br></code></pre></td></tr></table></figure>
+<img src="/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/image001.png" class="" title="Script result">
+<blockquote>
+<p>This was the very first T-SQL script I write when I interned as a
+Support Engineer at Microsoft.</p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>T-SQL</tag>
+        <tag>My Work</tag>
       </tags>
   </entry>
   <entry>
@@ -4515,200 +4693,6 @@ Server会让那个操作等待。直到文件自动增长结束了，原先的�
       </tags>
   </entry>
   <entry>
-    <title>Script_Backup databases iteratively and truncate name</title>
-    <url>/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/</url>
-    <content><![CDATA[<h1
-id="script_backup-databases-iteratively-and-truncate-name">Script_Backup
-databases iteratively and truncate name</h1>
-<p><u>Problem</u></p>
-<p>For the database backup script, if the name <code>@dbname</code> is
-too long, longer than <code>128</code>, there will be an error since the
-length of <code>name</code> column in <code>msdb.dbo.backupset</code> is
-<code>nvarchar(128)</code>.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br></code></pre></td></tr></table></figure>
-<p><u>Script logic</u></p>
-<ul>
-<li>Backup all databases except for some required databases</li>
-<li>Truncate necessary characters when the length is larger than
-<code>128</code></li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@name</span>_small NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@path</span>_small NVARCHAR(<span class="hljs-number">512</span>)  <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileName</span>_small NVARCHAR(<span class="hljs-number">512</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileDate</span>_small NVARCHAR(<span class="hljs-number">40</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@errorMessage</span> NVARCHAR(<span class="hljs-number">256</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@dbName</span> NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@counter</span> <span class="hljs-type">int</span><br><br><span class="hljs-comment">-- specify database backup directory</span><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\&#x27;</span>   <br><br><span class="hljs-comment">-- specify filename format</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@fileDate</span>_small <span class="hljs-operator">=</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">101</span>),<span class="hljs-string">&#x27;/&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <span class="hljs-operator">+</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">108</span>),<span class="hljs-string">&#x27;:&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <br><br><span class="hljs-comment">-- Cursor for small databases </span><br><span class="hljs-keyword">DECLARE</span> db_cursor_small <span class="hljs-keyword">CURSOR</span> READ_ONLY <span class="hljs-keyword">FOR</span>  <br><span class="hljs-keyword">SELECT</span> name <br><span class="hljs-keyword">FROM</span> master.sys.databases <br><span class="hljs-keyword">WHERE</span> name <br><span class="hljs-keyword">NOT</span> <span class="hljs-keyword">IN</span> (<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span>,<span class="hljs-string">&#x27;tempdb&#x27;</span>)  <span class="hljs-comment">-- Fill in databases you want to exclude here</span><br><span class="hljs-keyword">AND</span> state <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is online</span><br><span class="hljs-keyword">AND</span> is_in_standby <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is not read only for log shipping</span><br><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as required:&#x27;</span>)<br>PRINT N<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span><br>PRINT N<span class="hljs-string">&#x27;tempdb&#x27;</span><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as they are not ONLINE:&#x27;</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@xmltmp</span> xml <span class="hljs-operator">=</span> (<span class="hljs-keyword">SELECT</span> name, state_desc <span class="hljs-keyword">FROM</span> sys.databases <span class="hljs-keyword">where</span> state_desc <span class="hljs-operator">&lt;&gt;</span> <span class="hljs-string">&#x27;ONLINE&#x27;</span> <span class="hljs-keyword">FOR</span> XML AUTO)<br>PRINT <span class="hljs-keyword">CONVERT</span>(NVARCHAR(MAX), <span class="hljs-variable">@xmltmp</span>)<br><br><span class="hljs-keyword">OPEN</span> db_cursor_small   <br><span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><br> <br>WHILE @<span class="hljs-variable">@FETCH</span>_STATUS <span class="hljs-operator">=</span> <span class="hljs-number">0</span>   <br><span class="hljs-keyword">BEGIN</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">+</span> <span class="hljs-number">1</span><br>   <span class="hljs-comment">-- Truncate database name if too long</span><br>   IF len(<span class="hljs-variable">@name</span>_small<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small) <span class="hljs-operator">&gt;</span> <span class="hljs-number">128</span><br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">LEFT</span>(<span class="hljs-variable">@name</span>_small,len(<span class="hljs-variable">@name</span>_small)<span class="hljs-operator">-</span>len(<span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small))<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small<br>   <span class="hljs-keyword">ELSE</span> <br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;_&#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@fileDate</span>_small<br>   PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>   PRINT(<span class="hljs-string">&#x27;Start backup database: &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; AS &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span>)<br>			<br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-operator">=</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;.BAK&#x27;</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@errorMessage</span> <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Verify failed. Backup information for database &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; not found.&#x27;</span><br>   BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>   NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br>   <span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">AS</span> <span class="hljs-type">int</span><br>   <span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-operator">=</span> position <span class="hljs-keyword">FROM</span> msdb..backupset <br>   <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <br>   <span class="hljs-keyword">AND</span> backup_set_id<span class="hljs-operator">=</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">max</span>(backup_set_id) <span class="hljs-keyword">FROM</span> msdb..backupset <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small)<br>   IF <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">BEGIN</span> RAISERROR(<span class="hljs-variable">@errorMessage</span>, <span class="hljs-number">16</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">END</span><br>   RESTORE VERIFYONLY <span class="hljs-keyword">FROM</span>  DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span>  FILE <span class="hljs-operator">=</span> <span class="hljs-variable">@backupSetId</span>,  NOUNLOAD,  NOREWIND<br>  <br>   <span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><span class="hljs-keyword">END</span>   <br>PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>PRINT(<span class="hljs-string">&#x27;Total backups:&#x27;</span>)<br>PRINT(<span class="hljs-variable">@counter</span>)<br><br><span class="hljs-keyword">CLOSE</span> db_cursor_small   <br><span class="hljs-keyword">DEALLOCATE</span> db_cursor_small<br><br></code></pre></td></tr></table></figure>
-<img src="/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/image001.png" class="" title="Script result">
-<blockquote>
-<p>This was the very first T-SQL script I write when I interned as a
-Support Engineer at Microsoft.</p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>T-SQL</tag>
-        <tag>My Work</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SQL Server IAM Page</title>
-    <url>/2022/06/26/SQL%20Server%20IAM%20Page/</url>
-    <content><![CDATA[<h1 id="sql-server-iam-page">SQL Server IAM Page</h1>
-<p>Index Allocation Map (IAM) pages keep track of the extents in a 4 GB
-section of a database file used by an allocation unit.</p>
-<p><u>Allocation unit</u></p>
-<p>An allocation unit is a set of pages belonging to a single partition
-in a table or index and comprises pages of one of three storage
-types:</p>
-<ol type="1">
-<li>pages holding regular in-row data</li>
-<li>pages holding Large Object (LOB) data</li>
-<li>pages holding row-overflow data</li>
-</ol>
-<p><u>Multiple IAM pages</u></p>
-<p>A single IAM page covers only a 4 GB section of a single file.</p>
-<ol type="1">
-<li>if the partition spans files</li>
-<li>if the file is more than 4 GB in size</li>
-<li>if the partition uses pages in more than one 4 GB section</li>
-</ol>
-<p><u>IAM page structure</u></p>
-<ol type="1">
-<li>96-byte page header</li>
-<li>An IAM page header
-<ol type="1">
-<li>Contains eight page-pointer slots</li>
-</ol></li>
-<li>Contains bitmap
-<ol type="1">
-<li>A set of bits that map a range of extents onto a file</li>
-<li>Each bit of the bitmap represents an extent in the range</li>
-<li>1, is allocated; 0, unallocated</li>
-</ol></li>
-</ol>
-<p>Running the defined procedure <code>sp_AllocationMetadata</code> in
-the <code>AdventureWorks2019</code>, we can see the page number of the
-first IAM pages.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">EXEC</span> [sp_AllocationMetadata] N<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>;<br>GO<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623131334311.png"
-alt="sp_AllocationMetadata result" />
-<figcaption aria-hidden="true">sp_AllocationMetadata result</figcaption>
-</figure>
-<p>As we can see, the object <code>Employee</code> has 6 partitions. For
-the partition that has partition ID of <code>72057594056933376</code>,
-its first IAM page is <code>2105</code>.</p>
-<p>Then let's take a closer look at the page <code>2105</code>.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">3</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623133029678.png"
-alt="Mode 3 result" />
-<figcaption aria-hidden="true">Mode 3 result</figcaption>
-</figure>
-<p>The 8 slots listed under the <code>Single Page Allocations</code>
-mean they are in the mixed extent.</p>
-<p>Following the <code>Extent Alloc Status Slot</code> are pages in
-uniform extent. The result suggests that page <code>12640</code> and
-page <code>12672</code> are allocated</p>
-<p>We can check the allocation status by running the query:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> allocated_page_file_id <span class="hljs-keyword">AS</span> [FileID],<br>allocated_page_page_id <span class="hljs-keyword">AS</span> [PageID],<br>page_type_desc,extent_page_id<span class="hljs-operator">/</span><span class="hljs-number">8</span> <span class="hljs-keyword">AS</span> ExtentID,<br>is_mixed_page_allocation,<br>extent_page_id <span class="hljs-keyword">AS</span> [<span class="hljs-keyword">First</span> Page <span class="hljs-keyword">in</span> Extent],<br>extent_page_id<span class="hljs-operator">+</span><span class="hljs-number">7</span> <span class="hljs-keyword">AS</span> [LastPage <span class="hljs-keyword">in</span> Extent],<br>is_allocated <br><span class="hljs-keyword">FROM</span> sys.dm_db_database_page_allocations(db_id(),object_id(<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>),<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-string">&#x27;detailed&#x27;</span>)  <br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> allocated_page_page_id<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623134406196.png"
-alt="Allocation status result" />
-<figcaption aria-hidden="true">Allocation status result</figcaption>
-</figure>
-<p>As shown in the result, page <code>12640</code> and
-<code>12672</code> are allocated, and clearly there are
-<code>(12672-12640)/8=4</code> extents between them, which is proved by
-the corresponding extent ID, <code>1580</code> and
-<code>1584</code>.</p>
-<p>Let's validate our observation by dive into the page in mode 1.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">1</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623140010858.png"
-alt="Mode 1 result" />
-<figcaption aria-hidden="true">Mode 1 result</figcaption>
-</figure>
-<ol type="1">
-<li><p><code>0000381f</code> is fixed.</p></li>
-<li><p>Slot 0 is for mixed extent; Slot 1 is for the uniform
-extent</p></li>
-<li><p>For string <code>00000000 0010</code> and
-<code>0100 00000000</code> in Slot 1</p>
-<p>Each bit in the table stands for one extent.</p>
-<p>Note we need to convert little-endian into normal binary.</p>
-<table>
-<thead>
-<tr class="header">
-<th>HEX</th>
-<th>00 00 00 00 00</th>
-<th>10</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Binary (Little endian)</td>
-<td>many 0</td>
-<td>0001 0000</td>
-</tr>
-<tr class="even">
-<td>Binary (normal)</td>
-<td>many 0</td>
-<td>0000 1000</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th>HEX</th>
-<th>01</th>
-<th>00 00 00 00 00</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Binary (Little endian)</td>
-<td>0000 0001</td>
-<td>many 0</td>
-</tr>
-<tr class="even">
-<td>Binary (normal)</td>
-<td>1000 0000</td>
-<td>many 0</td>
-</tr>
-</tbody>
-</table>
-<p>That is, for <code>10 01</code> we have
-<code>0000 1000 1000 0000</code> in binary, the difference is 4 extent,
-from <code>1580</code> to <code>1584</code>.</p>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220624094601306.png"
-alt="Endian example" />
-<figcaption aria-hidden="true">Endian example</figcaption>
-</figure></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Web crawler for Shenzhen Exchange</title>
-    <url>/2022/07/08/Web%20crawler%20for%20Shenzhen%20Exchange/</url>
-    <content><![CDATA[<h1 id="web-crawler-for-shenzhen-exchange">Web crawler for Shenzhen
-Exchange</h1>
-<p><a
-href="https://github.com/jason5306/WebCrawlerForShenzhenExchange">深圳互动易公司问答数据爬虫Github</a></p>
-<img src="/2022/07/08/Web%20crawler%20for%20Shenzhen%20Exchange/DemoImg.png" class="" title="DemoImg">
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> selenium <span class="hljs-keyword">import</span> webdriver<br><span class="hljs-keyword">from</span> selenium.webdriver.chrome.service <span class="hljs-keyword">import</span> Service<br><span class="hljs-keyword">from</span> selenium.webdriver.common.action_chains <span class="hljs-keyword">import</span> ActionChains<br><span class="hljs-keyword">from</span> selenium.webdriver.common.keys <span class="hljs-keyword">import</span> Keys<br><span class="hljs-keyword">from</span> bs4 <span class="hljs-keyword">import</span> BeautifulSoup<br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> time<br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><br><span class="hljs-comment"># 深交所公司代码</span><br>code = pd.read_excel(<span class="hljs-string">&#x27;./code.xlsx&#x27;</span>, header = <span class="hljs-number">0</span>, dtype=<span class="hljs-built_in">str</span>)<br>code_list = code[<span class="hljs-string">&#x27;code&#x27;</span>].tolist()<br><br><br><span class="hljs-comment">#for code in code_list:</span><br>driver = webdriver.Chrome()<br><span class="hljs-comment"># a new window for QA site</span><br>driver2 = webdriver.Chrome()<br>url = <span class="hljs-string">&#x27;http://irm.cninfo.com.cn/ircs/index&#x27;</span><br><br><span class="hljs-keyword">for</span> code <span class="hljs-keyword">in</span> code_list:<br><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Collecting data for company ... &#x27;</span> + code + <span class="hljs-string">&#x27;...........&#x27;</span>)<br><br>    driver.set_window_size(<span class="hljs-number">1000</span>,<span class="hljs-number">30000</span>)<br><br>    driver.get(url)<br>    table_content_translate_box = []<br>    <span class="hljs-comment">#while(True): # Stop manually </span><br><br>    <span class="hljs-comment"># scoll down</span><br>    <span class="hljs-comment">#driver.execute_script(&quot;window.scrollBy(0,8000)&quot;)</span><br>    <span class="hljs-comment">#time.sleep(1)</span><br><br>    <span class="hljs-comment"># find search box and search company code</span><br>    time.sleep(<span class="hljs-number">2</span>)<br>    searc_box = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-input__inner&#x27;</span>)<br>    searc_box.click()<br>    time.sleep(<span class="hljs-number">1</span>)<br>    searc_box.send_keys(code)<br>    searc_box.send_keys(Keys.ENTER)<br>    time.sleep(<span class="hljs-number">1</span>)<br><br>    <span class="hljs-comment"># go to QA section</span><br>    tablist = driver.find_element_by_css_selector(<span class="hljs-string">&#x27;.el-tabs__nav.is-top&#x27;</span>)<br>    tablist.find_element_by_id(<span class="hljs-string">&#x27;tab-2&#x27;</span>).click()<br><br>    <span class="hljs-comment"># find date search</span><br>    date_search_box = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-range-input&#x27;</span>)<br>    date_search_box.click()<br>    date_search_box.clear()<br>    time.sleep(<span class="hljs-number">1</span>)<br>    date_search_box.send_keys(<span class="hljs-string">&#x27;2012-01-01&#x27;</span>)<br>    time.sleep(<span class="hljs-number">1</span>)<br>    action = ActionChains(driver)<br>    action.move_by_offset(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>).click().perform()<br><br><br>    <span class="hljs-comment"># max page number</span><br>    page = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-pager&#x27;</span>)<br>    pages = page.find_elements_by_class_name(<span class="hljs-string">&#x27;number&#x27;</span>)<br>    page_number = []<br>    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> pages:<br>        page_number.append(<span class="hljs-built_in">int</span>(item.text))<br>        <span class="hljs-comment">#print(item.text)</span><br><br>    max_page_number = <span class="hljs-built_in">max</span>(page_number)<br>    <span class="hljs-comment">#print(max_page_number)</span><br><br>    <span class="hljs-comment">#data_ids = []</span><br><br>    <span class="hljs-comment"># header</span><br>    result = []<br>    header = [<span class="hljs-string">&#x27;深市代码&#x27;</span>, <span class="hljs-string">&#x27;提问&#x27;</span>, <span class="hljs-string">&#x27;提问时间&#x27;</span>, <span class="hljs-string">&#x27;回复&#x27;</span>, <span class="hljs-string">&#x27;回复时间&#x27;</span>]<br>    result.append(header)<br><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        <span class="hljs-comment"># current page number</span><br>        page = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-pager&#x27;</span>)<br>        active_page_number = page.find_element_by_css_selector(<span class="hljs-string">&#x27;.number.active&#x27;</span>).text<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Current page:&quot;</span> + <span class="hljs-built_in">str</span>(max_page_number) + <span class="hljs-string">&#x27;/&#x27;</span> + <span class="hljs-built_in">str</span>(active_page_number))<br><br><br>        <span class="hljs-comment"># find QA of this page </span><br>        search_content_box = driver.find_elements_by_class_name(<span class="hljs-string">&#x27;search-content-box&#x27;</span>)<br>        time.sleep(<span class="hljs-number">1</span>)<br>        <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> search_content_box:<br>            temp_item1 = item.find_element_by_css_selector(<span class="hljs-string">&#x27;.item-question.left-content.table-list.pd-r-20&#x27;</span>)<br>            temp_item2 = temp_item1.find_element_by_css_selector(<span class="hljs-string">&#x27;.table-content.div-translate&#x27;</span>)<br>            data_id = temp_item2.get_attribute(<span class="hljs-string">&#x27;data-id&#x27;</span>)<br>            <span class="hljs-built_in">print</span>(data_id)<br>            <span class="hljs-comment">#data_ids.append(data_id)</span><br>            time.sleep(<span class="hljs-number">1</span>)<br><br>            <span class="hljs-comment"># get QA for each data id</span><br>            url_QA = <span class="hljs-string">&#x27;http://irm.cninfo.com.cn/ircs/question/questionDetail?questionId=&#x27;</span> + data_id<br>            driver2.get(url_QA)<br>            time.sleep(<span class="hljs-number">3</span>)<br>            <span class="hljs-comment"># have Q and A</span><br>            Q = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.question-detail.translate-box.pd-30&#x27;</span>).text<br>            time.sleep(<span class="hljs-number">1</span>)<br>            <span class="hljs-built_in">print</span>(Q)<br>            Qtime = driver2.find_element_by_class_name(<span class="hljs-string">&#x27;question-time&#x27;</span>).text.split(<span class="hljs-string">&#x27;·&#x27;</span>)[<span class="hljs-number">0</span>]<br>            time.sleep(<span class="hljs-number">1</span>)<br>            <span class="hljs-built_in">print</span>(Qtime)<br>            <span class="hljs-keyword">try</span>:<br>                A = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.left-content.no-data&#x27;</span>).text<br>                <span class="hljs-built_in">print</span>(A)<br>                Atime = <span class="hljs-string">&#x27;暂无回复&#x27;</span><br>                <span class="hljs-built_in">print</span>(Atime)<br>            <span class="hljs-keyword">except</span> Exception:<br><br>                A = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.reply-content.translate-box&#x27;</span>).text<br>                <span class="hljs-built_in">print</span>(A)<br><br>                Atime = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.question-time.hidden-xs-only&#x27;</span>).text.split(<span class="hljs-string">&#x27;：&#x27;</span>)[<span class="hljs-number">1</span>]<br>                <span class="hljs-built_in">print</span>(Atime)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;________________&#x27;</span>)<br>            time.sleep(<span class="hljs-number">2</span>)<br>            result.append([code, Q, Qtime, A, Atime])<br><br><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Page finished&#x27;</span>)<br><br>        <span class="hljs-comment"># next page</span><br>        next_btn = driver.find_element_by_class_name(<span class="hljs-string">&#x27;btn-next&#x27;</span>)<br>        next_btn.find_element_by_css_selector(<span class="hljs-string">&#x27;.el-icon.el-icon-arrow-right&#x27;</span>).click()<br>        time.sleep(<span class="hljs-number">1</span>)<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">int</span>(active_page_number) == max_page_number:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;All pages done&quot;</span>)<br>            <span class="hljs-keyword">break</span><br>    <span class="hljs-comment"># export to csv        </span><br>        df = pd.DataFrame(result)<br>        df.to_csv(<span class="hljs-string">&#x27;./&#x27;</span>+code+<span class="hljs-string">&#x27;.csv&#x27;</span>, index = <span class="hljs-literal">False</span>, header = <span class="hljs-number">0</span>)<br></code></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>Python</tag>
-        <tag>My Work</tag>
-        <tag>Web Crawler</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Xevent Reader</title>
     <url>/2022/08/17/Xevent%20Reader/</url>
     <content><![CDATA[<h1 id="xevent-reader">Xevent Reader</h1>
@@ -4883,6 +4867,22 @@ faster.</p>
         <tag>SQL Server</tag>
         <tag>Python</tag>
         <tag>My Work</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Web crawler for Shenzhen Exchange</title>
+    <url>/2022/07/08/Web%20crawler%20for%20Shenzhen%20Exchange/</url>
+    <content><![CDATA[<h1 id="web-crawler-for-shenzhen-exchange">Web crawler for Shenzhen
+Exchange</h1>
+<p><a
+href="https://github.com/jason5306/WebCrawlerForShenzhenExchange">深圳互动易公司问答数据爬虫Github</a></p>
+<img src="/2022/07/08/Web%20crawler%20for%20Shenzhen%20Exchange/DemoImg.png" class="" title="DemoImg">
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> selenium <span class="hljs-keyword">import</span> webdriver<br><span class="hljs-keyword">from</span> selenium.webdriver.chrome.service <span class="hljs-keyword">import</span> Service<br><span class="hljs-keyword">from</span> selenium.webdriver.common.action_chains <span class="hljs-keyword">import</span> ActionChains<br><span class="hljs-keyword">from</span> selenium.webdriver.common.keys <span class="hljs-keyword">import</span> Keys<br><span class="hljs-keyword">from</span> bs4 <span class="hljs-keyword">import</span> BeautifulSoup<br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> time<br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><br><span class="hljs-comment"># 深交所公司代码</span><br>code = pd.read_excel(<span class="hljs-string">&#x27;./code.xlsx&#x27;</span>, header = <span class="hljs-number">0</span>, dtype=<span class="hljs-built_in">str</span>)<br>code_list = code[<span class="hljs-string">&#x27;code&#x27;</span>].tolist()<br><br><br><span class="hljs-comment">#for code in code_list:</span><br>driver = webdriver.Chrome()<br><span class="hljs-comment"># a new window for QA site</span><br>driver2 = webdriver.Chrome()<br>url = <span class="hljs-string">&#x27;http://irm.cninfo.com.cn/ircs/index&#x27;</span><br><br><span class="hljs-keyword">for</span> code <span class="hljs-keyword">in</span> code_list:<br><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Collecting data for company ... &#x27;</span> + code + <span class="hljs-string">&#x27;...........&#x27;</span>)<br><br>    driver.set_window_size(<span class="hljs-number">1000</span>,<span class="hljs-number">30000</span>)<br><br>    driver.get(url)<br>    table_content_translate_box = []<br>    <span class="hljs-comment">#while(True): # Stop manually </span><br><br>    <span class="hljs-comment"># scoll down</span><br>    <span class="hljs-comment">#driver.execute_script(&quot;window.scrollBy(0,8000)&quot;)</span><br>    <span class="hljs-comment">#time.sleep(1)</span><br><br>    <span class="hljs-comment"># find search box and search company code</span><br>    time.sleep(<span class="hljs-number">2</span>)<br>    searc_box = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-input__inner&#x27;</span>)<br>    searc_box.click()<br>    time.sleep(<span class="hljs-number">1</span>)<br>    searc_box.send_keys(code)<br>    searc_box.send_keys(Keys.ENTER)<br>    time.sleep(<span class="hljs-number">1</span>)<br><br>    <span class="hljs-comment"># go to QA section</span><br>    tablist = driver.find_element_by_css_selector(<span class="hljs-string">&#x27;.el-tabs__nav.is-top&#x27;</span>)<br>    tablist.find_element_by_id(<span class="hljs-string">&#x27;tab-2&#x27;</span>).click()<br><br>    <span class="hljs-comment"># find date search</span><br>    date_search_box = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-range-input&#x27;</span>)<br>    date_search_box.click()<br>    date_search_box.clear()<br>    time.sleep(<span class="hljs-number">1</span>)<br>    date_search_box.send_keys(<span class="hljs-string">&#x27;2012-01-01&#x27;</span>)<br>    time.sleep(<span class="hljs-number">1</span>)<br>    action = ActionChains(driver)<br>    action.move_by_offset(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>).click().perform()<br><br><br>    <span class="hljs-comment"># max page number</span><br>    page = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-pager&#x27;</span>)<br>    pages = page.find_elements_by_class_name(<span class="hljs-string">&#x27;number&#x27;</span>)<br>    page_number = []<br>    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> pages:<br>        page_number.append(<span class="hljs-built_in">int</span>(item.text))<br>        <span class="hljs-comment">#print(item.text)</span><br><br>    max_page_number = <span class="hljs-built_in">max</span>(page_number)<br>    <span class="hljs-comment">#print(max_page_number)</span><br><br>    <span class="hljs-comment">#data_ids = []</span><br><br>    <span class="hljs-comment"># header</span><br>    result = []<br>    header = [<span class="hljs-string">&#x27;深市代码&#x27;</span>, <span class="hljs-string">&#x27;提问&#x27;</span>, <span class="hljs-string">&#x27;提问时间&#x27;</span>, <span class="hljs-string">&#x27;回复&#x27;</span>, <span class="hljs-string">&#x27;回复时间&#x27;</span>]<br>    result.append(header)<br><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        <span class="hljs-comment"># current page number</span><br>        page = driver.find_element_by_class_name(<span class="hljs-string">&#x27;el-pager&#x27;</span>)<br>        active_page_number = page.find_element_by_css_selector(<span class="hljs-string">&#x27;.number.active&#x27;</span>).text<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Current page:&quot;</span> + <span class="hljs-built_in">str</span>(max_page_number) + <span class="hljs-string">&#x27;/&#x27;</span> + <span class="hljs-built_in">str</span>(active_page_number))<br><br><br>        <span class="hljs-comment"># find QA of this page </span><br>        search_content_box = driver.find_elements_by_class_name(<span class="hljs-string">&#x27;search-content-box&#x27;</span>)<br>        time.sleep(<span class="hljs-number">1</span>)<br>        <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> search_content_box:<br>            temp_item1 = item.find_element_by_css_selector(<span class="hljs-string">&#x27;.item-question.left-content.table-list.pd-r-20&#x27;</span>)<br>            temp_item2 = temp_item1.find_element_by_css_selector(<span class="hljs-string">&#x27;.table-content.div-translate&#x27;</span>)<br>            data_id = temp_item2.get_attribute(<span class="hljs-string">&#x27;data-id&#x27;</span>)<br>            <span class="hljs-built_in">print</span>(data_id)<br>            <span class="hljs-comment">#data_ids.append(data_id)</span><br>            time.sleep(<span class="hljs-number">1</span>)<br><br>            <span class="hljs-comment"># get QA for each data id</span><br>            url_QA = <span class="hljs-string">&#x27;http://irm.cninfo.com.cn/ircs/question/questionDetail?questionId=&#x27;</span> + data_id<br>            driver2.get(url_QA)<br>            time.sleep(<span class="hljs-number">3</span>)<br>            <span class="hljs-comment"># have Q and A</span><br>            Q = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.question-detail.translate-box.pd-30&#x27;</span>).text<br>            time.sleep(<span class="hljs-number">1</span>)<br>            <span class="hljs-built_in">print</span>(Q)<br>            Qtime = driver2.find_element_by_class_name(<span class="hljs-string">&#x27;question-time&#x27;</span>).text.split(<span class="hljs-string">&#x27;·&#x27;</span>)[<span class="hljs-number">0</span>]<br>            time.sleep(<span class="hljs-number">1</span>)<br>            <span class="hljs-built_in">print</span>(Qtime)<br>            <span class="hljs-keyword">try</span>:<br>                A = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.left-content.no-data&#x27;</span>).text<br>                <span class="hljs-built_in">print</span>(A)<br>                Atime = <span class="hljs-string">&#x27;暂无回复&#x27;</span><br>                <span class="hljs-built_in">print</span>(Atime)<br>            <span class="hljs-keyword">except</span> Exception:<br><br>                A = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.reply-content.translate-box&#x27;</span>).text<br>                <span class="hljs-built_in">print</span>(A)<br><br>                Atime = driver2.find_element_by_css_selector(<span class="hljs-string">&#x27;.question-time.hidden-xs-only&#x27;</span>).text.split(<span class="hljs-string">&#x27;：&#x27;</span>)[<span class="hljs-number">1</span>]<br>                <span class="hljs-built_in">print</span>(Atime)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;________________&#x27;</span>)<br>            time.sleep(<span class="hljs-number">2</span>)<br>            result.append([code, Q, Qtime, A, Atime])<br><br><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Page finished&#x27;</span>)<br><br>        <span class="hljs-comment"># next page</span><br>        next_btn = driver.find_element_by_class_name(<span class="hljs-string">&#x27;btn-next&#x27;</span>)<br>        next_btn.find_element_by_css_selector(<span class="hljs-string">&#x27;.el-icon.el-icon-arrow-right&#x27;</span>).click()<br>        time.sleep(<span class="hljs-number">1</span>)<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">int</span>(active_page_number) == max_page_number:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;All pages done&quot;</span>)<br>            <span class="hljs-keyword">break</span><br>    <span class="hljs-comment"># export to csv        </span><br>        df = pd.DataFrame(result)<br>        df.to_csv(<span class="hljs-string">&#x27;./&#x27;</span>+code+<span class="hljs-string">&#x27;.csv&#x27;</span>, index = <span class="hljs-literal">False</span>, header = <span class="hljs-number">0</span>)<br></code></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>Python</tag>
+        <tag>My Work</tag>
+        <tag>Web Crawler</tag>
       </tags>
   </entry>
 </search>
