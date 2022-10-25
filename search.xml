@@ -48,40 +48,6 @@ alt="image-20220608100634388" />
       </tags>
   </entry>
   <entry>
-    <title>Change Vote Weight of WSFC Node Servers</title>
-    <url>/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/</url>
-    <content><![CDATA[<h1 id="change-vote-weight-of-wsfc-node-servers">Change Vote Weight of
-WSFC Node Servers</h1>
-<p>Currently, my node servers have the voting values as the
-following.</p>
-<figure>
-<img
-src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171346007.png"
-alt="image-20220606171346007" />
-<figcaption aria-hidden="true">image-20220606171346007</figcaption>
-</figure>
-<p>In <strong>Windows PowerShell</strong>, we can view the node servers
-by <code>get-clusternode</code>.</p>
-<figure>
-<img
-src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171619268.png"
-alt="image-20220606171619268" />
-<figcaption aria-hidden="true">image-20220606171619268</figcaption>
-</figure>
-<p>Then, to change the vote weight,</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># (get-clusternode NODE_NAME).nodeweight = VALUE</span><br>(<span class="hljs-built_in">get-clusternode</span> tjxiem406VM).nodeweight = <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606172036812.png"
-alt="image-20220606172036812" />
-<figcaption aria-hidden="true">image-20220606172036812</figcaption>
-</figure>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Build a Failover Cluster on VMAS</title>
     <url>/2022/06/07/Build%20a%20failover%20cluster%20on%20VMAS/</url>
     <content><![CDATA[<h1 id="build-a-failover-cluster-on-vmas">Build a failover cluster on
@@ -549,6 +515,40 @@ alt="image-20220607174939143" />
       </tags>
   </entry>
   <entry>
+    <title>Change Vote Weight of WSFC Node Servers</title>
+    <url>/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/</url>
+    <content><![CDATA[<h1 id="change-vote-weight-of-wsfc-node-servers">Change Vote Weight of
+WSFC Node Servers</h1>
+<p>Currently, my node servers have the voting values as the
+following.</p>
+<figure>
+<img
+src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171346007.png"
+alt="image-20220606171346007" />
+<figcaption aria-hidden="true">image-20220606171346007</figcaption>
+</figure>
+<p>In <strong>Windows PowerShell</strong>, we can view the node servers
+by <code>get-clusternode</code>.</p>
+<figure>
+<img
+src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606171619268.png"
+alt="image-20220606171619268" />
+<figcaption aria-hidden="true">image-20220606171619268</figcaption>
+</figure>
+<p>Then, to change the vote weight,</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># (get-clusternode NODE_NAME).nodeweight = VALUE</span><br>(<span class="hljs-built_in">get-clusternode</span> tjxiem406VM).nodeweight = <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/06/Change%20Vote%20Weight%20of%20WSFC%20Node%20Servers/image-20220606172036812.png"
+alt="image-20220606172036812" />
+<figcaption aria-hidden="true">image-20220606172036812</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Data Visualization Project-Development of Models Used in Computer Vision</title>
     <url>/2022/10/25/Data%20Visualization%20Project-Development%20of%20Models%20Used%20in%20Computer%20Vision/</url>
     <content><![CDATA[<h1 id="development-of-models-used-in-computer-vision">Development of
@@ -853,296 +853,6 @@ the cmd window.</p>
 ]]></content>
       <tags>
         <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Install Always On 2019 For Failover Clusters</title>
-    <url>/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/</url>
-    <content><![CDATA[<h1 id="install-always-on-2019-for-failover-clusters">Install Always On
-2019 For Failover Clusters</h1>
-<h2 id="configure-sql-server">Configure SQL Server</h2>
-<p>On each of the node servers (replica), turn on <strong>SQL Server
-Configuration Manager</strong>, <strong>SQL Server Services --&gt; SQL
-Server (MSSQLSERVER) --&gt; Properties --&gt; Always on Availability
-Groups --&gt; Enable Always on Availability Groups</strong>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607094155497.png"
-alt="image-20220607094155497" />
-<figcaption aria-hidden="true">image-20220607094155497</figcaption>
-</figure>
-<p>Then we install a stand-alone SQL service for the two node servers
-(replica).</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607113534697.png"
-alt="image-20220607113534697" />
-<figcaption aria-hidden="true">image-20220607113534697</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607113818112.png"
-alt="image-20220607113818112" />
-<figcaption aria-hidden="true">image-20220607113818112</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114135531.png"
-alt="image-20220607114135531" />
-<figcaption aria-hidden="true">image-20220607114135531</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114435948.png"
-alt="image-20220607114435948" />
-<figcaption aria-hidden="true">image-20220607114435948</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114540380.png"
-alt="image-20220607114540380" />
-<figcaption aria-hidden="true">image-20220607114540380</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114626758.png"
-alt="image-20220607114626758" />
-<figcaption aria-hidden="true">image-20220607114626758</figcaption>
-</figure>
-<p>Also, we need to enable <strong>Always on Availability
-Groups</strong> service as we did before for the two stand-alone SQL
-services.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607132532145.png"
-alt="image-20220607132532145" />
-<figcaption aria-hidden="true">image-20220607132532145</figcaption>
-</figure>
-<p>Moreover, for the secondary replica, we need to make sure its local
-SQL service can be connected to the primary replica. In the <strong>SQL
-Server Configuration Manager</strong> of the secondary replica,
-<strong>SQL Server Network Configuration --&gt; Protocols for SQL2
-</strong>, enable <code>Named Pipes</code> and <code>TCP/IP</code>.</p>
-<p>You need to restart the servers to make all the changes.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607151315019.png"
-alt="image-20220607151315019" />
-<figcaption aria-hidden="true">image-20220607151315019</figcaption>
-</figure>
-<h2 id="restore-and-backup-databases">Restore and Backup Databases</h2>
-<p>If you have databases that need to be added to the AG, make sure that
-they are in <strong>Full Recovery Mode</strong> and remove these
-databases from any <strong>tlog backup maintenance</strong>. Here I need
-to restore and back up <code>AdventureWorks2019</code> database.</p>
-<p>Restore the database on the primary replica, SQL 1.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607151437088.png"
-alt="image-20220607151437088" />
-<figcaption aria-hidden="true">image-20220607151437088</figcaption>
-</figure>
-<p>Change the <code>Recovery Model</code> to <code>Full</code>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607103723163.png"
-alt="image-20220607103723163" />
-<figcaption aria-hidden="true">image-20220607103723163</figcaption>
-</figure>
-<p>Take Full and tlog backups of all databases before adding them to
-AG.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">--Full Backups</span><br>BACKUP DATABASE [AdventureWorks2019] <span class="hljs-keyword">TO</span>  DISK <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.SQL1\MSSQL\Backup\AdventureWorks2019_FullBackup_20220607.bak&#x27;</span> <br><span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,  <br>NAME <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;AdventureWorks2019-Full Database Backup&#x27;</span>, <br><span class="hljs-keyword">SKIP</span>, NOREWIND, NOUNLOAD, COMPRESSION,  STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span>, CHECKSUM<br>GO<br><br><span class="hljs-comment">--Tlog Backups</span><br>BACKUP LOG [AdventureWorks2019] <span class="hljs-keyword">TO</span>  DISK <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.SQL1\MSSQL\Backup\Adventureworks2019_TlogBackup_20220607.trn&#x27;</span> <br><span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,  <br>NAME <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;AdventureWorks2019-Full Database Backup&#x27;</span>, <br><span class="hljs-keyword">SKIP</span>, NOREWIND, NOUNLOAD, COMPRESSION,  STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span>, CHECKSUM<br>GO<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607140009216.png"
-alt="image-20220607140009216" />
-<figcaption aria-hidden="true">image-20220607140009216</figcaption>
-</figure>
-<h2 id="install-always-on">Install Always On</h2>
-<p>Connect to your primary replica, and start the <strong>New
-Availability Group Wizard</strong>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142521671.png"
-alt="image-20220607142521671" />
-<figcaption aria-hidden="true">image-20220607142521671</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607101944506.png"
-alt="image-20220607101944506" />
-<figcaption aria-hidden="true">image-20220607101944506</figcaption>
-</figure>
-<p>If the <code>status</code> of the database is not
-<code>Meets prerequisites</code>, check detailed information.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607104426006.png"
-alt="image-20220607104426006" />
-<figcaption aria-hidden="true">image-20220607104426006</figcaption>
-</figure>
-<p>Add secondary replica.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607140235168.png"
-alt="image-20220607140235168" />
-<figcaption aria-hidden="true">image-20220607140235168</figcaption>
-</figure>
-<p>In the <code>Endpoints</code> tab, to avoid the following warning, we
-need to set the <code>SQL Server Service Account</code> to the domain
-account instead of the local server service account. Note that the
-<code>Port Number</code> should be <strong>5022</strong></p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141252469.png"
-alt="image-20220607141252469" />
-<figcaption aria-hidden="true">image-20220607141252469</figcaption>
-</figure>
-<p>In the <strong>SQL Service Configuration Manager</strong> of both
-node servers, change the account name into the <strong>domain
-account</strong> as the following.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141542135.png"
-alt="image-20220607141542135" />
-<figcaption aria-hidden="true">image-20220607141542135</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141623518-16545825841621-16545825852083.png"
-alt="image-20220607141623518" />
-<figcaption aria-hidden="true">image-20220607141623518</figcaption>
-</figure>
-<p>Now, back to the wizard, refresh the page, and the account is
-successfully changed.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141929009.png"
-alt="image-20220607141929009" />
-<figcaption aria-hidden="true">image-20220607141929009</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142141848.png"
-alt="image-20220607142141848" />
-<figcaption aria-hidden="true">image-20220607142141848</figcaption>
-</figure>
-<p>Note that the <code>Port</code> should be <strong>1433</strong> and
-the <code>IP Address</code> should be an unused IP Address on the
-network.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142110076.png"
-alt="image-20220607142110076" />
-<figcaption aria-hidden="true">image-20220607142110076</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142223919.png"
-alt="image-20220607142223919" />
-<figcaption aria-hidden="true">image-20220607142223919</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142235554-16545829607005.png"
-alt="image-20220607142235554" />
-<figcaption aria-hidden="true">image-20220607142235554</figcaption>
-</figure>
-<p>If successfully installed, we can find an AG listener in the
-<strong>Failover Cluster Manager</strong>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607143200288.png"
-alt="image-20220607143200288" />
-<figcaption aria-hidden="true">image-20220607143200288</figcaption>
-</figure>
-<h2 id="configure-read-only-route">Configure Read-Only Route</h2>
-<h3 id="configuration">Configuration</h3>
-<p>In the <strong>Object Explorer</strong>, open the
-<strong>Properties</strong> of the AG. Change
-<code>Readable Secondary</code> in <strong>Availability
-Replicas</strong> to <code>Read-intent Only</code>.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607154139066.png"
-alt="image-20220607154139066" />
-<figcaption aria-hidden="true">image-20220607154139066</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607161723678.png"
-alt="image-20220607161723678" />
-<figcaption aria-hidden="true">image-20220607161723678</figcaption>
-</figure>
-<p>For the two stand-alone SQL servers, in the <strong>SQL Server
-Configuration Manager</strong>, <strong>Protocols for SQL 1 --&gt;
-TCP/IP --&gt; Properties --&gt; IP Addresses --&gt; TPC Dynamic
-Ports</strong>, change the port to an unused one for both services. This
-step ensures we can find the servers using a Read-only routing URL with
-the same port.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093558782.png"
-alt="image-20220608093558782" />
-<figcaption aria-hidden="true">image-20220608093558782</figcaption>
-</figure>
-<p>Fill in the <code>Read-Only Routing URL</code> with
-<code>TCP://ComputerName.domain:port</code>. The <code>port</code> here
-should be the number set in the previous step. Then, click on the first
-instance, there will be two available replicas shown, add SQL2 and then
-add SQL1. Then, click on the second instance, there will also be two
-available replicas shown, add SQL1 and then add SQL2.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608101300076.png"
-alt="image-20220608101300076" />
-<figcaption aria-hidden="true">image-20220608101300076</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608101311244.png"
-alt="image-20220608101311244" />
-<figcaption aria-hidden="true">image-20220608101311244</figcaption>
-</figure>
-<p>Or, simply run the script.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">USE [master]<br> GO<br> <span class="hljs-keyword">ALTER</span> AVAILABILITY <span class="hljs-keyword">GROUP</span> [jiachengAG]<br> MODIFY REPLICA <span class="hljs-keyword">ON</span> N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span> <span class="hljs-keyword">WITH</span> (PRIMARY_ROLE(READ_ONLY_ROUTING_LIST <span class="hljs-operator">=</span> (N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span>,N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span>)))<br> GO<br> USE [master]<br> GO<br> <span class="hljs-keyword">ALTER</span> AVAILABILITY <span class="hljs-keyword">GROUP</span> [jiachengAG]<br> MODIFY REPLICA <span class="hljs-keyword">ON</span> N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span> <span class="hljs-keyword">WITH</span> (PRIMARY_ROLE(READ_ONLY_ROUTING_LIST <span class="hljs-operator">=</span> (N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span>,N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span>)))<br> GO<br></code></pre></td></tr></table></figure>
-<h3 id="test">Test</h3>
-<p>Connect the AG listener. Click <strong>Options</strong> to configure
-the connection.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093733764.png"
-alt="image-20220608093733764" />
-<figcaption aria-hidden="true">image-20220608093733764</figcaption>
-</figure>
-<p>Note that the connected database needs to be specified in
-<code>Connection Properties</code></p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093829901.png"
-alt="image-20220608093829901" />
-<figcaption aria-hidden="true">image-20220608093829901</figcaption>
-</figure>
-<p>Also, add <code>ApplicationIntent=ReadOnly</code> as connection
-strings to enable Read-only routing.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093924655.png"
-alt="image-20220608093924655" />
-<figcaption aria-hidden="true">image-20220608093924655</figcaption>
-</figure>
-<p>New a query, run the script, the Read-only routing works as I am
-working in the primary replica while it routes read-only connections to
-the secondary replica.</p>
-<figure>
-<img
-src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608094019762.png"
-alt="image-20220608094019762" />
-<figcaption aria-hidden="true">image-20220608094019762</figcaption>
-</figure>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
       </tags>
   </entry>
   <entry>
@@ -2330,6 +2040,296 @@ backups, which reduces total restore time</figcaption>
       </tags>
   </entry>
   <entry>
+    <title>Install Always On 2019 For Failover Clusters</title>
+    <url>/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/</url>
+    <content><![CDATA[<h1 id="install-always-on-2019-for-failover-clusters">Install Always On
+2019 For Failover Clusters</h1>
+<h2 id="configure-sql-server">Configure SQL Server</h2>
+<p>On each of the node servers (replica), turn on <strong>SQL Server
+Configuration Manager</strong>, <strong>SQL Server Services --&gt; SQL
+Server (MSSQLSERVER) --&gt; Properties --&gt; Always on Availability
+Groups --&gt; Enable Always on Availability Groups</strong>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607094155497.png"
+alt="image-20220607094155497" />
+<figcaption aria-hidden="true">image-20220607094155497</figcaption>
+</figure>
+<p>Then we install a stand-alone SQL service for the two node servers
+(replica).</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607113534697.png"
+alt="image-20220607113534697" />
+<figcaption aria-hidden="true">image-20220607113534697</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607113818112.png"
+alt="image-20220607113818112" />
+<figcaption aria-hidden="true">image-20220607113818112</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114135531.png"
+alt="image-20220607114135531" />
+<figcaption aria-hidden="true">image-20220607114135531</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114435948.png"
+alt="image-20220607114435948" />
+<figcaption aria-hidden="true">image-20220607114435948</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114540380.png"
+alt="image-20220607114540380" />
+<figcaption aria-hidden="true">image-20220607114540380</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607114626758.png"
+alt="image-20220607114626758" />
+<figcaption aria-hidden="true">image-20220607114626758</figcaption>
+</figure>
+<p>Also, we need to enable <strong>Always on Availability
+Groups</strong> service as we did before for the two stand-alone SQL
+services.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607132532145.png"
+alt="image-20220607132532145" />
+<figcaption aria-hidden="true">image-20220607132532145</figcaption>
+</figure>
+<p>Moreover, for the secondary replica, we need to make sure its local
+SQL service can be connected to the primary replica. In the <strong>SQL
+Server Configuration Manager</strong> of the secondary replica,
+<strong>SQL Server Network Configuration --&gt; Protocols for SQL2
+</strong>, enable <code>Named Pipes</code> and <code>TCP/IP</code>.</p>
+<p>You need to restart the servers to make all the changes.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607151315019.png"
+alt="image-20220607151315019" />
+<figcaption aria-hidden="true">image-20220607151315019</figcaption>
+</figure>
+<h2 id="restore-and-backup-databases">Restore and Backup Databases</h2>
+<p>If you have databases that need to be added to the AG, make sure that
+they are in <strong>Full Recovery Mode</strong> and remove these
+databases from any <strong>tlog backup maintenance</strong>. Here I need
+to restore and back up <code>AdventureWorks2019</code> database.</p>
+<p>Restore the database on the primary replica, SQL 1.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607151437088.png"
+alt="image-20220607151437088" />
+<figcaption aria-hidden="true">image-20220607151437088</figcaption>
+</figure>
+<p>Change the <code>Recovery Model</code> to <code>Full</code>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607103723163.png"
+alt="image-20220607103723163" />
+<figcaption aria-hidden="true">image-20220607103723163</figcaption>
+</figure>
+<p>Take Full and tlog backups of all databases before adding them to
+AG.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">--Full Backups</span><br>BACKUP DATABASE [AdventureWorks2019] <span class="hljs-keyword">TO</span>  DISK <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.SQL1\MSSQL\Backup\AdventureWorks2019_FullBackup_20220607.bak&#x27;</span> <br><span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,  <br>NAME <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;AdventureWorks2019-Full Database Backup&#x27;</span>, <br><span class="hljs-keyword">SKIP</span>, NOREWIND, NOUNLOAD, COMPRESSION,  STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span>, CHECKSUM<br>GO<br><br><span class="hljs-comment">--Tlog Backups</span><br>BACKUP LOG [AdventureWorks2019] <span class="hljs-keyword">TO</span>  DISK <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.SQL1\MSSQL\Backup\Adventureworks2019_TlogBackup_20220607.trn&#x27;</span> <br><span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,  <br>NAME <span class="hljs-operator">=</span> N<span class="hljs-string">&#x27;AdventureWorks2019-Full Database Backup&#x27;</span>, <br><span class="hljs-keyword">SKIP</span>, NOREWIND, NOUNLOAD, COMPRESSION,  STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span>, CHECKSUM<br>GO<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607140009216.png"
+alt="image-20220607140009216" />
+<figcaption aria-hidden="true">image-20220607140009216</figcaption>
+</figure>
+<h2 id="install-always-on">Install Always On</h2>
+<p>Connect to your primary replica, and start the <strong>New
+Availability Group Wizard</strong>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142521671.png"
+alt="image-20220607142521671" />
+<figcaption aria-hidden="true">image-20220607142521671</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607101944506.png"
+alt="image-20220607101944506" />
+<figcaption aria-hidden="true">image-20220607101944506</figcaption>
+</figure>
+<p>If the <code>status</code> of the database is not
+<code>Meets prerequisites</code>, check detailed information.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607104426006.png"
+alt="image-20220607104426006" />
+<figcaption aria-hidden="true">image-20220607104426006</figcaption>
+</figure>
+<p>Add secondary replica.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607140235168.png"
+alt="image-20220607140235168" />
+<figcaption aria-hidden="true">image-20220607140235168</figcaption>
+</figure>
+<p>In the <code>Endpoints</code> tab, to avoid the following warning, we
+need to set the <code>SQL Server Service Account</code> to the domain
+account instead of the local server service account. Note that the
+<code>Port Number</code> should be <strong>5022</strong></p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141252469.png"
+alt="image-20220607141252469" />
+<figcaption aria-hidden="true">image-20220607141252469</figcaption>
+</figure>
+<p>In the <strong>SQL Service Configuration Manager</strong> of both
+node servers, change the account name into the <strong>domain
+account</strong> as the following.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141542135.png"
+alt="image-20220607141542135" />
+<figcaption aria-hidden="true">image-20220607141542135</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141623518-16545825841621-16545825852083.png"
+alt="image-20220607141623518" />
+<figcaption aria-hidden="true">image-20220607141623518</figcaption>
+</figure>
+<p>Now, back to the wizard, refresh the page, and the account is
+successfully changed.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607141929009.png"
+alt="image-20220607141929009" />
+<figcaption aria-hidden="true">image-20220607141929009</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142141848.png"
+alt="image-20220607142141848" />
+<figcaption aria-hidden="true">image-20220607142141848</figcaption>
+</figure>
+<p>Note that the <code>Port</code> should be <strong>1433</strong> and
+the <code>IP Address</code> should be an unused IP Address on the
+network.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142110076.png"
+alt="image-20220607142110076" />
+<figcaption aria-hidden="true">image-20220607142110076</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142223919.png"
+alt="image-20220607142223919" />
+<figcaption aria-hidden="true">image-20220607142223919</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607142235554-16545829607005.png"
+alt="image-20220607142235554" />
+<figcaption aria-hidden="true">image-20220607142235554</figcaption>
+</figure>
+<p>If successfully installed, we can find an AG listener in the
+<strong>Failover Cluster Manager</strong>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607143200288.png"
+alt="image-20220607143200288" />
+<figcaption aria-hidden="true">image-20220607143200288</figcaption>
+</figure>
+<h2 id="configure-read-only-route">Configure Read-Only Route</h2>
+<h3 id="configuration">Configuration</h3>
+<p>In the <strong>Object Explorer</strong>, open the
+<strong>Properties</strong> of the AG. Change
+<code>Readable Secondary</code> in <strong>Availability
+Replicas</strong> to <code>Read-intent Only</code>.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607154139066.png"
+alt="image-20220607154139066" />
+<figcaption aria-hidden="true">image-20220607154139066</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220607161723678.png"
+alt="image-20220607161723678" />
+<figcaption aria-hidden="true">image-20220607161723678</figcaption>
+</figure>
+<p>For the two stand-alone SQL servers, in the <strong>SQL Server
+Configuration Manager</strong>, <strong>Protocols for SQL 1 --&gt;
+TCP/IP --&gt; Properties --&gt; IP Addresses --&gt; TPC Dynamic
+Ports</strong>, change the port to an unused one for both services. This
+step ensures we can find the servers using a Read-only routing URL with
+the same port.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093558782.png"
+alt="image-20220608093558782" />
+<figcaption aria-hidden="true">image-20220608093558782</figcaption>
+</figure>
+<p>Fill in the <code>Read-Only Routing URL</code> with
+<code>TCP://ComputerName.domain:port</code>. The <code>port</code> here
+should be the number set in the previous step. Then, click on the first
+instance, there will be two available replicas shown, add SQL2 and then
+add SQL1. Then, click on the second instance, there will also be two
+available replicas shown, add SQL1 and then add SQL2.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608101300076.png"
+alt="image-20220608101300076" />
+<figcaption aria-hidden="true">image-20220608101300076</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608101311244.png"
+alt="image-20220608101311244" />
+<figcaption aria-hidden="true">image-20220608101311244</figcaption>
+</figure>
+<p>Or, simply run the script.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">USE [master]<br> GO<br> <span class="hljs-keyword">ALTER</span> AVAILABILITY <span class="hljs-keyword">GROUP</span> [jiachengAG]<br> MODIFY REPLICA <span class="hljs-keyword">ON</span> N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span> <span class="hljs-keyword">WITH</span> (PRIMARY_ROLE(READ_ONLY_ROUTING_LIST <span class="hljs-operator">=</span> (N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span>,N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span>)))<br> GO<br> USE [master]<br> GO<br> <span class="hljs-keyword">ALTER</span> AVAILABILITY <span class="hljs-keyword">GROUP</span> [jiachengAG]<br> MODIFY REPLICA <span class="hljs-keyword">ON</span> N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span> <span class="hljs-keyword">WITH</span> (PRIMARY_ROLE(READ_ONLY_ROUTING_LIST <span class="hljs-operator">=</span> (N<span class="hljs-string">&#x27;TJXIEM405VM\SQL1&#x27;</span>,N<span class="hljs-string">&#x27;TJXIEM406VM\SQL2&#x27;</span>)))<br> GO<br></code></pre></td></tr></table></figure>
+<h3 id="test">Test</h3>
+<p>Connect the AG listener. Click <strong>Options</strong> to configure
+the connection.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093733764.png"
+alt="image-20220608093733764" />
+<figcaption aria-hidden="true">image-20220608093733764</figcaption>
+</figure>
+<p>Note that the connected database needs to be specified in
+<code>Connection Properties</code></p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093829901.png"
+alt="image-20220608093829901" />
+<figcaption aria-hidden="true">image-20220608093829901</figcaption>
+</figure>
+<p>Also, add <code>ApplicationIntent=ReadOnly</code> as connection
+strings to enable Read-only routing.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608093924655.png"
+alt="image-20220608093924655" />
+<figcaption aria-hidden="true">image-20220608093924655</figcaption>
+</figure>
+<p>New a query, run the script, the Read-only routing works as I am
+working in the primary replica while it routes read-only connections to
+the secondary replica.</p>
+<figure>
+<img
+src="/2022/06/08/Install%20AlwaysOn%202019%20For%20Failover%20Clusters/image-20220608094019762.png"
+alt="image-20220608094019762" />
+<figcaption aria-hidden="true">image-20220608094019762</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SQL Server 2012 Internal Note_SQL Server Architecture and Configuration</title>
     <url>/2022/06/29/SQL%20Server%202012%20Internal%20Note_SQL%20Server%20Architecture%20and%20Configuration/</url>
     <content><![CDATA[<h2
@@ -3403,505 +3403,6 @@ Server.4。）</p></li>
       </tags>
   </entry>
   <entry>
-    <title>SQL Server 2012 实施与管理实战指南Note：高可用性和灾难恢复技术</title>
-    <url>/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/</url>
-    <content><![CDATA[<h1
-id="sql-server-2012-实施与管理实战指南note高可用性和灾难恢复技术">SQL
-Server 2012 实施与管理实战指南Note：高可用性和灾难恢复技术</h1>
-<p>SQL Server
-“高可用性”和“灾难恢复”四个传统技术：故障转移群集(Cluster)、日志传送(Log
-Shipping)、复制(Replication)和数据库镜像(database Mirroring)</p>
-<h2 id="高可用性与灾难恢复">“高可用性”与“灾难恢复”</h2>
-<p>数据库服务的可用时间=在线时间/（在线时间+宕机时间）</p>
-<figure>
-<img
-src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608130753104-16546649635641.png"
-alt="数据库服务的可用时间" />
-<figcaption aria-hidden="true">数据库服务的可用时间</figcaption>
-</figure>
-<p>SQL Server服务由两部分组成：</p>
-<ol type="1">
-<li>SQL Server作为应用服务，由Windows上的可执行文件提供功能。</li>
-<li>储存在硬盘上的数据。</li>
-</ol>
-<p>“高可用性”（High
-Availability，简称HA）指的是数据库服务能够始终保持在线运行，针对的是软件或硬件问题造成的数据库系统不可用。</p>
-<p>“灾难恢复”（Disaster
-Recovery，简称DR）指的是当数据库中的数据发生损坏或者不可访问时，可以在尽可能短的时间恢复全部数据或者恢复尽可能多的数据，从而保证应用系统的正常运行，针对的是保存在数据库系统中的数据不可用。</p>
-<h2 id="sql-server故障转移群集">SQL Server故障转移群集</h2>
-<p><em>SQL
-Server故障转移群集</em>是一项基于<em>Windows故障转移群集</em>的一种技术。</p>
-<h3 id="windows故障转移群集">Windows故障转移群集</h3>
-<h4 id="结构">结构</h4>
-<figure>
-<img
-src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608131602446.png"
-alt="故障转移群集的结构" />
-<figcaption aria-hidden="true">故障转移群集的结构</figcaption>
-</figure>
-<ol type="1">
-<li>Windows故障转移群集由多个服务器（Node）组成，每个Node都运行着Microsoft集群服务（MSCS）</li>
-<li>共享磁盘（Shared Array）：存放需要共享的数据，如SQL
-Server的数据库文件、错误日志等</li>
-<li>本地磁盘（Drive
-C）：每个节点的本地磁盘，存放不需要共享的内容。当某节点是活跃节点时，用户可以访问其本地磁盘而不能访问其他Node的本地磁盘。</li>
-<li>私有网络（Private
-Network）：由每个Node上的私有网卡相互连接形成，用于“心脏线”信号，即节点相互感知彼此是否正常工作，如某节点无法回应信号，即被排出群集。</li>
-<li>公用网络（Public
-Network）：外部资源通过节点上的公共网卡访问该节点。</li>
-<li>混合网络（Mixed
-Network）：由于私有网卡和公共网卡在物理上可以是一块网卡，群集可以通过一个网络完成私有和公共网络的功能。</li>
-<li>虚拟服务器（Virtual
-Server）：由群集内所有节点组成的一个（虚拟）服务器。有与群集内任何节点都不同的IP地址（虚拟IP）和机器名（虚拟网络名）。虚拟IP一定要和公共网络配置在同一个网段里。</li>
-<li>资源：指在Windows群集中，虚拟IP，虚拟网络名，共享磁盘，SQL
-Server等等。在任意时刻，只有群集中的一个节点（活跃节点，用户实际登录的节点）能提供用户所需的服务和资源，而其他节点都处于空闲状态。</li>
-<li>活跃节点：当前拥有该群集资源的节点，由Windows群集服务决定。</li>
-<li>客户端的连接指令始终都是一样的：指向虚拟IP，或者虚拟网络名，对虚拟服务器的请求会被转向到活跃节点上。</li>
-</ol>
-<h4 id="故障转移failover">故障转移（Failover）</h4>
-<figure>
-<img
-src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608134016918.png"
-alt="资源的故障转移" />
-<figcaption aria-hidden="true">资源的故障转移</figcaption>
-</figure>
-<p>当前拥有资源的节点NodeA出现故障时，Windows群集会自动发起故障转移，转移后NodeB拥有资源。</p>
-<p>故障转移发生：</p>
-<ol type="1">
-<li>由于故障自动切换</li>
-<li>系统管理员手动切换</li>
-</ol>
-<h3 id="sql-server故障转移群集-1">SQL Server故障转移群集</h3>
-<p>SQL Server故障转移群集，即将SQL
-Server部署在Windows群集中的多个节点上以组成一个虚拟SQL
-Server实例。在当前活跃节点不可用时，SQL
-Server可以被切换到工作正常的节点上继续进行服务。</p>
-<h4 id="sql-server群集资源组的结构">SQL Server群集资源组的结构</h4>
-<p>“资源组”是由一个或者多个（相互关联）的资源组成的组，在任何时候每个资源组都仅属于其“活跃节点”，所有的故障转移都是以资源组为单位发生。</p>
-<p>对于SQL Server资源组，通常包含以下资源：</p>
-<figure>
-<img
-src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608144213186.png"
-alt="故障转移群集管理器中查看SQL Server资源组的拥有者" />
-<figcaption aria-hidden="true">故障转移群集管理器中查看SQL
-Server资源组的拥有者</figcaption>
-</figure>
-<h5 id="sql-server网络名和sql-server-ip地址">SQL Server网络名和SQL
-Server IP地址</h5>
-<p>SQL Server实例拥有专属的虚拟网络名和IP地址，它们提供了应用程序访问SQL
-Server时使用的机器名或者IP地址。SQL
-Server群集并不使用Windows群集的虚拟网络名和虚拟IP地址来作为应用程序访问它的接口。</p>
-<h5 id="sql-server和sql-server-agent">SQL Server和SQL Server Agent</h5>
-<p>SQL Server群集中所有节点都安装有SQL Server和SQL Server
-Agent服务以及与服务所对应的二进制文件、注册表键值等。</p>
-<p>在群集正常运行的情况下，只有活跃节点的SQL
-Server实例是Running的，其他节点上都是Stopped。</p>
-<p>SQL Server资源名：</p>
-<ol type="1">
-<li>SQL Server是默认实例，资源名为SQL Sever</li>
-<li>SQL Server是命名实例，资源名为SQL Server（实例名），eg “SQL Server
-(MSSQLSERVER)”</li>
-</ol>
-<p>客户端程序通过“虚拟网络名”访问SQL Server实例。</p>
-<h5 id="共享磁盘">共享磁盘</h5>
-<p>共享磁盘资源可以是一块<em>逻辑磁盘</em>，也可以是一块磁盘上的一个<em>mount
-point</em>。</p>
-<p>共享磁盘保存SQL Server群集实例的：</p>
-<ol type="1">
-<li>数据库的所有数据文件和事务日志文件（MDF，NDF和LDF）</li>
-<li>SQL Server和SQL Server Agent的日志文件（ERRORLOG）</li>
-<li>其他的文件和目录</li>
-</ol>
-<p>共享磁盘和SQL Server必须在用一资源组里，SQL
-Server依赖于共享磁盘。</p>
-<p>一个共享磁盘资源只能属于一个SQL Server实例，但是一个SQL
-Server群集实例可以使用多个共享磁盘。</p>
-<h5 id="其他">其他</h5>
-<p>可能包含：</p>
-<ol type="1">
-<li>File Share资源：如果 SQL Server要使用FileStream</li>
-<li>Analysis Services资源</li>
-</ol>
-<h5 id="资源状态">资源状态</h5>
-<p><strong>上线（online）：</strong>该资源在某个节点上正常工作中。</p>
-<p><strong>离线（offline）：</strong>该资源在某个节点上处于停止工作状态，无法提供相应的服务。</p>
-<p><strong>失败（failed）：</strong>该资源在某节点尝试上线，但是由于某些异常无法上线成功。</p>
-<p><strong>上线挂起（online
-pending）：</strong>资源尝试进入上线状态，但是还没完全成功上线。</p>
-<p><strong>离线挂起（offline
-pending）：</strong>资源尝试进入离线状态，但是还没完全成功离线。</p>
-<h4 id="集群资源的配置">集群资源的配置</h4>
-<p>在 <strong>Properties</strong>中，我们可以对于群集资源进行设置：</p>
-<h5 id="dependencies">Dependencies</h5>
-<p>一个资源所依赖的其他资源必须要和这个资源处于<u>同一个资源组</u>里，跨资源组的依赖关系是不存在的</p>
-<figure>
-<img
-src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608151524630.png"
-alt="Dependencies选择卡" />
-<figcaption aria-hidden="true">Dependencies选择卡</figcaption>
-</figure>
-<figure>
-<img
-src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608151633015.png"
-alt="SQL Server资源组中属性的依赖关系" />
-<figcaption aria-hidden="true">SQL
-Server资源组中属性的依赖关系</figcaption>
-</figure>
-<h5 id="policies">Policies</h5>
-<p>Policies决定了该资源发生故障转移时的行为。</p>
-<figure>
-<img
-src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608151828624.png"
-alt="Policies选择卡" />
-<figcaption aria-hidden="true">Policies选择卡</figcaption>
-</figure>
-<p>Affect the Group设置：</p>
-<ul class="task-list">
-<li><input type="checkbox" disabled="" checked="" />If resource fails,
-attempt restart on current node</li>
-<li><input type="checkbox" disabled="" checked="" />If restart is
-unsuccessful, fail over all resources in this service or
-application</li>
-</ul>
-<p>​ 适用于：SQL
-Server资源，共享磁盘资源，虚拟IP地址资源，虚拟服务名资源</p>
-<p>Not affect the Group设置：</p>
-<ul class="task-list">
-<li><input type="checkbox" disabled="" checked="" />If resource fails,
-attempt restart on current node</li>
-<li><input type="checkbox" disabled="" />If restart is unsuccessful,
-fail over all resources in this service or application</li>
-</ul>
-<p>​ 适用于：（出于最大化高可用目的，消除不必要的Failover）SQL Server
-Agent资源，Fill Share资源，Analysis Services资源</p>
-<h5 id="advanced-policies">Advanced Policies</h5>
-<figure>
-<img
-src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608152531006.png"
-alt="Advanced Policies选择卡" />
-<figcaption aria-hidden="true">Advanced Policies选择卡</figcaption>
-</figure>
-<p><code>Basic resource health check interval</code>和<code>Thorough resource health check interval</code>是Windows
-Cluster在不同时间间隔做的两种不同程度的检查（Looks alive check，Is alive
-check），用于确认每个资源是否在正常工作。</p>
-<h3 id="sql-server群集什么时候会发生故障转移">SQL
-Server群集什么时候会发生“故障转移”</h3>
-<p>当Looks alive check或Is alive
-check检查失败时，进行故障转移。由于故障转移一般是意外发生的，所以SQL
-Server切换到新节点以后，还需要一段时间来做数据库的recovery。</p>
-<p>群集里的每个资源都是一种资源类型。根据不同类型的资源，会使用不同的方式进行isalive和looksalive检查。
-| 资源 | 资源类型 | | ---------- | ------------ | | 共享磁盘 |
-physicaldisk | | 虚拟IP | IP Address | | SQL Server | SQL Server |</p>
-<figure>
-<img
-src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/clip_image002.png"
-alt="资源类型、资源DLL和资源的关系" />
-<figcaption
-aria-hidden="true">资源类型、资源DLL和资源的关系</figcaption>
-</figure>
-<p>Windows群集服务进程clussvc.exe会产生名为RHS.exe的进程，RHS.exe会装载resource
-dll，并且调用dll中定义的方法来检查相应resource的状态。一个资源其属性的Advanced
-Polices选项卡中如果没有勾选“run this resource in a separate Resource
-”，它的resource
-dll就会装载在一个默认的RHS.exe中；反之，则会有一个单独的RHS.exe来装载该资源的resource
-dll。所以在任务管理器中你可能看到多个RHS.exe进程。</p>
-<figure>
-<img
-src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608162438129.png"
-alt="多个RHS.exe进程" />
-<figcaption aria-hidden="true">多个RHS.exe进程</figcaption>
-</figure>
-<p>Windows群集自带的资源类型：</p>
-<ol type="1">
-<li>physical disk, IP, network name和DTC等</li>
-<li>检查的方法定义在resource DLL，<code>clusres.dll</code>中</li>
-</ol>
-<p>非Windows群集自带的资源类型：</p>
-<ol type="1">
-<li><p>SQL Server</p></li>
-<li><p>如有专属资源类型和专属resource dll，在resource
-dll中定义检查方法</p>
-<blockquote>
-<p>SQL ServerD的resource dll：</p>
-<p>SQL Server资源（通常affect the group模式）
---&gt;<code>sqsrvres.dll</code></p>
-<p>​ Looksalive：默认5秒一次，通过服务控制管理器（Service Control
-Manager，简称SCM）检查SQL Server服务在活跃节点是否处于“启动状态”</p>
-<p>​
-Isalive：默认60秒一次，如lookalive检查的结果失败，立刻触发Isalive检查。SQL
-2012之前，通过连 接SQL
-Server群集实例并获取运行命令的返回结果来进行判断。如果连接不上SQL
-Server群集实例或
-者语句运行失败，那么Isalive检查失败。此时Windows群集会再做3-5次（根据Windows的版本和设置
-不同）Isalive检查。如最终检查失败，则进行故障转移。</p>
-<p>SQL Server Agent资源--&gt;<code>sqagtres.dll</code></p>
-</blockquote></li>
-</ol>
-<p>”通用服务“（Generic Service）资源类型：</p>
-<ol type="1">
-<li>Analysis Service</li>
-<li>使用<code>clusres.dll</code>来作为resource
-dll并沿用定义进行检查。</li>
-</ol>
-<p>Cluster-aware服务：</p>
-<ol type="1">
-<li>可以通过resource dll形成群集资源</li>
-<li>SQL Server、SQL Server Agent，Analysis Service服务</li>
-</ol>
-<p>非Cluster-aware服务：</p>
-<ol type="1">
-<li>无法通过任何resource
-dll在Windows群集中形成资源，即使安装在群集的节点上也会被视作安装在单机环境，无法故障转移。</li>
-<li>SQL browser, Reporting Service等</li>
-<li>Integration
-Services不是Cluster-aware，可以人为配置为群集资源（不推荐），但是不具有自动故障转移功能。</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-        <tag>Note</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SQL Server Backup</title>
-    <url>/2022/06/06/SQL%20Server%20Backup/</url>
-    <content><![CDATA[<h1 id="sql-server-backup">SQL Server Backup</h1>
-<p><strong>Full Backup</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Windows\AdventureWorks2019_20220602.bak&#x27;</span>;<br></code></pre></td></tr></table></figure>
-<p>If get an error like this:</p>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100125253.png"
-alt="image-20220606100125253" />
-<figcaption aria-hidden="true">image-20220606100125253</figcaption>
-</figure>
-<p>It means that the SQL server has no permission to the location. To
-fix this, in the <strong>SQL Server Configuration Manager</strong>, we
-can find that the SQL service is logged on as
-<code>NT Service\MSSQLSERVER</code>.</p>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100346465.png"
-alt="image-20220606100346465" />
-<figcaption aria-hidden="true">image-20220606100346465</figcaption>
-</figure>
-<p>Then right-click on the folder you want to access, <strong>properties
---&gt; security</strong>, and add permission to the
-<code>NT Service\MSSQLSERVER</code>.</p>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100858530.png"
-alt="image-20220606100858530" />
-<figcaption aria-hidden="true">image-20220606100858530</figcaption>
-</figure>
-<p><strong>Backup with differential</strong></p>
-<p>This will back up the changed pages from the previous full
-backup.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup changes start from last full backup, save changed page only</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> differential;<br></code></pre></td></tr></table></figure>
-<p><strong>Backup with copy_only</strong></p>
-<p>This will leave the DCM (diff change map) unchanged, meaning that if
-we are back up with differential, it will also backup changes from the
-last full backup.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup, leave (DCM) diff change map unchanged, compressed</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> copy_only, compression;<br></code></pre></td></tr></table></figure>
-<p>The DCM records the changes made to the page of the database, we can
-view the DCM of the specific database by</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc page(<span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>, <span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101710464.png"
-alt="image-20220606101710464" />
-<figcaption aria-hidden="true">image-20220606101710464</figcaption>
-</figure>
-<p><strong>Backup log files</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup log AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602.trn&#x27;</span>;<br></code></pre></td></tr></table></figure>
-<p>We can view the information of log files of databases by</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc sqlperf(logspace)<br></code></pre></td></tr></table></figure>
-<figure>
-<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101859208.png"
-alt="image-20220606101859208" />
-<figcaption aria-hidden="true">image-20220606101859208</figcaption>
-</figure>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-        <tag>T-SQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SQL Server IAM Page</title>
-    <url>/2022/06/26/SQL%20Server%20IAM%20Page/</url>
-    <content><![CDATA[<h1 id="sql-server-iam-page">SQL Server IAM Page</h1>
-<p>Index Allocation Map (IAM) pages keep track of the extents in a 4 GB
-section of a database file used by an allocation unit.</p>
-<p><u>Allocation unit</u></p>
-<p>An allocation unit is a set of pages belonging to a single partition
-in a table or index and comprises pages of one of three storage
-types:</p>
-<ol type="1">
-<li>pages holding regular in-row data</li>
-<li>pages holding Large Object (LOB) data</li>
-<li>pages holding row-overflow data</li>
-</ol>
-<p><u>Multiple IAM pages</u></p>
-<p>A single IAM page covers only a 4 GB section of a single file.</p>
-<ol type="1">
-<li>if the partition spans files</li>
-<li>if the file is more than 4 GB in size</li>
-<li>if the partition uses pages in more than one 4 GB section</li>
-</ol>
-<p><u>IAM page structure</u></p>
-<ol type="1">
-<li>96-byte page header</li>
-<li>An IAM page header
-<ol type="1">
-<li>Contains eight page-pointer slots</li>
-</ol></li>
-<li>Contains bitmap
-<ol type="1">
-<li>A set of bits that map a range of extents onto a file</li>
-<li>Each bit of the bitmap represents an extent in the range</li>
-<li>1, is allocated; 0, unallocated</li>
-</ol></li>
-</ol>
-<p>Running the defined procedure <code>sp_AllocationMetadata</code> in
-the <code>AdventureWorks2019</code>, we can see the page number of the
-first IAM pages.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">EXEC</span> [sp_AllocationMetadata] N<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>;<br>GO<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623131334311.png"
-alt="sp_AllocationMetadata result" />
-<figcaption aria-hidden="true">sp_AllocationMetadata result</figcaption>
-</figure>
-<p>As we can see, the object <code>Employee</code> has 6 partitions. For
-the partition that has partition ID of <code>72057594056933376</code>,
-its first IAM page is <code>2105</code>.</p>
-<p>Then let's take a closer look at the page <code>2105</code>.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">3</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623133029678.png"
-alt="Mode 3 result" />
-<figcaption aria-hidden="true">Mode 3 result</figcaption>
-</figure>
-<p>The 8 slots listed under the <code>Single Page Allocations</code>
-mean they are in the mixed extent.</p>
-<p>Following the <code>Extent Alloc Status Slot</code> are pages in
-uniform extent. The result suggests that page <code>12640</code> and
-page <code>12672</code> are allocated</p>
-<p>We can check the allocation status by running the query:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> allocated_page_file_id <span class="hljs-keyword">AS</span> [FileID],<br>allocated_page_page_id <span class="hljs-keyword">AS</span> [PageID],<br>page_type_desc,extent_page_id<span class="hljs-operator">/</span><span class="hljs-number">8</span> <span class="hljs-keyword">AS</span> ExtentID,<br>is_mixed_page_allocation,<br>extent_page_id <span class="hljs-keyword">AS</span> [<span class="hljs-keyword">First</span> Page <span class="hljs-keyword">in</span> Extent],<br>extent_page_id<span class="hljs-operator">+</span><span class="hljs-number">7</span> <span class="hljs-keyword">AS</span> [LastPage <span class="hljs-keyword">in</span> Extent],<br>is_allocated <br><span class="hljs-keyword">FROM</span> sys.dm_db_database_page_allocations(db_id(),object_id(<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>),<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-string">&#x27;detailed&#x27;</span>)  <br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> allocated_page_page_id<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623134406196.png"
-alt="Allocation status result" />
-<figcaption aria-hidden="true">Allocation status result</figcaption>
-</figure>
-<p>As shown in the result, page <code>12640</code> and
-<code>12672</code> are allocated, and clearly there are
-<code>(12672-12640)/8=4</code> extents between them, which is proved by
-the corresponding extent ID, <code>1580</code> and
-<code>1584</code>.</p>
-<p>Let's validate our observation by dive into the page in mode 1.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">1</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623140010858.png"
-alt="Mode 1 result" />
-<figcaption aria-hidden="true">Mode 1 result</figcaption>
-</figure>
-<ol type="1">
-<li><p><code>0000381f</code> is fixed.</p></li>
-<li><p>Slot 0 is for mixed extent; Slot 1 is for the uniform
-extent</p></li>
-<li><p>For string <code>00000000 0010</code> and
-<code>0100 00000000</code> in Slot 1</p>
-<p>Each bit in the table stands for one extent.</p>
-<p>Note we need to convert little-endian into normal binary.</p>
-<table>
-<thead>
-<tr class="header">
-<th>HEX</th>
-<th>00 00 00 00 00</th>
-<th>10</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Binary (Little endian)</td>
-<td>many 0</td>
-<td>0001 0000</td>
-</tr>
-<tr class="even">
-<td>Binary (normal)</td>
-<td>many 0</td>
-<td>0000 1000</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th>HEX</th>
-<th>01</th>
-<th>00 00 00 00 00</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Binary (Little endian)</td>
-<td>0000 0001</td>
-<td>many 0</td>
-</tr>
-<tr class="even">
-<td>Binary (normal)</td>
-<td>1000 0000</td>
-<td>many 0</td>
-</tr>
-</tbody>
-</table>
-<p>That is, for <code>10 01</code> we have
-<code>0000 1000 1000 0000</code> in binary, the difference is 4 extent,
-from <code>1580</code> to <code>1584</code>.</p>
-<figure>
-<img
-src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220624094601306.png"
-alt="Endian example" />
-<figcaption aria-hidden="true">Endian example</figcaption>
-</figure></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>SQL Server</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Script_Backup databases iteratively and truncate name</title>
-    <url>/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/</url>
-    <content><![CDATA[<h1
-id="script_backup-databases-iteratively-and-truncate-name">Script_Backup
-databases iteratively and truncate name</h1>
-<p><u>Problem</u></p>
-<p>For the database backup script, if the name <code>@dbname</code> is
-too long, longer than <code>128</code>, there will be an error since the
-length of <code>name</code> column in <code>msdb.dbo.backupset</code> is
-<code>nvarchar(128)</code>.</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br></code></pre></td></tr></table></figure>
-<p><u>Script logic</u></p>
-<ul>
-<li>Backup all databases except for some required databases</li>
-<li>Truncate necessary characters when the length is larger than
-<code>128</code></li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@name</span>_small NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@path</span>_small NVARCHAR(<span class="hljs-number">512</span>)  <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileName</span>_small NVARCHAR(<span class="hljs-number">512</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileDate</span>_small NVARCHAR(<span class="hljs-number">40</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@errorMessage</span> NVARCHAR(<span class="hljs-number">256</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@dbName</span> NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@counter</span> <span class="hljs-type">int</span><br><br><span class="hljs-comment">-- specify database backup directory</span><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\&#x27;</span>   <br><br><span class="hljs-comment">-- specify filename format</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@fileDate</span>_small <span class="hljs-operator">=</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">101</span>),<span class="hljs-string">&#x27;/&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <span class="hljs-operator">+</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">108</span>),<span class="hljs-string">&#x27;:&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <br><br><span class="hljs-comment">-- Cursor for small databases </span><br><span class="hljs-keyword">DECLARE</span> db_cursor_small <span class="hljs-keyword">CURSOR</span> READ_ONLY <span class="hljs-keyword">FOR</span>  <br><span class="hljs-keyword">SELECT</span> name <br><span class="hljs-keyword">FROM</span> master.sys.databases <br><span class="hljs-keyword">WHERE</span> name <br><span class="hljs-keyword">NOT</span> <span class="hljs-keyword">IN</span> (<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span>,<span class="hljs-string">&#x27;tempdb&#x27;</span>)  <span class="hljs-comment">-- Fill in databases you want to exclude here</span><br><span class="hljs-keyword">AND</span> state <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is online</span><br><span class="hljs-keyword">AND</span> is_in_standby <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is not read only for log shipping</span><br><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as required:&#x27;</span>)<br>PRINT N<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span><br>PRINT N<span class="hljs-string">&#x27;tempdb&#x27;</span><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as they are not ONLINE:&#x27;</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@xmltmp</span> xml <span class="hljs-operator">=</span> (<span class="hljs-keyword">SELECT</span> name, state_desc <span class="hljs-keyword">FROM</span> sys.databases <span class="hljs-keyword">where</span> state_desc <span class="hljs-operator">&lt;&gt;</span> <span class="hljs-string">&#x27;ONLINE&#x27;</span> <span class="hljs-keyword">FOR</span> XML AUTO)<br>PRINT <span class="hljs-keyword">CONVERT</span>(NVARCHAR(MAX), <span class="hljs-variable">@xmltmp</span>)<br><br><span class="hljs-keyword">OPEN</span> db_cursor_small   <br><span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><br> <br>WHILE @<span class="hljs-variable">@FETCH</span>_STATUS <span class="hljs-operator">=</span> <span class="hljs-number">0</span>   <br><span class="hljs-keyword">BEGIN</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">+</span> <span class="hljs-number">1</span><br>   <span class="hljs-comment">-- Truncate database name if too long</span><br>   IF len(<span class="hljs-variable">@name</span>_small<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small) <span class="hljs-operator">&gt;</span> <span class="hljs-number">128</span><br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">LEFT</span>(<span class="hljs-variable">@name</span>_small,len(<span class="hljs-variable">@name</span>_small)<span class="hljs-operator">-</span>len(<span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small))<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small<br>   <span class="hljs-keyword">ELSE</span> <br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;_&#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@fileDate</span>_small<br>   PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>   PRINT(<span class="hljs-string">&#x27;Start backup database: &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; AS &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span>)<br>			<br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-operator">=</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;.BAK&#x27;</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@errorMessage</span> <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Verify failed. Backup information for database &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; not found.&#x27;</span><br>   BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>   NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br>   <span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">AS</span> <span class="hljs-type">int</span><br>   <span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-operator">=</span> position <span class="hljs-keyword">FROM</span> msdb..backupset <br>   <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <br>   <span class="hljs-keyword">AND</span> backup_set_id<span class="hljs-operator">=</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">max</span>(backup_set_id) <span class="hljs-keyword">FROM</span> msdb..backupset <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small)<br>   IF <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">BEGIN</span> RAISERROR(<span class="hljs-variable">@errorMessage</span>, <span class="hljs-number">16</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">END</span><br>   RESTORE VERIFYONLY <span class="hljs-keyword">FROM</span>  DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span>  FILE <span class="hljs-operator">=</span> <span class="hljs-variable">@backupSetId</span>,  NOUNLOAD,  NOREWIND<br>  <br>   <span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><span class="hljs-keyword">END</span>   <br>PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>PRINT(<span class="hljs-string">&#x27;Total backups:&#x27;</span>)<br>PRINT(<span class="hljs-variable">@counter</span>)<br><br><span class="hljs-keyword">CLOSE</span> db_cursor_small   <br><span class="hljs-keyword">DEALLOCATE</span> db_cursor_small<br><br></code></pre></td></tr></table></figure>
-<img src="/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/image001.png" class="" title="Script result">
-<blockquote>
-<p>This was the very first T-SQL script I write when I interned as a
-Support Engineer at Microsoft.</p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>T-SQL</tag>
-        <tag>My Work</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SQL Server 2012 实施与管理实战指南Note：数据库空间管理</title>
     <url>/2022/06/15/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h1 id="sql-server-2012-实施与管理实战指南note数据库空间管理">SQL Server
@@ -4896,6 +4397,505 @@ Server会让那个操作等待。直到文件自动增长结束了，原先的�
       <tags>
         <tag>SQL Server</tag>
         <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL Server 2012 实施与管理实战指南Note：高可用性和灾难恢复技术</title>
+    <url>/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/</url>
+    <content><![CDATA[<h1
+id="sql-server-2012-实施与管理实战指南note高可用性和灾难恢复技术">SQL
+Server 2012 实施与管理实战指南Note：高可用性和灾难恢复技术</h1>
+<p>SQL Server
+“高可用性”和“灾难恢复”四个传统技术：故障转移群集(Cluster)、日志传送(Log
+Shipping)、复制(Replication)和数据库镜像(database Mirroring)</p>
+<h2 id="高可用性与灾难恢复">“高可用性”与“灾难恢复”</h2>
+<p>数据库服务的可用时间=在线时间/（在线时间+宕机时间）</p>
+<figure>
+<img
+src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608130753104-16546649635641.png"
+alt="数据库服务的可用时间" />
+<figcaption aria-hidden="true">数据库服务的可用时间</figcaption>
+</figure>
+<p>SQL Server服务由两部分组成：</p>
+<ol type="1">
+<li>SQL Server作为应用服务，由Windows上的可执行文件提供功能。</li>
+<li>储存在硬盘上的数据。</li>
+</ol>
+<p>“高可用性”（High
+Availability，简称HA）指的是数据库服务能够始终保持在线运行，针对的是软件或硬件问题造成的数据库系统不可用。</p>
+<p>“灾难恢复”（Disaster
+Recovery，简称DR）指的是当数据库中的数据发生损坏或者不可访问时，可以在尽可能短的时间恢复全部数据或者恢复尽可能多的数据，从而保证应用系统的正常运行，针对的是保存在数据库系统中的数据不可用。</p>
+<h2 id="sql-server故障转移群集">SQL Server故障转移群集</h2>
+<p><em>SQL
+Server故障转移群集</em>是一项基于<em>Windows故障转移群集</em>的一种技术。</p>
+<h3 id="windows故障转移群集">Windows故障转移群集</h3>
+<h4 id="结构">结构</h4>
+<figure>
+<img
+src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608131602446.png"
+alt="故障转移群集的结构" />
+<figcaption aria-hidden="true">故障转移群集的结构</figcaption>
+</figure>
+<ol type="1">
+<li>Windows故障转移群集由多个服务器（Node）组成，每个Node都运行着Microsoft集群服务（MSCS）</li>
+<li>共享磁盘（Shared Array）：存放需要共享的数据，如SQL
+Server的数据库文件、错误日志等</li>
+<li>本地磁盘（Drive
+C）：每个节点的本地磁盘，存放不需要共享的内容。当某节点是活跃节点时，用户可以访问其本地磁盘而不能访问其他Node的本地磁盘。</li>
+<li>私有网络（Private
+Network）：由每个Node上的私有网卡相互连接形成，用于“心脏线”信号，即节点相互感知彼此是否正常工作，如某节点无法回应信号，即被排出群集。</li>
+<li>公用网络（Public
+Network）：外部资源通过节点上的公共网卡访问该节点。</li>
+<li>混合网络（Mixed
+Network）：由于私有网卡和公共网卡在物理上可以是一块网卡，群集可以通过一个网络完成私有和公共网络的功能。</li>
+<li>虚拟服务器（Virtual
+Server）：由群集内所有节点组成的一个（虚拟）服务器。有与群集内任何节点都不同的IP地址（虚拟IP）和机器名（虚拟网络名）。虚拟IP一定要和公共网络配置在同一个网段里。</li>
+<li>资源：指在Windows群集中，虚拟IP，虚拟网络名，共享磁盘，SQL
+Server等等。在任意时刻，只有群集中的一个节点（活跃节点，用户实际登录的节点）能提供用户所需的服务和资源，而其他节点都处于空闲状态。</li>
+<li>活跃节点：当前拥有该群集资源的节点，由Windows群集服务决定。</li>
+<li>客户端的连接指令始终都是一样的：指向虚拟IP，或者虚拟网络名，对虚拟服务器的请求会被转向到活跃节点上。</li>
+</ol>
+<h4 id="故障转移failover">故障转移（Failover）</h4>
+<figure>
+<img
+src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608134016918.png"
+alt="资源的故障转移" />
+<figcaption aria-hidden="true">资源的故障转移</figcaption>
+</figure>
+<p>当前拥有资源的节点NodeA出现故障时，Windows群集会自动发起故障转移，转移后NodeB拥有资源。</p>
+<p>故障转移发生：</p>
+<ol type="1">
+<li>由于故障自动切换</li>
+<li>系统管理员手动切换</li>
+</ol>
+<h3 id="sql-server故障转移群集-1">SQL Server故障转移群集</h3>
+<p>SQL Server故障转移群集，即将SQL
+Server部署在Windows群集中的多个节点上以组成一个虚拟SQL
+Server实例。在当前活跃节点不可用时，SQL
+Server可以被切换到工作正常的节点上继续进行服务。</p>
+<h4 id="sql-server群集资源组的结构">SQL Server群集资源组的结构</h4>
+<p>“资源组”是由一个或者多个（相互关联）的资源组成的组，在任何时候每个资源组都仅属于其“活跃节点”，所有的故障转移都是以资源组为单位发生。</p>
+<p>对于SQL Server资源组，通常包含以下资源：</p>
+<figure>
+<img
+src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608144213186.png"
+alt="故障转移群集管理器中查看SQL Server资源组的拥有者" />
+<figcaption aria-hidden="true">故障转移群集管理器中查看SQL
+Server资源组的拥有者</figcaption>
+</figure>
+<h5 id="sql-server网络名和sql-server-ip地址">SQL Server网络名和SQL
+Server IP地址</h5>
+<p>SQL Server实例拥有专属的虚拟网络名和IP地址，它们提供了应用程序访问SQL
+Server时使用的机器名或者IP地址。SQL
+Server群集并不使用Windows群集的虚拟网络名和虚拟IP地址来作为应用程序访问它的接口。</p>
+<h5 id="sql-server和sql-server-agent">SQL Server和SQL Server Agent</h5>
+<p>SQL Server群集中所有节点都安装有SQL Server和SQL Server
+Agent服务以及与服务所对应的二进制文件、注册表键值等。</p>
+<p>在群集正常运行的情况下，只有活跃节点的SQL
+Server实例是Running的，其他节点上都是Stopped。</p>
+<p>SQL Server资源名：</p>
+<ol type="1">
+<li>SQL Server是默认实例，资源名为SQL Sever</li>
+<li>SQL Server是命名实例，资源名为SQL Server（实例名），eg “SQL Server
+(MSSQLSERVER)”</li>
+</ol>
+<p>客户端程序通过“虚拟网络名”访问SQL Server实例。</p>
+<h5 id="共享磁盘">共享磁盘</h5>
+<p>共享磁盘资源可以是一块<em>逻辑磁盘</em>，也可以是一块磁盘上的一个<em>mount
+point</em>。</p>
+<p>共享磁盘保存SQL Server群集实例的：</p>
+<ol type="1">
+<li>数据库的所有数据文件和事务日志文件（MDF，NDF和LDF）</li>
+<li>SQL Server和SQL Server Agent的日志文件（ERRORLOG）</li>
+<li>其他的文件和目录</li>
+</ol>
+<p>共享磁盘和SQL Server必须在用一资源组里，SQL
+Server依赖于共享磁盘。</p>
+<p>一个共享磁盘资源只能属于一个SQL Server实例，但是一个SQL
+Server群集实例可以使用多个共享磁盘。</p>
+<h5 id="其他">其他</h5>
+<p>可能包含：</p>
+<ol type="1">
+<li>File Share资源：如果 SQL Server要使用FileStream</li>
+<li>Analysis Services资源</li>
+</ol>
+<h5 id="资源状态">资源状态</h5>
+<p><strong>上线（online）：</strong>该资源在某个节点上正常工作中。</p>
+<p><strong>离线（offline）：</strong>该资源在某个节点上处于停止工作状态，无法提供相应的服务。</p>
+<p><strong>失败（failed）：</strong>该资源在某节点尝试上线，但是由于某些异常无法上线成功。</p>
+<p><strong>上线挂起（online
+pending）：</strong>资源尝试进入上线状态，但是还没完全成功上线。</p>
+<p><strong>离线挂起（offline
+pending）：</strong>资源尝试进入离线状态，但是还没完全成功离线。</p>
+<h4 id="集群资源的配置">集群资源的配置</h4>
+<p>在 <strong>Properties</strong>中，我们可以对于群集资源进行设置：</p>
+<h5 id="dependencies">Dependencies</h5>
+<p>一个资源所依赖的其他资源必须要和这个资源处于<u>同一个资源组</u>里，跨资源组的依赖关系是不存在的</p>
+<figure>
+<img
+src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608151524630.png"
+alt="Dependencies选择卡" />
+<figcaption aria-hidden="true">Dependencies选择卡</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608151633015.png"
+alt="SQL Server资源组中属性的依赖关系" />
+<figcaption aria-hidden="true">SQL
+Server资源组中属性的依赖关系</figcaption>
+</figure>
+<h5 id="policies">Policies</h5>
+<p>Policies决定了该资源发生故障转移时的行为。</p>
+<figure>
+<img
+src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608151828624.png"
+alt="Policies选择卡" />
+<figcaption aria-hidden="true">Policies选择卡</figcaption>
+</figure>
+<p>Affect the Group设置：</p>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" checked="" />If resource fails,
+attempt restart on current node</li>
+<li><input type="checkbox" disabled="" checked="" />If restart is
+unsuccessful, fail over all resources in this service or
+application</li>
+</ul>
+<p>​ 适用于：SQL
+Server资源，共享磁盘资源，虚拟IP地址资源，虚拟服务名资源</p>
+<p>Not affect the Group设置：</p>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" checked="" />If resource fails,
+attempt restart on current node</li>
+<li><input type="checkbox" disabled="" />If restart is unsuccessful,
+fail over all resources in this service or application</li>
+</ul>
+<p>​ 适用于：（出于最大化高可用目的，消除不必要的Failover）SQL Server
+Agent资源，Fill Share资源，Analysis Services资源</p>
+<h5 id="advanced-policies">Advanced Policies</h5>
+<figure>
+<img
+src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608152531006.png"
+alt="Advanced Policies选择卡" />
+<figcaption aria-hidden="true">Advanced Policies选择卡</figcaption>
+</figure>
+<p><code>Basic resource health check interval</code>和<code>Thorough resource health check interval</code>是Windows
+Cluster在不同时间间隔做的两种不同程度的检查（Looks alive check，Is alive
+check），用于确认每个资源是否在正常工作。</p>
+<h3 id="sql-server群集什么时候会发生故障转移">SQL
+Server群集什么时候会发生“故障转移”</h3>
+<p>当Looks alive check或Is alive
+check检查失败时，进行故障转移。由于故障转移一般是意外发生的，所以SQL
+Server切换到新节点以后，还需要一段时间来做数据库的recovery。</p>
+<p>群集里的每个资源都是一种资源类型。根据不同类型的资源，会使用不同的方式进行isalive和looksalive检查。
+| 资源 | 资源类型 | | ---------- | ------------ | | 共享磁盘 |
+physicaldisk | | 虚拟IP | IP Address | | SQL Server | SQL Server |</p>
+<figure>
+<img
+src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/clip_image002.png"
+alt="资源类型、资源DLL和资源的关系" />
+<figcaption
+aria-hidden="true">资源类型、资源DLL和资源的关系</figcaption>
+</figure>
+<p>Windows群集服务进程clussvc.exe会产生名为RHS.exe的进程，RHS.exe会装载resource
+dll，并且调用dll中定义的方法来检查相应resource的状态。一个资源其属性的Advanced
+Polices选项卡中如果没有勾选“run this resource in a separate Resource
+”，它的resource
+dll就会装载在一个默认的RHS.exe中；反之，则会有一个单独的RHS.exe来装载该资源的resource
+dll。所以在任务管理器中你可能看到多个RHS.exe进程。</p>
+<figure>
+<img
+src="/2022/07/17/SQL%20Server%202012%20%E5%AE%9E%E6%96%BD%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97Note%EF%BC%9A%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E5%92%8C%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/image-20220608162438129.png"
+alt="多个RHS.exe进程" />
+<figcaption aria-hidden="true">多个RHS.exe进程</figcaption>
+</figure>
+<p>Windows群集自带的资源类型：</p>
+<ol type="1">
+<li>physical disk, IP, network name和DTC等</li>
+<li>检查的方法定义在resource DLL，<code>clusres.dll</code>中</li>
+</ol>
+<p>非Windows群集自带的资源类型：</p>
+<ol type="1">
+<li><p>SQL Server</p></li>
+<li><p>如有专属资源类型和专属resource dll，在resource
+dll中定义检查方法</p>
+<blockquote>
+<p>SQL ServerD的resource dll：</p>
+<p>SQL Server资源（通常affect the group模式）
+--&gt;<code>sqsrvres.dll</code></p>
+<p>​ Looksalive：默认5秒一次，通过服务控制管理器（Service Control
+Manager，简称SCM）检查SQL Server服务在活跃节点是否处于“启动状态”</p>
+<p>​
+Isalive：默认60秒一次，如lookalive检查的结果失败，立刻触发Isalive检查。SQL
+2012之前，通过连 接SQL
+Server群集实例并获取运行命令的返回结果来进行判断。如果连接不上SQL
+Server群集实例或
+者语句运行失败，那么Isalive检查失败。此时Windows群集会再做3-5次（根据Windows的版本和设置
+不同）Isalive检查。如最终检查失败，则进行故障转移。</p>
+<p>SQL Server Agent资源--&gt;<code>sqagtres.dll</code></p>
+</blockquote></li>
+</ol>
+<p>”通用服务“（Generic Service）资源类型：</p>
+<ol type="1">
+<li>Analysis Service</li>
+<li>使用<code>clusres.dll</code>来作为resource
+dll并沿用定义进行检查。</li>
+</ol>
+<p>Cluster-aware服务：</p>
+<ol type="1">
+<li>可以通过resource dll形成群集资源</li>
+<li>SQL Server、SQL Server Agent，Analysis Service服务</li>
+</ol>
+<p>非Cluster-aware服务：</p>
+<ol type="1">
+<li>无法通过任何resource
+dll在Windows群集中形成资源，即使安装在群集的节点上也会被视作安装在单机环境，无法故障转移。</li>
+<li>SQL browser, Reporting Service等</li>
+<li>Integration
+Services不是Cluster-aware，可以人为配置为群集资源（不推荐），但是不具有自动故障转移功能。</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+        <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL Server Backup</title>
+    <url>/2022/06/06/SQL%20Server%20Backup/</url>
+    <content><![CDATA[<h1 id="sql-server-backup">SQL Server Backup</h1>
+<p><strong>Full Backup</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Windows\AdventureWorks2019_20220602.bak&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>If get an error like this:</p>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100125253.png"
+alt="image-20220606100125253" />
+<figcaption aria-hidden="true">image-20220606100125253</figcaption>
+</figure>
+<p>It means that the SQL server has no permission to the location. To
+fix this, in the <strong>SQL Server Configuration Manager</strong>, we
+can find that the SQL service is logged on as
+<code>NT Service\MSSQLSERVER</code>.</p>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100346465.png"
+alt="image-20220606100346465" />
+<figcaption aria-hidden="true">image-20220606100346465</figcaption>
+</figure>
+<p>Then right-click on the folder you want to access, <strong>properties
+--&gt; security</strong>, and add permission to the
+<code>NT Service\MSSQLSERVER</code>.</p>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606100858530.png"
+alt="image-20220606100858530" />
+<figcaption aria-hidden="true">image-20220606100858530</figcaption>
+</figure>
+<p><strong>Backup with differential</strong></p>
+<p>This will back up the changed pages from the previous full
+backup.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup changes start from last full backup, save changed page only</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> differential;<br></code></pre></td></tr></table></figure>
+<p><strong>Backup with copy_only</strong></p>
+<p>This will leave the DCM (diff change map) unchanged, meaning that if
+we are back up with differential, it will also backup changes from the
+last full backup.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- backup, leave (DCM) diff change map unchanged, compressed</span><br>backup database AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602_2.bak&#x27;</span> <span class="hljs-keyword">with</span> copy_only, compression;<br></code></pre></td></tr></table></figure>
+<p>The DCM records the changes made to the page of the database, we can
+view the DCM of the specific database by</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc page(<span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>, <span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101710464.png"
+alt="image-20220606101710464" />
+<figcaption aria-hidden="true">image-20220606101710464</figcaption>
+</figure>
+<p><strong>Backup log files</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">backup log AdventureWorks2019 <span class="hljs-keyword">to</span> disk <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Users\t-jxie\Downloads\AdventureWorks2019_20220602.trn&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>We can view the information of log files of databases by</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">dbcc sqlperf(logspace)<br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/2022/06/06/SQL%20Server%20Backup/image-20220606101859208.png"
+alt="image-20220606101859208" />
+<figcaption aria-hidden="true">image-20220606101859208</figcaption>
+</figure>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+        <tag>T-SQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL Server IAM Page</title>
+    <url>/2022/06/26/SQL%20Server%20IAM%20Page/</url>
+    <content><![CDATA[<h1 id="sql-server-iam-page">SQL Server IAM Page</h1>
+<p>Index Allocation Map (IAM) pages keep track of the extents in a 4 GB
+section of a database file used by an allocation unit.</p>
+<p><u>Allocation unit</u></p>
+<p>An allocation unit is a set of pages belonging to a single partition
+in a table or index and comprises pages of one of three storage
+types:</p>
+<ol type="1">
+<li>pages holding regular in-row data</li>
+<li>pages holding Large Object (LOB) data</li>
+<li>pages holding row-overflow data</li>
+</ol>
+<p><u>Multiple IAM pages</u></p>
+<p>A single IAM page covers only a 4 GB section of a single file.</p>
+<ol type="1">
+<li>if the partition spans files</li>
+<li>if the file is more than 4 GB in size</li>
+<li>if the partition uses pages in more than one 4 GB section</li>
+</ol>
+<p><u>IAM page structure</u></p>
+<ol type="1">
+<li>96-byte page header</li>
+<li>An IAM page header
+<ol type="1">
+<li>Contains eight page-pointer slots</li>
+</ol></li>
+<li>Contains bitmap
+<ol type="1">
+<li>A set of bits that map a range of extents onto a file</li>
+<li>Each bit of the bitmap represents an extent in the range</li>
+<li>1, is allocated; 0, unallocated</li>
+</ol></li>
+</ol>
+<p>Running the defined procedure <code>sp_AllocationMetadata</code> in
+the <code>AdventureWorks2019</code>, we can see the page number of the
+first IAM pages.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">EXEC</span> [sp_AllocationMetadata] N<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>;<br>GO<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623131334311.png"
+alt="sp_AllocationMetadata result" />
+<figcaption aria-hidden="true">sp_AllocationMetadata result</figcaption>
+</figure>
+<p>As we can see, the object <code>Employee</code> has 6 partitions. For
+the partition that has partition ID of <code>72057594056933376</code>,
+its first IAM page is <code>2105</code>.</p>
+<p>Then let's take a closer look at the page <code>2105</code>.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">3</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623133029678.png"
+alt="Mode 3 result" />
+<figcaption aria-hidden="true">Mode 3 result</figcaption>
+</figure>
+<p>The 8 slots listed under the <code>Single Page Allocations</code>
+mean they are in the mixed extent.</p>
+<p>Following the <code>Extent Alloc Status Slot</code> are pages in
+uniform extent. The result suggests that page <code>12640</code> and
+page <code>12672</code> are allocated</p>
+<p>We can check the allocation status by running the query:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> allocated_page_file_id <span class="hljs-keyword">AS</span> [FileID],<br>allocated_page_page_id <span class="hljs-keyword">AS</span> [PageID],<br>page_type_desc,extent_page_id<span class="hljs-operator">/</span><span class="hljs-number">8</span> <span class="hljs-keyword">AS</span> ExtentID,<br>is_mixed_page_allocation,<br>extent_page_id <span class="hljs-keyword">AS</span> [<span class="hljs-keyword">First</span> Page <span class="hljs-keyword">in</span> Extent],<br>extent_page_id<span class="hljs-operator">+</span><span class="hljs-number">7</span> <span class="hljs-keyword">AS</span> [LastPage <span class="hljs-keyword">in</span> Extent],<br>is_allocated <br><span class="hljs-keyword">FROM</span> sys.dm_db_database_page_allocations(db_id(),object_id(<span class="hljs-string">&#x27;HumanResources.Employee&#x27;</span>),<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-string">&#x27;detailed&#x27;</span>)  <br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> allocated_page_page_id<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623134406196.png"
+alt="Allocation status result" />
+<figcaption aria-hidden="true">Allocation status result</figcaption>
+</figure>
+<p>As shown in the result, page <code>12640</code> and
+<code>12672</code> are allocated, and clearly there are
+<code>(12672-12640)/8=4</code> extents between them, which is proved by
+the corresponding extent ID, <code>1580</code> and
+<code>1584</code>.</p>
+<p>Let's validate our observation by dive into the page in mode 1.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">DBCC TRACEON(<span class="hljs-number">3604</span>)<br>DBCC PAGE(<span class="hljs-string">&#x27;AdventureWorks2019&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2105</span>, <span class="hljs-number">1</span>)<br>DBCC TRACEOFF(<span class="hljs-number">3604</span>)<br></code></pre></td></tr></table></figure>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220623140010858.png"
+alt="Mode 1 result" />
+<figcaption aria-hidden="true">Mode 1 result</figcaption>
+</figure>
+<ol type="1">
+<li><p><code>0000381f</code> is fixed.</p></li>
+<li><p>Slot 0 is for mixed extent; Slot 1 is for the uniform
+extent</p></li>
+<li><p>For string <code>00000000 0010</code> and
+<code>0100 00000000</code> in Slot 1</p>
+<p>Each bit in the table stands for one extent.</p>
+<p>Note we need to convert little-endian into normal binary.</p>
+<table>
+<thead>
+<tr class="header">
+<th>HEX</th>
+<th>00 00 00 00 00</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Binary (Little endian)</td>
+<td>many 0</td>
+<td>0001 0000</td>
+</tr>
+<tr class="even">
+<td>Binary (normal)</td>
+<td>many 0</td>
+<td>0000 1000</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>HEX</th>
+<th>01</th>
+<th>00 00 00 00 00</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Binary (Little endian)</td>
+<td>0000 0001</td>
+<td>many 0</td>
+</tr>
+<tr class="even">
+<td>Binary (normal)</td>
+<td>1000 0000</td>
+<td>many 0</td>
+</tr>
+</tbody>
+</table>
+<p>That is, for <code>10 01</code> we have
+<code>0000 1000 1000 0000</code> in binary, the difference is 4 extent,
+from <code>1580</code> to <code>1584</code>.</p>
+<figure>
+<img
+src="/2022/06/26/SQL%20Server%20IAM%20Page/image-20220624094601306.png"
+alt="Endian example" />
+<figcaption aria-hidden="true">Endian example</figcaption>
+</figure></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>SQL Server</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Script_Backup databases iteratively and truncate name</title>
+    <url>/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/</url>
+    <content><![CDATA[<h1
+id="script_backup-databases-iteratively-and-truncate-name">Script_Backup
+databases iteratively and truncate name</h1>
+<p><u>Problem</u></p>
+<p>For the database backup script, if the name <code>@dbname</code> is
+too long, longer than <code>128</code>, there will be an error since the
+length of <code>name</code> column in <code>msdb.dbo.backupset</code> is
+<code>nvarchar(128)</code>.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br></code></pre></td></tr></table></figure>
+<p><u>Script logic</u></p>
+<ul>
+<li>Backup all databases except for some required databases</li>
+<li>Truncate necessary characters when the length is larger than
+<code>128</code></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@name</span>_small NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@path</span>_small NVARCHAR(<span class="hljs-number">512</span>)  <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileName</span>_small NVARCHAR(<span class="hljs-number">512</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@fileDate</span>_small NVARCHAR(<span class="hljs-number">40</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@errorMessage</span> NVARCHAR(<span class="hljs-number">256</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@dbName</span> NVARCHAR(<span class="hljs-number">128</span>) <br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@counter</span> <span class="hljs-type">int</span><br><br><span class="hljs-comment">-- specify database backup directory</span><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\&#x27;</span>   <br><br><span class="hljs-comment">-- specify filename format</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@fileDate</span>_small <span class="hljs-operator">=</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">101</span>),<span class="hljs-string">&#x27;/&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <span class="hljs-operator">+</span> replace(<span class="hljs-keyword">convert</span>(<span class="hljs-type">varchar</span>, getdate(),<span class="hljs-number">108</span>),<span class="hljs-string">&#x27;:&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>) <br><br><span class="hljs-comment">-- Cursor for small databases </span><br><span class="hljs-keyword">DECLARE</span> db_cursor_small <span class="hljs-keyword">CURSOR</span> READ_ONLY <span class="hljs-keyword">FOR</span>  <br><span class="hljs-keyword">SELECT</span> name <br><span class="hljs-keyword">FROM</span> master.sys.databases <br><span class="hljs-keyword">WHERE</span> name <br><span class="hljs-keyword">NOT</span> <span class="hljs-keyword">IN</span> (<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span>,<span class="hljs-string">&#x27;tempdb&#x27;</span>)  <span class="hljs-comment">-- Fill in databases you want to exclude here</span><br><span class="hljs-keyword">AND</span> state <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is online</span><br><span class="hljs-keyword">AND</span> is_in_standby <span class="hljs-operator">=</span> <span class="hljs-number">0</span> <span class="hljs-comment">-- database is not read only for log shipping</span><br><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as required:&#x27;</span>)<br>PRINT N<span class="hljs-string">&#x27;WSS_Content_xchange&#x27;</span><br>PRINT N<span class="hljs-string">&#x27;tempdb&#x27;</span><br>PRINT(<span class="hljs-string">&#x27;The backup script will skip the following databases as they are not ONLINE:&#x27;</span>)<br><span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@xmltmp</span> xml <span class="hljs-operator">=</span> (<span class="hljs-keyword">SELECT</span> name, state_desc <span class="hljs-keyword">FROM</span> sys.databases <span class="hljs-keyword">where</span> state_desc <span class="hljs-operator">&lt;&gt;</span> <span class="hljs-string">&#x27;ONLINE&#x27;</span> <span class="hljs-keyword">FOR</span> XML AUTO)<br>PRINT <span class="hljs-keyword">CONVERT</span>(NVARCHAR(MAX), <span class="hljs-variable">@xmltmp</span>)<br><br><span class="hljs-keyword">OPEN</span> db_cursor_small   <br><span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><br> <br>WHILE @<span class="hljs-variable">@FETCH</span>_STATUS <span class="hljs-operator">=</span> <span class="hljs-number">0</span>   <br><span class="hljs-keyword">BEGIN</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@counter</span> <span class="hljs-operator">+</span> <span class="hljs-number">1</span><br>   <span class="hljs-comment">-- Truncate database name if too long</span><br>   IF len(<span class="hljs-variable">@name</span>_small<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small) <span class="hljs-operator">&gt;</span> <span class="hljs-number">128</span><br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">LEFT</span>(<span class="hljs-variable">@name</span>_small,len(<span class="hljs-variable">@name</span>_small)<span class="hljs-operator">-</span>len(<span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small))<span class="hljs-operator">+</span><span class="hljs-string">&#x27;_&#x27;</span><span class="hljs-operator">+</span><span class="hljs-variable">@fileDate</span>_small<br>   <span class="hljs-keyword">ELSE</span> <br>		<span class="hljs-keyword">SET</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;_&#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@fileDate</span>_small<br>   PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>   PRINT(<span class="hljs-string">&#x27;Start backup database: &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; AS &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span>)<br>			<br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-operator">=</span> <span class="hljs-variable">@path</span>_small <span class="hljs-operator">+</span> <span class="hljs-variable">@dbName</span> <span class="hljs-operator">+</span> <span class="hljs-string">&#x27;.BAK&#x27;</span><br>   <span class="hljs-keyword">SET</span> <span class="hljs-variable">@errorMessage</span> <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Verify failed. Backup information for database &#x27;</span> <span class="hljs-operator">+</span> <span class="hljs-variable">@name</span>_small <span class="hljs-operator">+</span> <span class="hljs-string">&#x27; not found.&#x27;</span><br>   BACKUP DATABASE <span class="hljs-variable">@name</span>_small <span class="hljs-keyword">TO</span> DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span> NOFORMAT, NOINIT,<br>   NAME <span class="hljs-operator">=</span> <span class="hljs-variable">@dbName</span>, <span class="hljs-keyword">SKIP</span>, REWIND, NOUNLOAD, COMPRESSION, STATS <span class="hljs-operator">=</span> <span class="hljs-number">10</span><br>   <span class="hljs-keyword">DECLARE</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">AS</span> <span class="hljs-type">int</span><br>   <span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@backupSetId</span> <span class="hljs-operator">=</span> position <span class="hljs-keyword">FROM</span> msdb..backupset <br>   <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small <br>   <span class="hljs-keyword">AND</span> backup_set_id<span class="hljs-operator">=</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">max</span>(backup_set_id) <span class="hljs-keyword">FROM</span> msdb..backupset <span class="hljs-keyword">WHERE</span> database_name <span class="hljs-operator">=</span> <span class="hljs-variable">@name</span>_small)<br>   IF <span class="hljs-variable">@backupSetId</span> <span class="hljs-keyword">IS</span> <span class="hljs-keyword">NULL</span> <span class="hljs-keyword">BEGIN</span> RAISERROR(<span class="hljs-variable">@errorMessage</span>, <span class="hljs-number">16</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">END</span><br>   RESTORE VERIFYONLY <span class="hljs-keyword">FROM</span>  DISK <span class="hljs-operator">=</span> <span class="hljs-variable">@fileName</span>_small <span class="hljs-keyword">WITH</span>  FILE <span class="hljs-operator">=</span> <span class="hljs-variable">@backupSetId</span>,  NOUNLOAD,  NOREWIND<br>  <br>   <span class="hljs-keyword">FETCH</span> NEXT <span class="hljs-keyword">FROM</span> db_cursor_small <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@name</span>_small   <br><span class="hljs-keyword">END</span>   <br>PRINT(<span class="hljs-string">&#x27;-------------------&#x27;</span>)<br>PRINT(<span class="hljs-string">&#x27;Total backups:&#x27;</span>)<br>PRINT(<span class="hljs-variable">@counter</span>)<br><br><span class="hljs-keyword">CLOSE</span> db_cursor_small   <br><span class="hljs-keyword">DEALLOCATE</span> db_cursor_small<br><br></code></pre></td></tr></table></figure>
+<img src="/2022/07/05/Script_Backup%20databases%20iteratively%20and%20truncate%20name/image001.png" class="" title="Script result">
+<blockquote>
+<p>This was the very first T-SQL script I write when I interned as a
+Support Engineer at Microsoft.</p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>T-SQL</tag>
+        <tag>My Work</tag>
       </tags>
   </entry>
   <entry>
