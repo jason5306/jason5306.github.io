@@ -1,0 +1,2124 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jiacheng Xie">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="This is the note of reading materials on course STATS401 Data Analytics and Visualizations.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Data Analytics and Visualizations">
+<meta property="og:url" content="http://example.com/2022/10/25/Data%20Analytics%20and%20Visualizations/index.html">
+<meta property="og:site_name" content="Ycheng&#39;s Blog">
+<meta property="og:description" content="This is the note of reading materials on course STATS401 Data Analytics and Visualizations.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/stats401_reading_cover.png">
+<meta property="article:published_time" content="2022-10-25T14:43:22.000Z">
+<meta property="article:modified_time" content="2022-10-25T14:16:45.626Z">
+<meta property="article:author" content="Jiacheng Xie">
+<meta property="article:tag" content="Data Visualization">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/stats401_reading_cover.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Data Analytics and Visualizations - Ycheng&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"|","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>YCheng&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Data Analytics and Visualizations"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-10-25 22:43" pubdate>
+          October 25, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          42k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          350 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Data Analytics and Visualizations</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="intro-to-data-analytics-and-visualizations">Intro to Data
+Analytics and Visualizations</h1>
+<p><strong>What’s data visualization?</strong></p>
+<p>Visual representations of datasets</p>
+<p><strong>What’s information visualization
+(infovis/infographics)?</strong></p>
+<p>Finding the artificial memory that best supports our natural means of
+perception</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-08-22%20at%2015.07.51-6706932.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-08-22 at 15.07.51" />
+<figcaption aria-hidden="true">Screen Shot 2022-08-22 at
+15.07.51</figcaption>
+</figure>
+<p><strong>What’s illustration</strong></p>
+<p>A visual representation (a picture or diagram) that is used to make
+some subject more pleasing or easier to understand</p>
+<p><strong>Illustration or Visualization?</strong></p>
+<p>Visualization is about MAPPING.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-08-22%20at%2015.09.04-6706951.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-08-22 at 15.09.04" />
+<figcaption aria-hidden="true">Screen Shot 2022-08-22 at
+15.09.04</figcaption>
+</figure>
+<p><strong>Why using Visualization?</strong></p>
+<ul>
+<li>Visual Aids for Thinking
+<ul>
+<li>Calculation on paper</li>
+</ul></li>
+<li>Visualization for Problem-solving
+<ul>
+<li>Overlapping maps to find pattern</li>
+</ul></li>
+<li>Visualization for Eliciting Knowledge from Data
+<ul>
+<li>Find data correlations</li>
+</ul></li>
+<li>Visualization for Clarification
+<ul>
+<li>London subway map</li>
+</ul></li>
+<li>Visualization for Telling a Story</li>
+</ul>
+<p><strong>Two Key Aspects of Information visualization</strong></p>
+<ul>
+<li>Representation</li>
+<li>Interaction</li>
+</ul>
+<h1 id="week-1-reading-post"><strong>Week 1 Reading Post</strong></h1>
+<p><strong>Q1. What factors should you consider when develop a
+visualization?</strong></p>
+<ol type="1">
+<li>Consider resource limitations:computational capacity, human
+perceptual and cognitive capacity, and display capacity.</li>
+<li>Consider why the user needs it, what data is shown, and how the
+idiom is designed.</li>
+<li>Consider whether the vis is a stepping stone or for long-term
+use.</li>
+<li>Consider what external representations to use</li>
+<li>Consider the task of the vis users</li>
+<li>Consider the effectiveness of vis</li>
+<li>Consider multiple alternatives</li>
+<li>Consider how to validate the vis</li>
+</ol>
+<p><strong>Q2. Choose one type of complex vis idioms from below list and
+find one example (attach the picture): tree maps, network, link-node,
+parallel coordinates, star plot, fields, geometry maps, etc.. Discuss
+its visualization task, interactions, and efficiency.</strong></p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Treemap-with-measure-name-labels-6706960.png" srcset="/img/loading.gif" lazyload
+alt="Source: The Information Lab" />
+<figcaption aria-hidden="true">Source: The Information Lab</figcaption>
+</figure>
+<p>From:
+https://images.squarespace-cdn.com/content/v1/55b6a6dce4b089e11621d3ed/1528204277811-JX4HT3U2578DXA5CIW7O/Treemap-with-measure-name-labels.png?format=1000w</p>
+<p>Treemap is the visualizations for hierarchical data. It is used to
+query attributes at leaf nodes. It shows hierarchical structure with
+containment rather than connection. All of the children of a tree node
+are enclosed within the area allocated that node, creating a nested
+layout. The size of the nodes is mapped to some attribute of the node.
+Treemaps are very effective for spotting the outliers of very large
+attribute values, but it shows no parent–child node relationships.</p>
+<h2 id="whats-vis-and-why-do-it">What’s Vis, and Why Do It?</h2>
+<h3 id="definition-of-visualization">Definition of visualization</h3>
+<p>Computer-based <strong>visualization</strong> systems provide visual
+representations of datasets designed to help people carry out tasks more
+effectively.</p>
+<p>Visualization is suitable when there is a need to augment human
+capabilities rather than replace people with computational
+decision-making methods.</p>
+<h3 id="why-have-a-human-in-the-loop">Why Have a Human in the Loop?</h3>
+<p>Vis allows people to analyze data when they don’t know exactly what
+questions they need to ask in advance.</p>
+<p>Vis systems are appropriate for use when your goal is to augment
+human capabilities, rather than completely replace the human in the
+loop.</p>
+<h3 id="why-have-a-computer-in-the-loop">Why Have a Computer in the
+Loop?</h3>
+<p>By enlisting computation, you can build tools that allow people to
+explore or present large datasets that would be completely infeasible to
+draw by hand, thus opening up the possibility of seeing how datasets
+change over time.</p>
+<h3 id="why-use-an-external-representation">Why Use an External
+Representation?</h3>
+<p>External representations augment human capacity by allowing us to
+surpass the limitations of our own internal cognition and memory.</p>
+<p><u>External representations (external memory)</u>: carefully designed
+images</p>
+<ol type="1">
+<li>Diagrams: information can be organized by spatial location, offering
+the possibility of accelerating both search and recognition</li>
+</ol>
+<h3 id="why-depend-on-vision">Why Depend on Vision?</h3>
+<p>Visualization is based on exploiting the human visual system as a
+means of communication.</p>
+<p>The visual system provides a very high-bandwidth channel to our
+brains.</p>
+<h3 id="why-show-the-data-in-detail">Why Show the Data in Detail?</h3>
+<p>Vis tools help people in situations where seeing the dataset
+structure in detail is better than seeing only a brief summary of it,
+since a single summary is often an oversimplification that hides the
+true structure of the dataset.</p>
+<ol type="1">
+<li>when exploring the data to find patterns</li>
+<li>when assessing the validity of a statistical model</li>
+</ol>
+<h3 id="why-use-interactivity">Why Use Interactivity?</h3>
+<p>When datasets are large enough, the limitations of both people and
+displays preclude just showing everything at once;
+<strong>interaction</strong> where user actions cause the view to change
+is the way forward.</p>
+<p>A single static view can show only one aspect of a dataset.</p>
+<h3 id="why-is-the-vis-idiom-design-space-huge">Why Is the Vis Idiom
+Design Space Huge?</h3>
+<p>A vis <strong>idiom</strong> is a distinct approach to creating and
+manipulating visual representations.</p>
+<p>A more complicated idiom can link together multiple simple charts
+through interaction.</p>
+<h3 id="why-focus-on-tasks">Why Focus on Tasks?</h3>
+<p>The task of the users is an equally important constraint for a vis
+designer as the kind of data that the users have.</p>
+<p>For discovery, vis can be used to generate new hypotheses, as when
+exploring a completely unfamil- iar dataset, or to confirm existing
+hypotheses about some dataset that is already partially understood.</p>
+<h3 id="why-focus-on-effectiveness">Why Focus on Effectiveness?</h3>
+<p>The focus on effectiveness is a corollary of defining vis to have the
+goal of supporting user tasks, which means we need to concern about
+correctness, accuracy, and truth playing.</p>
+<p>No picture can communicate the truth, the whole truth, and nothing
+but the truth.</p>
+<p><em>Any</em> depiction of data is an abstraction where choices are
+made about which aspects to emphasize.</p>
+<h3 id="why-are-most-designs-ineffective">Why Are Most Designs
+Ineffective?</h3>
+<p>The most fundamental reason that vis design is a difficult enter-
+prise is that the vast majority of the possibilities in the design space
+will be ineffective for any specific usage context.</p>
+<p>In addressing design problems, we should consider “satisfy”, to find
+one of the many possible good solutions rather than one of the even
+larger number of bad ones.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-08-27%20at%2018.21.38-6706970.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-08-27 at 18.21.38" />
+<figcaption aria-hidden="true">Screen Shot 2022-08-27 at
+18.21.38</figcaption>
+</figure>
+<p>A fundamental principle of design is to <strong>consider multiple
+alternatives</strong> and then choose the best, rather than to
+immediately fixate on one solution without considering any alternatives,
+that is, explicitly generate multiple ideas in parallel.</p>
+<h3 id="why-is-validation-difficult">Why Is Validation Difficult?</h3>
+<p>Because there are so many questions that you could ask when
+considering whether a vis tool has met your design goals.</p>
+<h3 id="why-are-there-resource-limitations">Why Are There Resource
+Limitations?</h3>
+<p>You must consider at least three different kinds of limitations:
+computational capacity, human perceptual and cognitive capacity, and
+display capacity.</p>
+<p><u>Scalability</u></p>
+<p>designing systems to handle large amounts of data gracefully</p>
+<p><u>Change blindness</u></p>
+<p>The phenomenon where even very large changes are not noticed if we
+are attending to something else in our view</p>
+<p><u>Information density</u> (Graphic density / data-ink ratio)</p>
+<p>A measure of the amount of information encoded versus the amount of
+unused space of a single image.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-08-27%20at%2018.34.16-6706976.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-08-27 at 18.34.16" />
+<figcaption aria-hidden="true">Screen Shot 2022-08-27 at
+18.34.16</figcaption>
+</figure>
+<p>Trade-off: the benefits of showing as much as possible at once vs the
+costs of showing too much at once</p>
+<h3 id="why-analyze">Why Analyze?</h3>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220827184540580-6706986.png" srcset="/img/loading.gif" lazyload
+alt="image-20220827184540580" />
+<figcaption aria-hidden="true">image-20220827184540580</figcaption>
+</figure>
+<p><strong>What</strong> data the user sees, <strong>why</strong> the
+user intends to use a vis tool, and <strong>how</strong> the visual
+encoding and in- teraction idioms are constructed in terms of design
+choices.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220827184704122-6706995.png" srcset="/img/loading.gif" lazyload
+alt="image-20220827184704122" />
+<figcaption aria-hidden="true">image-20220827184704122</figcaption>
+</figure>
+<p>One of these analysis trios is called an
+<strong>instance</strong>.</p>
+<h2 id="what-data-abstraction">What: Data Abstraction</h2>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220827184822460-6707002.png" srcset="/img/loading.gif" lazyload
+alt="What can be visualized: data, datasets, and attributes" />
+<figcaption aria-hidden="true">What can be visualized: data, datasets,
+and attributes</figcaption>
+</figure>
+<h3 id="why-do-data-semantics-and-types-matter">Why Do Data Semantics
+and Types Matter?</h3>
+<p>To move beyond guesses, you need to know two crosscutting pieces of
+information about these terms: their semantics and their types.</p>
+<p><u>Semantics</u></p>
+<p>The <strong>semantics</strong> of the data is its real-world
+meaning</p>
+<p><u>Type</u></p>
+<p>The <strong>type</strong> of the data is its structural or
+mathematical interpretation.</p>
+<h3 id="data-types">Data Types</h3>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220827193457778-6707013.png" srcset="/img/loading.gif" lazyload
+alt="image-20220827193457778" />
+<figcaption aria-hidden="true">image-20220827193457778</figcaption>
+</figure>
+<p><u>Attributes</u> (variable / data dimension)</p>
+<p>An <strong>attribute</strong> is some specific property that can be
+measured, observed, or logged.</p>
+<p>EG. salary, price, number of sales.</p>
+<p><u>Item</u></p>
+<p>An <strong>item</strong> is an individual entity that is
+discrete.</p>
+<p>EG. a row in a simple table or a node in a network</p>
+<p><u>Link</u></p>
+<p>A <strong>link</strong> is a relationship between items, typ- ically
+within a network.</p>
+<p><u>Grid</u></p>
+<p>A <strong>grid</strong> specifies the strategy for sampling
+continuous data in terms of both geometric and topological relationships
+between its cells.</p>
+<p><u>Position</u></p>
+<p>A <strong>position</strong> is spatial data, providing a location in
+two-dimensional (2D) or three-dimensional (3D) space.</p>
+<p>EG. a latitude–longitude pair</p>
+<h3 id="dataset-types">Dataset Types</h3>
+<p>A <strong>dataset</strong> is any collection of information that is
+the target of anal- ysis.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-08-27%20at%2019.40.41-6707019.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-08-27 at 19.40.41" />
+<figcaption aria-hidden="true">Screen Shot 2022-08-27 at
+19.40.41</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220827194058822-6707024.png" srcset="/img/loading.gif" lazyload
+alt="image-20220827194058822" />
+<figcaption aria-hidden="true">image-20220827194058822</figcaption>
+</figure>
+<h4 id="tables">Tables</h4>
+<p>Tables have cells indexed by items and attributes, for either the
+simple flat case or the more complex multidimensional case.</p>
+<p><u>Flat table</u></p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220827194154498-6707029.png" srcset="/img/loading.gif" lazyload
+alt="image-20220827194154498" />
+<figcaption aria-hidden="true">image-20220827194154498</figcaption>
+</figure>
+<p>Each row represents an <strong>item</strong> of data.</p>
+<p>Each column is an <strong>attribute</strong> of the dataset.</p>
+<p>Each <strong>cell</strong> in the table is fully specified by the
+combination of a row and a column—an item and an attribute—and contains
+a <strong>value</strong> for that pair.</p>
+<p><u>Multidimensional table</u></p>
+<p>A <strong>multidimensional table</strong> has a more complex
+structure for in- dexing into a cell, with multiple keys.</p>
+<h4 id="networks-and-trees">Networks and Trees</h4>
+<p>In a network, items are usually called nodes, and they are connected
+with links; a special case of networks is trees.</p>
+<p><u>Networks</u></p>
+<p><strong>Networks</strong> is well suited for specifying that there is
+some kind of relationship between two or more items.</p>
+<p>An item in a network is often called a <strong>node</strong>.
+(vertex)</p>
+<p>A <strong>link</strong> is a relation between two items.(edge)</p>
+<p>Network nodes can have associated attributes</p>
+<p>The links themselves could also be considered to have attributes
+associated with them; these may be partly or wholly disjoint from the
+node attributes.</p>
+<p><u>Trees</u></p>
+<p>Networks with hierarchical structure are more specifically called
+<strong>trees</strong>.</p>
+<p>Trees do not have cycles: each child node has only one parent node
+pointing to it</p>
+<h4 id="fields">Fields</h4>
+<p>Continuous fields have grids based on spatial positions where cells
+contain attributes.</p>
+<p>Each <strong>cell</strong> in a field contains measurements or
+calculations from a <strong>continuous</strong> domain</p>
+<p>Continuous data requires careful treatment that takes into ac- count
+the mathematical questions of <strong>sampling</strong>, how frequently
+to take the measurements, and <strong>interpolation</strong>, how to
+show values in between the sampled points in a way that does not
+mislead.</p>
+<p><u>Spatial Fields</u></p>
+<p>Continuous data is often found in the form of a <strong>spatial
+field</strong>, where the cell structure of the field is based on
+sampling at spatial po- sitions.</p>
+<p>A central concern in infovis is determining whether the chosen idiom
+is suitable for the combination of data and task, leading to the use of
+methods from human–computer interaction and design.</p>
+<p><u>Grid Types</u></p>
+<p>When a field contains data created by sampling at completely reg-
+ular intervals, the cells form a <strong>uniform grid</strong>.</p>
+<p>A <strong>rectilinear grid</strong> supports nonuniform sampling,
+allowing efficient storage of information that has high complexity in
+some areas and low complexity in others, at the cost of storing some
+information about the geometric location of each each row.</p>
+<p>A <strong>structured grid</strong> allows curvilinear shapes, where
+the geometric location of each cell needs to be specified.</p>
+<p><strong>Unstructured grids</strong> provide complete flexibility, but
+the topological information about how the cells connect to each other
+must be stored explicitly in addition to their spatial positions.</p>
+<h4 id="geometry">Geometry</h4>
+<p>The <strong>geometry</strong> dataset type specifies information
+about the shape of items with explicit spatial positions.</p>
+<p>The items could be points, or one-dimensional lines or curves, or 2D
+surfaces or regions, or 3D volumes.</p>
+<p>Spatial data often includes hierarchical structure at multiple
+scales.</p>
+<p>Geometry datasets do not necessarily have attributes, in con- trast
+to the other three basic dataset types.</p>
+<p>Geometric data is sometimes shown alone, particularly when shape
+understanding is the primary task.</p>
+<h4 id="other-combinations">Other Combinations</h4>
+<p>A <strong>set</strong> is simply an unordered group of items.</p>
+<p>A group of items with a specified ordering could be called a
+<strong>list</strong>.</p>
+<p>A <strong>cluster</strong> is a grouping based on attribute
+similarity, where items within a cluster are more similar to each other
+than to ones in another cluster.</p>
+<p>A <strong>path</strong> through a network is an ordered set of seg-
+ments formed by links connecting nodes.</p>
+<p>A <strong>compound network</strong> is a network with an associated
+tree: all of the nodes in the network are the leaves of the tree, and
+interior nodes in the tree provide a hierarchical structure for the
+nodes that is different from network links between them.</p>
+<h4 id="dataset-availability">Dataset Availability</h4>
+<p>The default approach to vis assumes that the entire dataset is
+available all at once, as a <strong>static file</strong>.</p>
+<p>Some datasets are instead <strong>dynamic streams</strong>, where the
+dataset information trickles in over the course of the vis session.</p>
+<h3 id="attribute-types">Attribute Types</h3>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220828001436631-6707038.png" srcset="/img/loading.gif" lazyload
+alt="image-20220828001436631" />
+<figcaption aria-hidden="true">image-20220828001436631</figcaption>
+</figure>
+<h4 id="categorical-nominal">Categorical (Nominal)</h4>
+<p>The type of <strong>categorical</strong> data does not have an
+implicit ordering, but it often has hierarchical structure.</p>
+<p>Categories can only distinguish whether two things are the same
+(apples) or different (apples versus oranges).</p>
+<h4 id="ordered-ordinal-and-quantitative">Ordered: Ordinal and
+Quantitative</h4>
+<p>All <strong>ordered</strong> data does have an implicit ordering</p>
+<p><u>Ordinal data</u></p>
+<p>With <strong>ordinal</strong> data, we cannot do full-fledged arith-
+metic, but there is a well-defined ordering</p>
+<p><u>Quantitative data</u></p>
+<p>A measurement of magnitude that supports arithmetic comparison.</p>
+<p>Both integers and real numbers are quantitative data.</p>
+<p><u>Sequential versus Diverging</u></p>
+<p>Ordered data can be either <strong>sequential</strong>, where there
+is a homoge- neous range from a minimum to a maximum value (height), or
+<strong>diverging</strong>, which can be deconstructed into two
+sequences pointing in oppo- site directions that meet at a common zero
+point (A full <em>elevation</em> dataset).</p>
+<p><u>Cyclic</u></p>
+<p>The values wrap around back to a starting point rather than
+continuing to increase indefinitely (the hour of the day, the day of the
+week, and the month of the year).</p>
+<h4 id="hierarchical-attributes">Hierarchical Attributes</h4>
+<p>There may be hierarchical structure within an attribute or between
+multiple attributes.</p>
+<p>For example, the geographic attribute of a postal code can be
+aggregated up to the level of cities or states or entire countries.</p>
+<h3 id="semantics">Semantics</h3>
+<h4 id="key-versus-value-semantics">Key versus Value Semantics</h4>
+<p>A <strong>key</strong> (<strong>independent attribute</strong>)
+attribute acts as an index that is used to look up
+<strong>value</strong> (<strong>dependent attribute</strong>)
+attributes.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220828150438213-6707050.png" srcset="/img/loading.gif" lazyload
+alt="image-20220828150438213" />
+<figcaption aria-hidden="true">image-20220828150438213</figcaption>
+</figure>
+<p><u>Flat Tables</u></p>
+<p>A simple <strong>flat table</strong> has only one key, where each
+item corresponds to a row in the table, and any number of value
+attributes.</p>
+<p>In this case, there must not be any duplicate values within that
+attribute.</p>
+<p>In tables, keys may be categorical or ordinal attributes.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220828150850446-6707057.png" srcset="/img/loading.gif" lazyload
+alt="image-20220828150850446" />
+<figcaption aria-hidden="true">image-20220828150850446</figcaption>
+</figure>
+<p><u>Multidimensional Tables</u></p>
+<p>A <strong>multidimensional table</strong>, where multiple keys are
+required to look up an item.</p>
+<p>The combination of all keys must be <strong>unique</strong> for each
+item, even though an individual key attribute may contain
+duplicates.</p>
+<p><u>Fields</u></p>
+<p>Fields represent continuous rather than discrete data, keys and
+values are still central concerns.</p>
+<p>Fields are structured by sampling in a systematic way so that each
+grid cell is spanned by a unique range from a continuous domain.</p>
+<p>In spatial fields, spatial position acts as a quantitative key.</p>
+<p>The crucial difference between fields and tables is that useful
+answers for attribute values are returned for locations throughout the
+sampled range, not just the exact points where data was recorded.</p>
+<p>Fields are typically characterized in terms of the number of keys
+versus values.</p>
+<p>The standard classification according to multivariate structure is
+that a <strong>scalar field</strong> has one attribute per cell, a
+<strong>vector field</strong> has two or more attributes per cell, and a
+<strong>tensor field</strong> has many attributes per cell.</p>
+<p><u>Scalar Fields</u></p>
+<p>A <strong>scalar field</strong> is univariate, with a single value
+attribute at each point in space.</p>
+<p>The geometric intuition is that each point in a scalar field has a
+single value.</p>
+<p><u>Vector Fields</u></p>
+<p>A <strong>vector field</strong> is multivariate, with a list of
+multiple attribute values at each point.</p>
+<p>EG. a 3D vector field is the velocity of air in the room at a
+specific time point, where there is a direction and speed for each
+item.</p>
+<p><u>Tensor Fields</u></p>
+<p>A <strong>tensor field</strong> has an array of attributes at each
+point, representing a more complex multivariate mathematical structure
+than the list of numbers in a vector.</p>
+<h4 id="temporal-semantics">Temporal Semantics</h4>
+<p>A <strong>temporal</strong> attribute is simply any kind of
+information that relates to time.</p>
+<p>The time hierarchy is deeply multiscale: the scale of interest could
+range anywhere from nanoseconds to hours to decades to millennia.</p>
+<p>One important idea is that even though the dataset semantics involves
+change over time, there are many approaches to visually encoding that
+data—and only one of them is to show it changing over time in the form
+of an animation.</p>
+<p>Temporal attributes can have either value or key semantics.</p>
+<p>A temporal key attribute is usually considered to have a
+<strong>quantitative</strong> type, although it’s possible to consider
+it as ordinal data if the duration between events is not
+interesting.</p>
+<p><u>Time-Varying Data</u></p>
+<p>A dataset has <strong>time-varying</strong> semantics when time is
+one of the key attributes, as opposed to when the temporal attribute is
+a value rather than a key.</p>
+<p>A common case of temporal data occurs in a
+<strong>time-series</strong> dataset, namely, an ordered sequence of
+time–value pairs. These datasets are a special case of tables, where
+time is the key.</p>
+<h1 id="week-2-reading-post">Week 2 Reading Post</h1>
+<p>Read Munzner 2014 Chapter 3. Write Short Answers to Below Questions
+(2-3 sentences per question), and <strong>reply to at least one other
+person's post.</strong></p>
+<p>Q1. Find <strong>one visualization example</strong> (you can use the
+ones posted in week 1 forum) and analyze its user tasks.</p>
+<p>Q2. Briefly discuss <strong>one of the three work</strong>
+(ChartSeer, MoocVideo, NBSearch) Dr. Zhao shared in his guest
+lecture:</p>
+<p>- what is this work about?</p>
+<p>- how did the authors achieve their visualization goals/tool?</p>
+<p>- why is this topic/visualization tool important?</p>
+<p>References to Dr. Zhao's papers:</p>
+<p>Zhao, J., Fan, M., &amp; Feng, M. (2020). Chartseer: Interactive
+steering exploratory visual analysis with machine intelligence. <em>IEEE
+Transactions on Visualization and Computer Graphics</em>.</p>
+<p>Zhao, J., Bhatt, C., Cooper, M., &amp; Shamma, D. A. (2018, April).
+Flexible learning with semantic visual exploration and sequence-based
+recommendation of MOOC videos. In <em>Proceedings of the 2018 CHI
+Conference on Human Factors in Computing Systems</em> (pp. 1-13).</p>
+<p>Li, X., Wang, Y., Wang, H., Wang, Y., &amp; Zhao, J. (2021, May).
+NBSearch: Semantic Search and Visual Exploration of Computational
+Notebooks. In <em>Proceedings of the 2021 CHI Conference on Human
+Factors in Computing Systems</em> (pp. 1-14).</p>
+<p><strong>Q1</strong></p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Treemap-with-measure-name-labels-6707064.png" srcset="/img/loading.gif" lazyload
+alt="Source: The Information Lab" />
+<figcaption aria-hidden="true">Source: The Information Lab</figcaption>
+</figure>
+<p>From:
+https://images.squarespace-cdn.com/content/v1/55b6a6dce4b089e11621d3ed/1528204277811-JX4HT3U2578DXA5CIW7O/Treemap-with-measure-name-labels.png?format=1000w</p>
+<p>The main user task of this chart is to consume, more specifically, to
+present. This chart displays the sales and profit data of products of a
+company in a treemap to the user. The area of the treemap blocks
+represents the sales of a product, where a product with higher sales
+occupies a larger area. The treemap block's color represents a product's
+profits, where a more positive profit is represented by darker green and
+a more negative profit is represented by darker red.</p>
+<p><strong>Q2.</strong></p>
+<p><u>Chartseer</u></p>
+<p>What:</p>
+<p>Help people create charts with a machine learning engine by providing
+dynamic chart summarization views and chart recommendation views.</p>
+<p>How:</p>
+<p>This tool is embedded with GVAE(grammar variational autoencoder) that
+has the DNN (Deep Neural Network) encoder to encode charts into vectors
+and the DNN decoder to decode vectors into charts. The chart
+summarization function is based on the DNN encoder, while the chart
+recommendation function is based on the DNN decoder.</p>
+<p>Why:</p>
+<p>This tool is proposed to solve the challenges of conducting
+exploratory visual analysis (EVA). During EVA, analysts often get lost
+in the vast combinations of data variables and fail to conduct their
+analysis from a holistic view when they are making decisions on which
+subsequent activities to perform.</p>
+<p><u>MOOCex</u></p>
+<p>What:</p>
+<p>MOOCex is a visual recommender system that recommends MOOC courses.
+Taking video lecture contents and course syllabus into consideration,
+MOOCex provides recommendations of lecture videos across different
+courses and presents an interactive visual semantic map of the
+recommendations to the learners.</p>
+<p>How:</p>
+<p>This tool consists of two main parts: recommendation engine and
+visualization generation. For the recommendation engine part, based on
+the content-based recommendation, the author improved the recommendation
+system using a sequence-based re-ranking model that ranks topic
+similarity, global sequence score, and local sequence score. This
+recommendation system is trained on over 4000 videos. For generating a
+visualization of recommendation results, techniques like
+multidimensional scaling, hierarchical clustering, and keyword
+extraction are used to generate a semantic map for the users.</p>
+<p>Why:</p>
+<p>Massive Open Online Course (MOOC) platforms are getting popular, but
+their course curriculum is limited since those courses are predefined
+and prerecorded. Also, most MOOC platforms use content-based
+recommendations to provide a ranked list for recommendations, which
+prevents learners from exploring learning content and making video
+playback decisions. Thus, MOOCex is introduced to help learners.</p>
+<p><u>NBSearch</u></p>
+<p>What:</p>
+<p>NBSearch is a code search engine designed for Jupyter notebooks that
+supports natural language queries and interactive visual search
+results.</p>
+<p>How:</p>
+<p>The author trains machine learning models to interpret semantic code
+search queries to code descriptors. The models are trained with
+commented Jupyter notebook cells to understand natural languages. Then,
+to help the user explore the query result, an interactive search result
+panel is designed to display a ranked list of relevant cells.</p>
+<p>Why:</p>
+<p>Code search is important for developers. However, for a developer
+using computational notebooks, code search is limited due to the
+flexible nature of the notebooks. For example, notebooks are often
+composed of loosely-connected cells, meaning that code in those cells is
+both independent and interrelated, which poses a great challenge to
+semantic code search. Also, a novel search result interface rather than
+simply listing the results is needed because of the complex relationship
+among notebook cells.</p>
+<h2 id="why-task-abstraction">Why: Task Abstraction</h2>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-01%20at%2014.27.34-6707071.png" srcset="/img/loading.gif" lazyload
+alt="Why people are using vis in terms of actions and targets." />
+<figcaption aria-hidden="true">Why people are using vis in terms of
+actions and targets.</figcaption>
+</figure>
+<h3 id="why-analyze-tasks-abstractly">Why Analyze Tasks Abstractly?</h3>
+<p>Transforming task descriptions from domain-specific language into
+abstract form allows you to reason about similarities and differences
+between them.</p>
+<p>The task abstraction can and should guide the data abstraction.</p>
+<h3 id="who-designer-or-user">Who: Designer or User</h3>
+<p>Vis tools fall somewhere along a continuum from specific to
+general.</p>
+<p>Specialized vis tools are designed for specific contexts with a
+narrow range of data configurations, especially those created through a
+problem-driven process.</p>
+<p>General vis tools are designed to handle a wide range of data in a
+flexible way.</p>
+<h3 id="actions">Actions</h3>
+<p>Hight-level: <em>analyze</em></p>
+<p>Mid-level: <em>search</em></p>
+<p>Low-level: <em>query</em></p>
+<h4 id="analyze">Analyze</h4>
+<p>At the highest level, the framework distinguishes between two
+possible goals of people who want to <strong>analyze</strong> data using
+a vis tool: users might want only to <em>consume</em> existing
+information or also to actively <em>produce</em> new information.</p>
+<p>The most common use case for vis is for the user to
+<strong>consume</strong> information that has already been generated as
+data stored in a format amenable to computation.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-01%20at%2015.05.21-6707094.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-01 at 15.05.21" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-01 at
+15.05.21</figcaption>
+</figure>
+<p><u>Discover</u></p>
+<p>The <strong>discover</strong> goal refers to using vis to find new
+knowledge that was not previously known. Discovery may arise from the
+serendipitous observation of unexpected phenomena, but the investigation
+may be motivated by existing theories, models, hypotheses, or hunches;
+the outcome is to <strong>generate</strong> a new hypothesis, and to
+<strong>verify</strong>—or disconfirm—an existing hypothesis.</p>
+<p>The fundamental motivation of this analysis framework is to help you
+separate out the questions of <em>why</em> the vis is being used from
+<em>how</em> the vis idiom is designed to achieve those goals</p>
+<p><u>Present</u></p>
+<p>The <strong>present</strong> goal refers to the use of vis for the
+succinct communication of information, for telling a story with data, or
+for guiding an audience through a series of cognitive operations.</p>
+<p>The crucial point about the <em>present</em> goal is that vis is
+being used by somebody to communicate something specific and already
+understood to an audience.</p>
+<p><u>Enjoy</u></p>
+<p>The <strong>enjoy</strong> goal refers to casual encounters with
+vis.</p>
+<p>One aspect of this classification that’s tricky is that the goals of
+the eventual vis user might not be a match with the user goals
+conjectured by the vis designer.</p>
+<h4 id="produce">Produce</h4>
+<p>in the <strong>produce</strong> case, the intent of the user is to
+generate new material. Often the goal with <em>produce</em> is to
+produce output that is used im- mediately, as input to the next
+instance.</p>
+<p><u>Annotate</u></p>
+<p>The <strong>annotate</strong> goal refers to the addition of
+graphical or textual annotations associated with one or more preexisting
+visualization elements, typically as a manual action by the user.</p>
+<p>When an annotation is associated with data items, the annotation
+could be thought of as a new attribute for them.</p>
+<p><u>Record</u></p>
+<p>The <strong>record</strong> goal saves or captures visualization
+elements as persistent artifacts.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-01%20at%2015.43.55-6707104.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-01 at 15.43.55" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-01 at
+15.43.55</figcaption>
+</figure>
+<p>Recording and retaining artifacts such as these are often desirable
+for maintaining a sense of analytical provenance, allowing users to
+revisit earlier states or parameter settings.</p>
+<p><u>Derive</u></p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220901154912445-6707112.png" srcset="/img/loading.gif" lazyload
+alt="image-20220901154912445" />
+<figcaption aria-hidden="true">image-20220901154912445</figcaption>
+</figure>
+<p>The <strong>derive</strong> goal is to produce new data elements
+based on existing data elements.</p>
+<p>New attributes can be derived from information contained within
+existing ones, or data can be transformed from one type into
+another.</p>
+<p>The common case is that deriving new data is a choice made by vis
+designers, but this choice could also be driven by a user of a vis
+tool.</p>
+<p>Changing the dataset to another form by deriving new attributes and
+types greatly expands the design space of possible vis idioms that you
+can use to display it.</p>
+<p>Datasets can be transformed into new ones of a different type, just
+as new attributes can be derived from existing ones.</p>
+<h4 id="search">Search</h4>
+<p>All of the high-level <em>analyze</em> cases require the user to
+<strong>search</strong> for elements of interest within the vis as a
+mid-level goal.</p>
+<p><u>Lookup</u></p>
+<p>If users already know both what they’re looking for and where it is,
+then the search type is simply <strong>lookup</strong>.</p>
+<p><u>Browse</u></p>
+<p>When users don’t know exactly what they’re looking for, but they do
+have a location in mind of where to look for it, the search type is
+<strong>browse</strong>.</p>
+<p><u>Explore</u></p>
+<p>When users are not even sure of the location, the search type is
+<strong>explore</strong>.</p>
+<h4 id="query">Query</h4>
+<p>Once a target or set of targets for a search has been found, a low-
+level user goal is to <strong>query</strong> these targets at one of
+three scopes: <em>identify</em>, <em>compare</em>, or
+<em>summarize</em>.</p>
+<p>The progression of these three corresponds to an increase in the
+amount of search targets under consideration: one, some, or all.</p>
+<p><u>Identify</u></p>
+<p>The scope of <strong>identify</strong> is a single target.</p>
+<p>If a search returns known targets, either by <em>lookup</em> or
+<em>locate</em>, then <em>identify</em> returns their
+characteristics.</p>
+<p><u>Compare</u></p>
+<p>The scope of <strong>compare</strong> is multiple targets.</p>
+<p><u>Summarize</u></p>
+<p>The scope of <strong>summarize</strong> task is all possible targets.
+A synonym for <em>summarize</em> is <strong>overview</strong>.</p>
+<h3 id="targets">Targets</h3>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220901214829691-6707119.png" srcset="/img/loading.gif" lazyload
+alt="image-20220901214829691" />
+<figcaption aria-hidden="true">image-20220901214829691</figcaption>
+</figure>
+<p><u>For all kinds of data</u></p>
+<p>A <strong>trend</strong> is a high-level characterization of a
+pattern in the data.</p>
+<p>Almost inevitably, some data doesn’t fit well with that backdrop;
+those el- ements are the <strong>outliers</strong></p>
+<p>The exact definition of <strong>features</strong> is task dependent,
+meaning any particular structures of interest.</p>
+<p><u>For attributes</u></p>
+<ol type="1">
+<li>Find an individual value</li>
+<li>Find the extremes</li>
+<li>Find the distribution of all values for an attribute.</li>
+</ol>
+<p><u>For multiple attributes</u></p>
+<p>A first attribute can have a <strong>dependency</strong> on a second,
+where the values for the first directly depend on those of the
+second.</p>
+<p>There is a <strong>correlation</strong> between one attribute and
+another if there is a tendency for the values of second to be tied to
+those of the first.</p>
+<p>The <strong>similarity</strong> between two attributes can be defined
+as a quantitative measurement calculated on all of their values,
+allowing attributes to be ranked with respect to how similar, or
+different, they are from each other.</p>
+<p><u>Network data</u></p>
+<p>The fundamental target with network data is to understand the
+structure of these interconnections; that is, the network’s
+<strong>topology</strong>.</p>
+<p>A more specific topological target is a <strong>path</strong> of one
+or more links that connects two nodes.</p>
+<p><u>Spatial data</u></p>
+<p>Understanding and comparing the geo- metric <strong>shape</strong> is
+the common target of user actions.</p>
+<h3 id="how-a-preview">How: A Preview</h3>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220901222808610-6707131.png" srcset="/img/loading.gif" lazyload
+alt="image-20220901222808610" />
+<figcaption aria-hidden="true">image-20220901222808610</figcaption>
+</figure>
+<h3 id="analyzing-and-deriving-examples">Analyzing and Deriving:
+Examples</h3>
+<h4 id="comparing-two-idioms">Comparing Two Idioms</h4>
+<p>Examine two different vis tools that have different answers for the
+question of <em>how</em> the idiom is designed when used for exactly the
+same context of <em>why</em> and <em>what</em> at the abstraction
+level.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220901225846110-6707137.png" srcset="/img/loading.gif" lazyload
+alt="image-20220901225846110" />
+<figcaption aria-hidden="true">image-20220901225846110</figcaption>
+</figure>
+<p>What these tools take as input data is the same: a large tree
+composed of nodes and links.</p>
+<p>Why these tools are being used is for the same goal in this sce-
+nario: to present a path traced between two nodes of interest to a
+colleague.</p>
+<p>Both tools can be used to locate paths between nodes and identify
+them.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220901230027685-6707142.png" srcset="/img/loading.gif" lazyload
+alt="image-20220901230027685" />
+<figcaption aria-hidden="true">image-20220901230027685</figcaption>
+</figure>
+<p>SpaceTree ties the act of selection to a change of what is shown by
+automatically aggregating and filtering the unselected items.</p>
+<p>In contrast, TreeJuxtaposer allows the user to arrange areas of the
+tree to ensure visibility for areas of interest.</p>
+<h4 id="deriving-one-attribute">Deriving One Attribute</h4>
+<p>In a vis showing a complex network or tree, it is useful to be able
+to filter out most of the complexity by drawing a simpler picture that
+communicates the key aspects of its topological structure: calculate a
+new derived attribute that measures the importance of each node in the
+graph and filter based on that attribute.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-02%20at%2000.10.37-6707149.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-02 at 00.10.37" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-02 at
+00.10.37</figcaption>
+</figure>
+<p>Very central nodes have large Strahler numbers, whereas peripheral
+nodes have low values.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220902001140567-6707154.png" srcset="/img/loading.gif" lazyload
+alt="image-20220902001140567" />
+<figcaption aria-hidden="true">image-20220902001140567</figcaption>
+</figure>
+<h4 id="deriving-many-new-attributes">Deriving Many New Attributes</h4>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220902002123410-6707159.png" srcset="/img/loading.gif" lazyload
+alt="image-20220902002123410" />
+<figcaption aria-hidden="true">image-20220902002123410</figcaption>
+</figure>
+<p>The power of this idiom lies in seeing where regions that are
+contiguous in one view fall in the other views.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220902002144973-6707163.png" srcset="/img/loading.gif" lazyload
+alt="image-20220902002144973" />
+<figcaption aria-hidden="true">image-20220902002144973</figcaption>
+</figure>
+<h1 id="week-3-reading-post">Week 3 Reading Post</h1>
+<p>Read Munzner 2014 Chapter 5 and 10. Answer below questions with 2-3
+sentences, and <strong>reply to at least one other person's
+post.</strong></p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Treemap-with-measure-name-labels-6707169.png" srcset="/img/loading.gif" lazyload
+alt="Source: The Information Lab" />
+<figcaption aria-hidden="true">Source: The Information Lab</figcaption>
+</figure>
+<p>From:
+https://images.squarespace-cdn.com/content/v1/55b6a6dce4b089e11621d3ed/1528204277811-JX4HT3U2578DXA5CIW7O/Treemap-with-measure-name-labels.png?format=1000w</p>
+<p>Q1. Find one visualization with multiple channels, describe its
+channels and marks, and then discuss the channel effectiveness (e.g.,
+accuracy, discriminability, separability, pop-out, grouping).</p>
+<p>This treemap has channels of size and color and marks of areas. For
+its channel effectiveness, it uses area size to indicate the sales
+amount. As Figure 5.7 from the textbook suggests, we humans have
+relatively low accuracy of perception area channel. As in the treemap,
+it is easy to tell the sales amount of paper is lower than that of
+office machines based on the area while it is hard for us to tell the
+difference between the sales amount of office machines and tables based
+on area channel. For the color channel, it uses color saturation and
+color hue to indicate the profit of a product with purer green
+indicating higher positive profit and purer red indicating higher
+negative profit. It is very discriminable for us to tell whether a
+product has positive or negative profits based on the color hue channel.
+However, for the two products has similar profits, the color saturation
+channel is not discriminable, for instance, office machines and chairs
+&amp; chairmats.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-11%20at%2001.40.49-6707175.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-11 at 01.40.49" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-11 at
+01.40.49</figcaption>
+</figure>
+<p>Q2. For the same visualization, analyze its color selection (e.g.,
+luminance, saturation, hues, transparency), its color map (how colors
+are used to encode categories and groups), and other channels if
+applicable (e.g., how size, angle, motion, texture, etc. are used to
+encode categories and groups).</p>
+<p>The treemap uses color saturation and color hue to indicate the
+profit of a product with purer green indicating higher positive profit
+and purer red indicating higher negative profit. While the red and green
+color hues can help the user distinguishes the profit and loss, the
+color saturation does a bad job in encoding profit amount, which is
+quantitative data. For the color map, it uses red and green to encode
+profit and loss data, which is categorical, and color saturation to
+encode the profit amount, which is quantitative data. For other
+channels, it uses the size of the area to encode the amount of
+sales.</p>
+<h2 id="marks-and-channels">Marks and Channels</h2>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-10%20at%2023.01.32-6707194.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-10 at 23.01.32" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-10 at
+23.01.32</figcaption>
+</figure>
+<p>Marks are basic geometric elements that depict items or links, and
+channels control their appearance.</p>
+<h3 id="why-marks-and-channels">Why Marks and Channels?</h3>
+<p>The core of the design space of visual encodings can be described as
+an orthogonal combination of two aspects: graphical elements called
+marks, and visual channels to control their appearance.</p>
+<h3 id="defining-marks-and-channels">Defining Marks and Channels</h3>
+<p><u>Mark</u></p>
+<p>A <strong>mark</strong> is a basic graphical element in an image.</p>
+<p>A zero- dimensional (<strong>0D</strong>) mark is a point</p>
+<p>A one-dimensional (<strong>1D</strong>) mark is a line</p>
+<p>A two-dimensional (<strong>2D</strong>) mark is an area</p>
+<p>A three- dimensional (<strong>3D</strong>) volume mark is
+possible</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-10%20at%2023.21.38-6707200.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-10 at 23.21.38" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-10 at
+23.21.38</figcaption>
+</figure>
+<p><u>Channel</u></p>
+<p>A visual <strong>channel</strong> is a way to control the appearance
+of marks, independent of the dimensionality of the geometric
+primitive</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-10%20at%2023.25.30-6707205-6707208.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-10 at 23.25.30" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-10 at
+23.25.30</figcaption>
+</figure>
+<p><u>Using marks and channels</u></p>
+<p>Figure 5.4 shows a progression of chart types, with each show- ing
+one more quantitative data attribute by using one more visual
+channel.</p>
+
+<p>The size and shape channels cannot be used on all types of marks: the
+higher-dimensional mark types usually have built-in constraints that
+arise from the way that they are defined.</p>
+<p>An area mark has both dimensions of its size constrained intrinsi-
+cally as part of its shape, so area marks typically are not size coded
+or shape coded.</p>
+<p>A line mark that encodes a quantitative attribute using length in one
+direction can be size coded in the other dimension by changing the width
+of the line to make it fatter.</p>
+<p>Point marks can indeed be size coded and shape coded because their
+area is completely unconstrained.</p>
+<h4 id="channel-types">Channel Types</h4>
+<p>The <strong>identity</strong> channels tell us infor- mation about
+<em>what</em> something is or <em>where</em> it is.</p>
+<p>The <strong>magnitude</strong> channels tell us <em>how much</em> of
+something there is.</p>
+<h4 id="mark-types">Mark Types</h4>
+<p>For table datasets, where a mark always represents an item.</p>
+<p>For network datasets, a mark might represent either an item—also
+known as a node—or a link.</p>
+<p>Link marks represent a relationship between items.A
+<strong>connection</strong> mark shows a pairwise relationship between
+two items, using a line. A <strong>containment</strong> mark shows
+hierarchical relationships using areas, and to do so connection marks
+can be nested within each other at multiple levels. While the visual
+representation of the area mark might be with a line that depicts its
+boundary, containment is fun- damentally about the use of area.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220910234414340-6707217.png" srcset="/img/loading.gif" lazyload
+alt="image-20220910234414340" />
+<figcaption aria-hidden="true">image-20220910234414340</figcaption>
+</figure>
+<h3 id="using-marks-and-channels">Using Marks and Channels</h3>
+<p>All channels are not equal: the same data attribute encoded with two
+different visual channels will result in different information content
+in our heads after it has passed through the perceptual and cognitive
+processing pathways of the human visual system.</p>
+<p>The use of marks and channels in vis idiom design should be guided by
+the principles of expressiveness and effectiveness.</p>
+<h4 id="expressiveness-and-effectiveness">Expressiveness and
+Effectiveness</h4>
+<p><u>Expressiveness</u></p>
+<p>The <strong>expressiveness principle</strong> dictates that the
+visual encoding should express all of, and only, the information in the
+dataset attributes.</p>
+<p>The most fundamental expression of this principle is that ordered
+data should be shown in a way that our perceptual system intrinsically
+senses as ordered. Conversely, unordered data should not be shown in a
+way that perceptually implies an ordering that does not exist.</p>
+<p>The identity channels are the correct match for the categorical
+attributes that have no intrinsic order. The magnitude channels are the
+correct match for the ordered at- tributes, both ordinal and
+quantitative.</p>
+<p><u>Effectiveness</u></p>
+<p>The <strong>effectiveness principle</strong> dictates that the
+importance of the attribute should match the <strong>salience</strong>
+of the channel; that is, its noticeability.</p>
+<h4 id="channel-rankings">Channel Rankings</h4>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220910235419785-6707225.png" srcset="/img/loading.gif" lazyload
+alt="image-20220910235419785" />
+<figcaption aria-hidden="true">image-20220910235419785</figcaption>
+</figure>
+<p>The attributes encoded with position will dominate the user’s
+<strong>mental model</strong>—their internal mental representation used
+for thinking and reasoning—compared with those encoded with any other
+visual channel.</p>
+<h3 id="channel-effectiveness">Channel Effectiveness</h3>
+<p>To analyze the space of visual encoding possibilities you need to
+understand the characteristics of these visual channels.</p>
+<h4 id="accuracy">Accuracy</h4>
+<p><strong>Accuracy</strong>: how close is human perceptual judgement to
+some objective measurement of the stimulus?</p>
+<p>Our responses to the sensory experience of magnitude are
+characterizable by power laws, where the exponent depends on the exact
+sensory modality: most stimuli are magnified or com- pressed, with few
+remaining unchanged.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-11%20at%2001.40.49-6707231.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-11 at 01.40.49" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-11 at
+01.40.49</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220911014108183-6707242.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911014108183" />
+<figcaption aria-hidden="true">image-20220911014108183</figcaption>
+</figure>
+<h4 id="discriminability">Discriminability</h4>
+<p>The question of <strong>discriminability</strong> is: if you encode
+data using a particular visual channel, are the differences between
+items perceptible to the human as intended?</p>
+<p>The characterization of visual chan- nel thus should quantify the
+number of <strong>bins</strong> that are available for use within a
+visual channel, where each bin is a distinguishable step or level from
+the other.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-11%20at%2001.49.28-6707247.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-11 at 01.49.28" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-11 at
+01.49.28</figcaption>
+</figure>
+<p>Consider line width: changing the line size only works for a fairly
+small number of steps. Increasing the width past that limit will result
+in a mark that is perceived as a polygon area rather than a line
+mark.</p>
+<p>The key factor is matching the ranges: the number of different values
+that need to be shown for the attribute being encoded must not be
+greater than the number of bins available for the visual channel used to
+encode it.</p>
+<h4 id="separability">Separability</h4>
+<p>You must consider a continuum of potential interac- tions between
+channels for each pair, ranging from the orthogonal and independent
+<strong>separable</strong> channels to the inextricably combined
+<strong>integral</strong> channels.</p>
+<p>Integrality and separability are two endpoints of a con- tinuum, not
+strictly binary categories</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220911015031783-6707253.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911015031783" />
+<figcaption aria-hidden="true">image-20220911015031783</figcaption>
+</figure>
+<h4 id="popout">Popout</h4>
+<p>Many visual channels provide visual <strong>popout</strong>, where a
+distinct item stands out from many others immediately.</p>
+<p>The great value of popout is that the time it takes us to spot the
+different object does not depend on the number of distractor
+objects.</p>
+<p>Popout is not an all-or-nothing phenomenon. It depends on both the
+channel itself and how different the target item is from its
+surroundings.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220911015123465-6707260.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911015123465" />
+<figcaption aria-hidden="true">image-20220911015123465</figcaption>
+</figure>
+<p><img
+src="Data%20Analytics%20and%20Visualizations//image-20220911015250927.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911015250927" /> Popout is definitely not possible with
+three or more chan- nels. As a general rule, vis designers should only
+count on using popout for a single channel at a time.</p>
+<h4 id="grouping">Grouping</h4>
+<p>Containment is the strongest cue for grouping, with connection coming
+in second.</p>
+<p>The third strongest grouping approach is <strong>proximity</strong>;
+that is, placing items within the same spatial region.</p>
+<p>The final grouping channel is <strong>similarity</strong> with the
+other categorical channels of hue and motion, and also shape if chosen
+carefully.</p>
+<h3 id="relative-versus-absolute-judgements">Relative versus Absolute
+Judgements</h3>
+<p>The human perceptual system is fundamentally based on relative
+judgements, not absolute ones; this principle is known as
+<strong>Weber’s Law</strong>. This principle holds true for all sensory
+modalities.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220911015448704-6707270.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911015448704" />
+<figcaption aria-hidden="true">image-20220911015448704</figcaption>
+</figure>
+<p>Another example shows that our perception of color and lumi- nance is
+completely contextual, based on the contrast with sur- rounding
+colors.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-11%20at%2001.55.02-6707276.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-11 at 01.55.02" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-11 at
+01.55.02</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220911015517422-6707281.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911015517422" />
+<figcaption aria-hidden="true">image-20220911015517422</figcaption>
+</figure>
+<h2 id="map-color-and-other-channels">Map Color and Other Channels</h2>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220911173231351-6707286.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911173231351" />
+<figcaption aria-hidden="true">image-20220911173231351</figcaption>
+</figure>
+<p>The colloquial term <em>color</em> is best understood in terms of
+three separate channels: luminance, hue, and saturation.</p>
+<p>The major design choice for colormap construction is whether the
+intent is to distinguish between categorical attributes or to encode
+ordered attributes.</p>
+<h3 id="color-theory">Color Theory</h3>
+<h4 id="color-vision">Color Vision</h4>
+<p>The <strong>rods</strong> actively contribute to vision only in
+low-light settings and provide low-resolution black-and-white
+information. The main sensors in normal lighting conditions are the
+<strong>cones</strong>. The luminance channel conveys high-resolution
+edge information, while the red–green and blue–yellow channels are lower
+resolution.</p>
+<h4 id="color-spaces">Color Spaces</h4>
+<p><u>RGB</u></p>
+<p>The most common color space.</p>
+<p>Although this system is computationally convenient, it is a very poor
+match for the me- chanics of how we see.</p>
+<p><u>HSL</u></p>
+<p><strong>HSL</strong> system, is more intuitive and is heavily used by
+artists and designers.</p>
+<p>The <strong>hue</strong> axis captures what we normally think of as
+pure colors that are not mixed with white or black: red, blue, green,
+yellow, purple, and so on.</p>
+<p>The <strong>saturation</strong> axis is the amount of white mixed
+with that pure color. (pink is a partially desaturated red.)</p>
+<p>The <strong>lightness</strong> axis is the amount of black mixed with
+a color.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-11%20at%2021.05.50-6707295.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-11 at 21.05.50" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-11 at
+21.05.50</figcaption>
+</figure>
+<p>The HSV space is very similar, where V stands for grayscale value and
+is linearly related to L.</p>
+<p>it is only pseudoperceptual: it does not truly reflect how we
+perceive color.</p>
+<p><u>L∗a∗b∗</u></p>
+<p>This space has a single black and white luminance channel L∗, and the
+two color axes a∗ and b∗.</p>
+<p>The L∗ axis is a nonlinear transformation of the luminance perceived
+by the human eye.</p>
+<p>The L∗ axis is de- signed to be perceptually linear, so that equally
+sized steps appear equal to our visual systems, based on extensive
+measurement and calibration over a very large set of observers.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220911210714659-6707300.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911210714659" />
+<figcaption aria-hidden="true">image-20220911210714659</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-11%20at%2021.07.21-6707306.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-11 at 21.07.21" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-11 at
+21.07.21</figcaption>
+</figure>
+<h4 id="luminance-saturation-and-hue">Luminance, Saturation, and
+Hue</h4>
+<p>Luminance and saturation are magnitude channels, while hue is a
+identity channel.</p>
+<p>The magnitude channel of <strong>luminance</strong> is suitable for
+ordered data types.</p>
+<p>Ware suggests avoiding grayscale if more than two to four bins are
+required</p>
+<p>A crucial consideration when visual encoding with color is that
+luminance contrast is the only way we can resolve fine detail and see
+crisp edges; hue contrast or saturation contrast does not provide
+detectable edges.</p>
+<p>The magnitude channel of <strong>saturation</strong> is also suitable
+for ordered data.</p>
+<p>Saturation shares the problem of low accuracy for noncon- tiguous
+regions. The number of discriminable steps for saturation is low: around
+three bins</p>
+<p>Moreover, saturation interacts strongly with the size channel: it is
+more difficult to perceive in small regions than in large ones.
+Saturation and hue are not separable channels within small re- gions for
+the purpose of categorical color coding.</p>
+<p>The identity channel of <strong>hue</strong> is extremely effective
+for categorical data and showing groupings.</p>
+<p>However, hue shares the same challenges as saturation in terms of
+interaction with the size channel: hue is harder to distinguish in small
+regions than large regions. Hue does not have an im- plicit perceptual
+ordering</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220911210835850-6707314.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911210835850" />
+<figcaption aria-hidden="true">image-20220911210835850</figcaption>
+</figure>
+<h4 id="transparency">Transparency</h4>
+<p><strong>Transparency</strong>: information can be encoded by
+decreasing the opacity of a mark from fully opaque to completely
+see-through. Transparency cannot be used independently of the other
+color channels because of its strong interaction effects with them:
+fully transparent marks cannot convey any information at all with the
+other three channels. In particular, transparency coding interacts
+strongly with luminance and saturation coding and should not be used in
+conjunction with them at all. It can be used in conjunc- tion with hue
+encoding with a very small number of discriminable steps, most
+frequently just two</p>
+<h3 id="colormaps">Colormaps</h3>
+<p>A <strong>colormap</strong> specifies a mapping between colors and
+data values; that is, a visual encoding with color.</p>
+<p>Colormaps can be <strong>categorical</strong> or
+<strong>ordered</strong>, and ordered colormaps can be either
+<strong>se- quential</strong> or <strong>diverging</strong>.</p>
+<p>Colormaps can either be a <strong>continuous</strong> range of
+values, or <strong>seg- mented</strong> into discrete bins of color.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220911222021631-6707319.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911222021631" />
+<figcaption aria-hidden="true">image-20220911222021631</figcaption>
+</figure>
+<h3 id="categorical-colormaps">Categorical Colormaps</h3>
+<p>A <strong>categorical</strong> colormap uses color to encode
+categories and groupings. Categorical colormaps are normally
+segmented</p>
+<p>The number of discriminable colors for coding small separated regions
+is limited to between six and twelve bins. You should re- member to
+include background color and any default object colors in your total
+count: some or all of the most basic choices of black, white, and gray
+are often devoted to those uses.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-11%20at%2022.20.55-6707325.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-11 at 22.20.55" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-11 at
+22.20.55</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220911222109683-6707330.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911222109683" />
+<figcaption aria-hidden="true">image-20220911222109683</figcaption>
+</figure>
+<h4 id="ordered-colormaps">Ordered Colormaps</h4>
+<p>An <strong>ordered</strong> colormap is appropriate for encoding
+ordinal or quantitative attributes.</p>
+<p>A <strong>sequential</strong> colormap ranges from a minimum value to
+a maximum value.</p>
+<p>A <strong>diverging</strong> colormap has two hues at the endpoints
+and a neutral color as a midpoint, such as white, gray, or black, or a
+high-luminance color such as yellow.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220911222146145-6707337.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911222146145" />
+<figcaption aria-hidden="true">image-20220911222146145</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220911222154798-6707347.png" srcset="/img/loading.gif" lazyload
+alt="image-20220911222154798" />
+<figcaption aria-hidden="true">image-20220911222154798</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-11%20at%2022.22.05-6707355.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-11 at 22.22.05" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-11 at
+22.22.05</figcaption>
+</figure>
+<p>Design <strong>monotoni- cally increasing luminance</strong>
+colormaps: that is, where the multiple hues are ordered according to
+their luminance from lowest to highest.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-11%20at%2022.22.32-6707364.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-11 at 22.22.32" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-11 at
+22.22.32</figcaption>
+</figure>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-11%20at%2022.22.41-6707368.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-11 at 22.22.41" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-11 at
+22.22.41</figcaption>
+</figure>
+<h4 id="bivariate-colormaps">Bivariate Colormaps</h4>
+<p>The safest use of the color channel is to visually encode a single
+attribute; these colormaps are known as <strong>univariate</strong>.</p>
+<h3 id="other-channels">Other Channels</h3>
+<h4 id="size-channels">Size Channels</h4>
+<p>Size is a magnitude channel suitable for ordered data. It interacts
+with most other channels: when marks are too small, encodings in another
+channel such as shape or orientation simply cannot be seen. Size
+interacts particularly strongly with color hue and color saturation.</p>
+<p>Length is one-dimensional (1D) size; more specifically, height is
+vertical size and width is horizontal size. Area is two-dimensional (2D)
+size, and volume is three-dimensional (3D) size.</p>
+<p>Our judgements of length are extremely accurate.</p>
+<h4 id="angle-channel">Angle Channel</h4>
+<p>The <em>angle</em> channel encodes magnitude information based on the
+<strong>orientation</strong> of a mark: the direction that it
+points.</p>
+<p>With <strong>angle</strong>, the orientation of one line is judged
+with respect to another line.</p>
+<p>With <strong>tilt</strong>, an orientation is judged against the
+global frame of the display.</p>
+<p>The accuracy of our perception of angle is not uniform. We have very
+accurate perceptions of angles near the exact horizontal, vertical, or
+diagonal positions, but accuracy drops off in between them.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/Screen%20Shot%202022-09-11%20at%2022.36.41-6707374.png" srcset="/img/loading.gif" lazyload
+alt="Screen Shot 2022-09-11 at 22.36.41" />
+<figcaption aria-hidden="true">Screen Shot 2022-09-11 at
+22.36.41</figcaption>
+</figure>
+<h4 id="curvature-channel">Curvature Channel</h4>
+<p>The <strong>curvature</strong> channel is not very accurate, and it
+can only be used with line marks.</p>
+<p>It cannot be used with point marks that have no length, or area marks
+because their shape is fully constrained.</p>
+<h4 id="shape-channel">Shape Channel</h4>
+<p>The term <strong>shape</strong> is a catch-all word for a complex
+perceptual phenomenon.</p>
+<h4 id="motion-channels">Motion Channels</h4>
+<p>Several kinds of <strong>motion</strong> are also visual channels,
+including <strong>direc- tion</strong> of motion,
+<strong>velocity</strong> of motion, and flicker
+<strong>frequency</strong>.</p>
+<p>The strength and weakness of motion is that it strongly draws
+attention; it is nearly impossible to ignore.</p>
+<p>It is not clear whether different motion channels are separable from
+each other, or how many discriminable bins exist in each.</p>
+<p>The motion channels are most appropriate for highlighting, where
+drawing the user’s attention away from the rest of the scene is exactly
+the goal, particularly when the highlighting is transitory rather than
+ongoing.</p>
+<h4 id="texture-and-stippling">Texture and Stippling</h4>
+<p>The term <strong>texture</strong> refers to very small-scale
+patterns.</p>
+<p>Texture can be used to show categorical attributes, in which case the
+goal is to create patterns that are distinguishable from each other
+using the combination of all three channels.</p>
+<p>The term <strong>stippling</strong> means to fill in regions of
+drawing with short strokes. It is a special case of texture.</p>
+<h1 id="week-4-reading-post">Week 4 Reading Post</h1>
+<p>Read Munzner 2014 Chapter 4 and 9, and answer below questions in 2-3
+sentences. <strong>Reply to at least one other person's
+post.</strong></p>
+<p>Q1. Find one network visualization (trees or networks) and describe
+(1) it's design idiom and (2) the what-why-how (data-encode-tasks)
+elements of it.</p>
+<p>From:
+https://www.yworks.com/assets/images/landing-pages/demo-networkmonitoring-example.ae6cd134ce.webp</p>
+<p><img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/demo-networkmonitoring-example.6c44bddbc0-6707380.png" srcset="/img/loading.gif" lazyload
+alt="An example of a network monitoring visualization" />This
+visualization uses a network graph, which is a node-link diagram, to
+encode a computer network map. Here the data is the status of connecting
+devices and network switches. The network devices (PCs, laptops,
+tablets, servers, databases, etc.) are encoded as nodes (vertices), and
+the connection between those devices are encoded as edges (links) in the
+network graph. The edges are colored green, yellow, and red,
+representing light, middle, and heavy network traffic correspondingly.
+The network graph presents its users (network administrators) with the
+topological relationship of the devices and an overview of their system,
+as well as the status of network traffic, assisting them to control and
+troubleshoot the network system from a central location.</p>
+<h1 id="week-5-reading-post">Week 5 Reading Post</h1>
+<p>Read one of below papers and answer the discussion question in 2-3
+sentences (Pls find them in the Resources/Readings). <strong>Reply to at
+least one other person's post.</strong></p>
+<p><strong>Paper options (pick one to read):</strong></p>
+<p>\1. Isenberg et al. Vispubdata.org: A Metadata Collection About IEEE
+Visualization (VIS) Publications. IEEE TRANSACTIONS ON VISUALIZATION AND
+COMPUTER GRAPHICS, VOL. 23, NO. 9, SEPTEMBER 2017.</p>
+<p>\2. Havre et al. ThemeRiver: Visualizing Theme Changes over Time.
+Proceedings of the IEEE Symposium on Information Visualization 2000
+(InfoVis'00).</p>
+<p><strong>Discussion questions:</strong></p>
+<p>Q1. What's this paper about? What visualization techniques the
+authors implemented? What's the contributions of this work?</p>
+<p>Q2. Pick one visualization from this paper, and evaluate its data
+(&amp; attributes), user task, and efficiency.</p>
+<p>ThemeRiver</p>
+<ol type="1">
+<li><p>The paper is about a thematic visualization called ThemeRiver.
+The authors implemented the visualization techniques of the time river,
+with adjustment. The horizontal flow represents the change in time. The
+width of the river represents the variation (increase/decrease) of the
+strength of a topic. The currents are colored to represent different
+themes. The ThemeRiver fills the hole in the visualization of themes of
+associated documents and provides users with a macro-view over the
+themes of documents, as existing visualizations focus mainly on
+documents themselves.</p>
+<figure>
+<img
+src="/2022/10/25/Data%20Analytics%20and%20Visualizations/image-20220925185942567-6707386.png" srcset="/img/loading.gif" lazyload
+alt="image-20220925185942567" />
+<figcaption aria-hidden="true">image-20220925185942567</figcaption>
+</figure></li>
+<li><p>Data: A collection of speeches, interviews, articles, and other
+text related to Fidel Castro.</p>
+<p>Attributes: themes, year</p>
+<p>User task:</p>
+<ul>
+<li><p>Explore the change of theme over time</p></li>
+<li><p>Display topic and event labels</p></li>
+<li><p>Display time and event grid lines</p></li>
+<li><p>Display the raw data points</p></li>
+<li><p>Choose among drawing algorithms for the</p>
+<p>currents and river</p></li>
+<li><p>Efficiency:</p></li>
+<li><p>Users tend to follow the trend more easily over time</p></li>
+<li><p>Users find the plot useful in identifying macro trends in
+particularly.</p></li>
+<li><p>ThemeRiver requires users to interpolate between data points to
+produce the curve</p></li>
+</ul></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Reading/" class="category-chain-item">Reading</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Data-Visualization/">#Data Visualization</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Data Analytics and Visualizations</div>
+      <div>http://example.com/2022/10/25/Data Analytics and Visualizations/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Jiacheng Xie</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 25, 2022</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/25/Data%20Visualization%20Project-Development%20of%20Models%20Used%20in%20Computer%20Vision/" title="Data Visualization Project-Development of Models Used in Computer Vision">
+                        <span class="hidden-mobile">Data Visualization Project-Development of Models Used in Computer Vision</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <i class="iconfont icon-love"></i> Ycheng 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Totoal views 
+        <span id="busuanzi_value_site_pv"></span>
+        
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Total visitors 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
